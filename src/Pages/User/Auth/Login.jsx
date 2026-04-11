@@ -157,7 +157,7 @@ function Login() {
                   Mobile Number
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   className="w-full bg-[var(--background-light)] dark:bg-[var(--background-dark)] border border-[var(--border)] rounded-lg px-4 py-3 focus:border-[var(--primary)] outline-none text-[var(--text)] dark:text-[var(--text-white)]"
                   {...register("phone")}
                   required
@@ -167,18 +167,17 @@ function Login() {
               {/* Password */}
               <div className="flex">
                 <div
-                  className={`w-full transition-all ${isForgoting
-                    ? "opacity-0 pointer-events-none -translate-x-full h-0"
-                    : ""
-                    }`}
+                  className={`w-full transition-all ${
+                    isForgoting
+                      ? "opacity-0 pointer-events-none -translate-x-full h-0"
+                      : ""
+                  }`}
                 >
                   <div className="mb-3  ">
-
                     <label className="text-sm  text-[var(--text-light)] block mb-1">
                       Password
                     </label>
                     <div className="box relative">
-
                       <input
                         type={isShow ? "text" : "password"}
                         className="w-full bg-[var(--background-light)] dark:bg-[var(--background-dark)] border border-[var(--border)] rounded-lg px-4 py-3 focus:border-[var(--primary)] outline-none text-[var(--text)] dark:text-[var(--text-white)]"
@@ -198,10 +197,11 @@ function Login() {
 
                 {isOtpSent && (
                   <div
-                    className={`w-full transition-all ${isForgoting
-                      ? "pointer-events-all -translate-x-full"
-                      : "opacity-0 pointer-events-none"
-                      }`}
+                    className={`w-full transition-all ${
+                      isForgoting
+                        ? "pointer-events-all -translate-x-full"
+                        : "opacity-0 pointer-events-none"
+                    }`}
                   >
                     <div className="mb-3">
                       <label className="text-sm text-[var(--text-light)] block mb-1">

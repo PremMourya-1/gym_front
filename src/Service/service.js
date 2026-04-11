@@ -2,8 +2,11 @@ import axios from "axios";
 import { removeLoaleStorageItem } from "../Utils/localeStorage";
 import { ADMIN_DETAILS, USER_DETAILS } from "../Constant/Constant";
 
-export const COMMON_IMAGE_URL = "http://localhost:3000/";
-export const BASE_URL = "http://localhost:3000/";
+// export const COMMON_IMAGE_URL = "http://localhost:3000/";
+// export const BASE_URL = "http://localhost:3000/";
+
+export const COMMON_IMAGE_URL = "https://gym-backend-8189.onrender.com/";
+export const BASE_URL = "https://gym-backend-8189.onrender.com/";
 const createApiForClient = (contentType) => {
   const headers = { "Cache-Control": "no-cache" };
 

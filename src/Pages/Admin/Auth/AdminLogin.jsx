@@ -79,7 +79,7 @@ function AdminLogin() {
 
   useEffect(() => {
     setValue("mobileNo", 8824644769);
-    setValue("password", 123);
+    setValue("password", "Admin@12345");
   }, []);
 
   return (
@@ -90,8 +90,9 @@ function AdminLogin() {
             <div className="loginFormContainer h-max m-auto overflow-hidden card rounded-md max-w-[440px] w-full">
               <div className={` text-center  pb-5  `}>
                 <div
-                  className={`bg-white ${theme.isDark ? "p-4" : "p-4 pb-0"
-                    }  mb-4`}
+                  className={`bg-white ${
+                    theme.isDark ? "p-4" : "p-4 pb-0"
+                  }  mb-4`}
                 >
                   <img className="w-40 m-auto" src={logo} alt="logo" />
                 </div>
@@ -137,10 +138,11 @@ function AdminLogin() {
                 </div>
                 <div className="flex">
                   <div
-                    className={` shrink-0 w-full ${isForgoting
-                      ? "opacity-0 pointer-events-none translate-x-[-100%] h-0"
-                      : ""
-                      } inputContainer transition-all`}
+                    className={` shrink-0 w-full ${
+                      isForgoting
+                        ? "opacity-0 pointer-events-none translate-x-[-100%] h-0"
+                        : ""
+                    } inputContainer transition-all`}
                   >
                     <div className="inputBox">
                       <input
@@ -167,10 +169,11 @@ function AdminLogin() {
                   </div>
                   {isOtpSent && (
                     <div
-                      className={` shrink-0 w-full ${isForgoting
-                        ? " pointer-events-all translate-x-[-100%]"
-                        : "opacity-0 pointer-events-none "
-                        } inputContainer transition-all`}
+                      className={` shrink-0 w-full ${
+                        isForgoting
+                          ? " pointer-events-all translate-x-[-100%]"
+                          : "opacity-0 pointer-events-none "
+                      } inputContainer transition-all`}
                     >
                       <div className="inputBox">
                         <input
@@ -216,10 +219,11 @@ function AdminLogin() {
                         disabled={otpSubmitLoading || !otpData || !contact}
                         type="button"
                         onClick={hadleSubmitOtp}
-                        className={` ${!otpData || !contact
-                          ? "opacity-55 cursor-not-allowed"
-                          : ""
-                          } themeButton textWhite w-full hover:shadow-lg`}
+                        className={` ${
+                          !otpData || !contact
+                            ? "opacity-55 cursor-not-allowed"
+                            : ""
+                        } themeButton textWhite w-full hover:shadow-lg`}
                       >
                         {otpSubmitLoading ? (
                           <LoaderSpiner hw={20} />
@@ -231,8 +235,9 @@ function AdminLogin() {
                     <button
                       disabled={isLoading || resendTime < 30}
                       type="submit"
-                      className={`themeButton textWhite w-full hover:shadow-lg ${resendTime < 30 ? "cursor-not-allowed" : ""
-                        }`}
+                      className={`themeButton textWhite w-full hover:shadow-lg ${
+                        resendTime < 30 ? "cursor-not-allowed" : ""
+                      }`}
                     >
                       {isLoading ? (
                         <LoaderSpiner hw={20} />
