@@ -6,7 +6,7 @@ import { ADMIN_DETAILS, USER_DETAILS } from "../Constant/Constant";
 // export const BASE_URL = "http://localhost:3000/";
 
 export const COMMON_IMAGE_URL = "/api";
-export const BASE_URL = "/";
+export const BASE_URL = "/api";
 const createApiForClient = (contentType) => {
   const headers = { "Cache-Control": "no-cache" };
 
