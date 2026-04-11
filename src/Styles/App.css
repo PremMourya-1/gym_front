@@ -1,0 +1,837 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap'); */
+/* @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap'); */
+
+/* poppins */
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'); */
+
+/* roboto */
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap'); */
+
+/*  open sanse*/
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+/* charmon */
+@import url("https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&display=swap");
+
+/* nunito */
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+
+* {
+  /* font-family: "Lato", sans-serif; */
+  /* font-family: "Poppins", sans-serif; */
+  /* font-family: "Roboto", sans-serif; */
+  /* font-family: "Open Sans", sans-serif; */
+  font-family: "Nunito", sans-serif;
+  transition: all ease 0.1s;
+}
+
+body,
+.card {
+  transition: all 1s ease;
+}
+
+
+.logo,
+.crimson {
+  font-family: "Crimson Pro", serif;
+}
+
+.font-2 {
+  font-family: "Charmonman";
+}
+
+/* 🎨 Root Variables */
+:root {
+  --primary-tp: #8153ec2d;
+  --primary: #8153ec;
+  --box-Shadow: #9fc4ee;
+  --primary-light: #8153eca4;
+  --primary-dark: #8653ec;
+  --card-dark: #322f49;
+  --background-dark: #282829;
+
+  --background: #ffffff;
+  --background-light: #f3f2f3;
+  --table-heading: #f3f2f3;
+  /* --background-light: #f8f7fa; */
+
+  --text-white: #ffffff;
+  --text: #060606;
+  --text-light: #a29f9f;
+
+  --border: #e6e6e6;
+
+  /* Utility Colors */
+  --success: #22c55e;
+  --warning: #eab308;
+  --danger: #dc2626;
+  --info: #3b82f6;
+
+  /* Subtle */
+  --muted: #9ca3af;
+  --highlight: #f0f9ff;
+}
+
+/* 🌙 Dark Theme */
+.dark {
+  --box-Shadow: rgba(0, 0, 0, 0.4);
+  --primary-light: #9f7aea33;
+  --primary-dark: #7c3aed;
+
+  --card-dark: #171717;
+  --background-dark: #1a1a1a;
+
+  --background: #191919;
+  /* main bg blackish */
+  --background-light: #252525;
+  /* card/table bg */
+  --table-heading: #252525;
+  --text-white: #ffffff;
+  --text: #f1f1f1;
+  /* main text */
+  --text-light: #9f9d9d;
+  /* muted text */
+
+  --border: #323234;
+  /* subtle border */
+
+  /* Utility Colors (thoda soft version) */
+  --success: #22c55e;
+  --warning: #facc15;
+  --danger: #ef4444;
+  --info: #60a5fa;
+
+  /* Subtle */
+  --muted: #71717a;
+  --highlight: #1f2937;
+}
+
+body.orange {
+  --primary-tp: #f973162d;
+  --primary: #f97316;
+  --box-Shadow: #fdba74;
+  --primary-light: #f97316a4;
+  --primary-dark: #ea580c;
+}
+
+body.green {
+  --primary-tp: #22c55e2d;
+  --primary: #22c55e;
+  --box-Shadow: #86efac;
+  --primary-light: #22c55ea4;
+  --primary-dark: #16a34a;
+}
+
+body.pink {
+  --primary-tp: #ec48992d;
+  --primary: #ec4899;
+  --box-Shadow: #f9a8d4;
+  --primary-light: #ec4899a4;
+  --primary-dark: #db2777;
+}
+
+body.blue {
+  --primary-tp: #3b82f62d;
+  --primary: #3b82f6;
+  --box-Shadow: #93c5fd;
+  --primary-light: #3b82f6a4;
+  --primary-dark: #2563eb;
+}
+
+body.amber {
+  --primary-tp: #f59e0b2d;
+  --primary: #f59e0b;
+  --box-Shadow: #fcd34d;
+  --primary-light: #f59e0ba4;
+  --primary-dark: #d97706;
+}
+
+body.red {
+  --primary-tp: #ef44442d;
+  --primary: #ef4444;
+  --box-Shadow: #fca5a5;
+  --primary-light: #ef4444a4;
+  --primary-dark: #dc2626;
+}
+
+body.gray {
+  --primary-tp: #6b72802d;
+  --primary: #6b7280;
+  --box-Shadow: #d1d5db;
+  --primary-light: #6b7280a4;
+  --primary-dark: #4b5563;
+}
+
+body.hotpink {
+  --primary-tp: #ff14932d;
+  --primary: #ff1493;
+  --box-Shadow: #ff85c1;
+  --primary-light: #ff1493a4;
+  --primary-dark: #c71585;
+}
+
+body.teal {
+  --primary-tp: #14b8a62d;
+  --primary: #14b8a6;
+  --box-Shadow: #5eead4;
+  --primary-light: #14b8a6a4;
+  --primary-dark: #0f766e;
+}
+
+body.purple {
+  --primary-tp: #8b5cf62d;
+  --primary: #8b5cf6;
+  --box-Shadow: #c4b5fd;
+  --primary-light: #8b5cf6a4;
+  --primary-dark: #6d28d9;
+}
+
+body.indigo {
+  --primary-tp: #6366f12d;
+  --primary: #6366f1;
+  --box-Shadow: #a5b4fc;
+  --primary-light: #6366f1a4;
+  --primary-dark: #4338ca;
+}
+
+body.cyan {
+  --primary-tp: #06b6d42d;
+  --primary: #06b6d4;
+  --box-Shadow: #67e8f9;
+  --primary-light: #06b6d4a4;
+  --primary-dark: #0891b2;
+}
+
+body.lime {
+  --primary-tp: #84cc162d;
+  --primary: #84cc16;
+  --box-Shadow: #bef264;
+  --primary-light: #84cc16a4;
+  --primary-dark: #65a30d;
+}
+
+body.emerald {
+  --primary-tp: #10b9812d;
+  --primary: #10b981;
+  --box-Shadow: #6ee7b7;
+  --primary-light: #10b981a4;
+  --primary-dark: #047857;
+}
+
+body.rose {
+  --primary-tp: #f43f5e2d;
+  --primary: #f43f5e;
+  --box-Shadow: #fda4af;
+  --primary-light: #f43f5ea4;
+  --primary-dark: #be123c;
+}
+
+body.sky {
+  --primary-tp: #0ea5e92d;
+  --primary: #0ea5e9;
+  --box-Shadow: #7dd3fc;
+  --primary-light: #0ea5e9a4;
+  --primary-dark: #0369a1;
+}
+
+body {
+  @apply bg-[var(--background-light)] text-[color:var(--text)];
+}
+
+.border-color {
+  border-color: var(--border);
+}
+
+.breadcrumbAndButton {
+  @apply mb-4 flex justify-between items-center;
+}
+
+.text-primary {
+  @apply text-[color:var(--primary-dark)] dark:text-[color:var(--primary)];
+}
+
+.bg-light {
+  @apply bg-[color:var(--background-light)];
+}
+
+.bg-dark {
+  @apply bg-[color:var(--background-dark)];
+}
+
+.bg-primary {
+  @apply bg-[color:var(--primary)];
+}
+
+.text-light {
+  @apply text-[color:var(--text-light)];
+}
+
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+.btn {
+  @apply capitalize px-4 py-2 rounded-[6px] cursor-pointer text-sm flex items-center justify-center gap-1.5;
+}
+
+.badge-red {
+  @apply flex items-center justify-center text-red-600 dark:bg-[color:#dc26264a] bg-[color:#dc262630];
+}
+
+.alertMessage {
+  @apply transition-transform relative p-3 rounded-lg border border-red-400 dark:bg-[color:#dc26264a] bg-[color:#dc262630];
+}
+
+.closeAlert {
+  @apply text-xl absolute top-2 right-2;
+}
+
+/* badge red dot */
+.badge-red-dot {
+  @apply before:h-2 before:w-2 before:rounded-full before:inline-block before:bg-red-600 before:mr-2;
+}
+
+.badge-green {
+  @apply flex items-center justify-center text-green-500 dark:bg-[color:#16a34a45] bg-[color:#22c55e45];
+}
+
+/* badge green dot */
+.badge-green-dot {
+  @apply before:h-2 before:w-2 before:rounded-full before:inline-block before:bg-green-600 before:mr-2;
+}
+
+.badge-blue {
+  @apply flex items-center justify-center text-[var(--dark-primary-dark)] dark:bg-[color:#3daed430] bg-[color:#0fb0e636];
+}
+
+/* badge blue dot */
+.badge-blue-dot {
+  @apply before:h-2 before:w-2 before:rounded-full before:inline-block before:bg-blue-400 before:mr-2;
+}
+
+.badge-yellow {
+  @apply flex items-center justify-center text-yellow-600 dark:bg-[color:#ca8a0433] bg-[color:#ca8a043b];
+}
+
+.btn-primary {
+  @apply hover:shadow-lg bg-[color:var(--primary-dark)] font-semibold text-white;
+}
+
+.btn-success {
+  @apply hover:shadow-lg bg-green-300 dark:bg-green-500 font-semibold hover:text-white border border-green-600 hover:bg-green-600 dark:hover:bg-green-700;
+}
+
+.btn-print {
+  @apply hover:shadow-lg flex items-center gap-1 bg-blue-500 rounded-lg py-2 px-4 text-white hover:bg-blue-600;
+}
+
+.btn-excel {
+  @apply hover:shadow-lg flex items-center gap-1 bg-green-800 rounded-lg py-2 px-4 text-white hover:bg-green-900;
+}
+
+.btn-cancel {
+  @apply hover:shadow-lg dark:text-white dark:bg-red-500 dark:hover:text-white font-medium text-white hover:bg-red-600 bg-red-500 dark:hover:bg-red-700 py-2 px-4;
+}
+
+.btn-ok {
+  @apply hover:shadow-lg hover:bg-[color:var(--background)] dark:text-white font-medium text-white bg-[color:var(--background)] py-2 px-4;
+}
+
+.icon-fill {
+  @apply fill-gray-700 dark:fill-gray-200;
+}
+
+.icon-stroke {
+  @apply stroke-gray-700;
+}
+
+.card {
+  @apply rounded-[8px] bg-[var(--background)] shadow-sm;
+}
+
+.themeButton {
+  @apply bg-[color:var(--primary-dark)] px-6 py-2.5 rounded-md font-semibold;
+}
+
+/* input css star t ✅ */
+.inputBox {
+  @apply relative;
+}
+
+/* Label animation on focus or valid */
+.formControl.active {
+  border-color: var(--primary) !important;
+}
+
+fieldset.formControl.active {
+  @apply border-[color:var(--secondary)] shadow-none;
+}
+
+.formControl:focus~label,
+/* .formControl:valid ~ label, */
+.formControl:valid:not(.notRequired)~label,
+.hasClass~label,
+textarea.formControl:not(.notRequired):focus~label,
+/* textarea.formControl:not(.notRequired) ~ label, */
+#singleSelect.relative.picker.selected>label,
+.formControl.notRequired~label.editLabel,
+.formControl.notRequired:focus~label,
+.formControl~label.editLabel {
+  @apply !top-[0px] !text-[10px] font-medium;
+}
+
+.formControl[type="checkbox"],
+.formControl[type="radio"] {
+  @apply w-4 h-4 cursor-pointer border-2 border-gray-400 bg-white;
+  appearance: none;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* radio shape */
+.formControl[type="radio"] {
+  @apply rounded-full;
+}
+
+/* checkbox shape */
+.formControl[type="checkbox"] {
+  @apply rounded;
+}
+
+/* active border */
+.formControl[type="checkbox"]:checked,
+.formControl[type="radio"]:checked {
+  border-color: var(--primary);
+}
+
+/* inner dot (radio) */
+.formControl[type="radio"]::after {
+  content: "";
+  @apply absolute w-2 h-2 rounded-full scale-0;
+  background: var(--primary);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: 0.2s ease;
+}
+
+.formControl[type="radio"]:checked::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* checkbox inner fill */
+.formControl[type="checkbox"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Checked State */
+.formControl[type="checkbox"]:checked {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+/* White Check */
+.formControl[type="checkbox"]:checked::after {
+  content: "✔";
+  position: absolute;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -58%);
+}
+
+/* checkbox and radio */
+
+textarea.formControl.notRequired~label {
+  @apply !top-[14px];
+}
+
+/* Container spacing */
+.inputContainer:not(:last-child) {
+  @apply mb-5;
+}
+
+/* Warning message */
+.inputContainer .warning,
+.inputWarning {
+  @apply text-red-600 text-[12px] font-semibold capitalize !mt-[4px];
+}
+
+/* Main input styles */
+.inputBox .formControl {
+  @apply text-xs font-medium w-full bg-transparent border py-[10px] px-2 rounded-[4px] outline-none border-[var(--border)];
+}
+
+/* Focus/Valid border color */
+.inputBox .formControl:focus,
+.inputBox .formControl:valid {
+  @apply border-[var(--primary)];
+}
+
+.inputBox .formControl.notRequired {
+  @apply border-[var(--border)];
+}
+
+/* Label styling */
+.inputBox label,
+.relative>label {
+  @apply px-1 bg-[var(--background)] transition-all rounded-[3px] text-[14px] absolute font-medium top-1/2 -translate-y-1/2 left-2 pointer-events-none select-none capitalize dark:text-white;
+  z-index: 5;
+}
+
+/* Required mark */
+.inputBox label span {
+  @apply text-red-500;
+}
+
+/* White background variant */
+.inputBox.white .formControl {
+  @apply bg-[var(--background)];
+}
+
+/* Dark mode select options */
+.inputBox select option {
+  @apply dark:bg-[color:var(--background-dark)];
+}
+
+/* Textarea adjustments */
+.inputBox textarea~label {
+  @apply top-[20px] h-max;
+}
+
+/* Checkbox / radio wrapper */
+.checkInputBox {
+  @apply cursor-pointer flex items-center gap-2 border px-2 py-2 rounded-md w-full my-2 outline-none border-[var(--border)];
+}
+
+.checkInputBox.checked {
+  @apply border-[color:var(--primary)];
+}
+
+.checkInputBox span {
+  @apply text-sm font-medium capitalize;
+}
+
+/* input css end */
+
+/* xxxxxxxxxxxxxxxxxxxxxxxxxxxxx sidebar css start xxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
+
+/* sidebar css light */
+aside {
+  @apply shadow-md bg-[color:var(--background-dark)] rounded-lg md:rounded-l-none md:rounded-r-lg;
+}
+
+aside {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.425), rgba(21, 21, 21, 0.374)),
+    url(../Assets/images/sidebar/sidebar3.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#sideBarHeader {
+  @apply bg-white rounded-t-lg md:rounded-l-none;
+}
+
+aside .sideBarContent .navItem {
+  @apply border-b border-gray-600;
+}
+
+aside .sideBarContent .navItem .navLink {
+  @apply text-[16px] px-2.5 py-1 flex gap-2 items-center text-[color:var(--text-light)] hover:text-white;
+}
+
+aside .sideBarContent .navItem:not(.active):hover svg {
+  @apply dark:fill-white;
+}
+
+/* aside .sideBarContent .navItem.active {
+  @apply bg-[color:var(--background)];
+} */
+
+aside .sideBarContent .navItem.active .navLink {
+  @apply text-white bg-[color:var(--primary-light)];
+}
+
+aside .sideBarContent .navItem .navLink span.icon {
+  @apply border-2 border-transparent h-8 w-8 flex items-center justify-center fill-gray-200 dark:fill-gray-400;
+}
+
+aside .sideBarContent .navItem.active .navLink span.icon {
+  @apply dark:fill-white fill-[color:var(--background-light)];
+}
+
+.disableLink {
+  @apply opacity-30 pointer-events-none;
+}
+
+/* for dorp down */
+
+/* dropdown item with bullet */
+aside .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink {
+  @apply ps-10 p-2 hover:before:border-white before:left-6 relative before:absolute before:top-1/2 before:-translate-y-1/2 before:block before:h-[8px] before:w-[8px] before:rounded-full before:border-2 before:border-[var(--text-light)];
+}
+
+aside .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink.active {
+  @apply before:border-white;
+}
+
+aside.small .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink.active {
+  @apply dark:before:border-[color:var(--dark-primary-dark)];
+}
+
+aside .sideBarContent .navItem:not(.active).dropDown .dropDownContent .dropDownNavItem:hover svg {
+  @apply fill-white;
+}
+
+/* dropdown item with bullet end */
+
+aside .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink {
+  @apply text-[var(--text-light)] hover:text-white text-[15px];
+}
+
+aside.small .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink {
+  @apply border-b border-[var(--border)] text-[var(--text)] hover:text-[color:var(--primary)] before:border-[color:var(--text)] hover:before:border-[color:var(--primary)] text-[15px];
+}
+
+aside .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink.active {
+  @apply text-white font-semibold;
+}
+
+aside.small .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink.active {
+  @apply !text-[var(--primary)] before:border-[color:var(--primary)]
+}
+
+#sideBarHeader {
+  @apply dark:bg-white;
+}
+
+.svgFillLightBg {
+  @apply fill-gray-500 dark:fill-gray-200;
+}
+
+/* small sidebar dropDown */
+aside.small .sideBarContent .navItem.dropDown .dropDownContentOne {
+  @apply absolute transition-none shadow-sm top-0 w-[220px] left-[56px] bg-[color:var(--background)] rounded-e-lg
+}
+
+aside.small .sideBarContent .navItem.dropDown .dropDownNavLink.active {
+  @apply before:border-[color:var(--dark-primary-dark)] dark:text-[color:var(--dark-primary-dark)] hover:dark:text-[color:var(--dark-primary-dark)];
+}
+
+/* xxxxxxxxxxxxxxxxxxxxxxxxxxxxx header css start xxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
+
+header {
+  @apply bg-[color:var(--background-light)] fixed top-0 left-0;
+}
+
+header .headerDetails {
+  @apply bg-[color:var(--background)] px-3 py-3 rounded-lg;
+}
+
+/* xxxxxxxxxxxxxxxxxxxxxxxxxxxxx footer css start xxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
+
+footer {
+  @apply bg-[color:var(--background-light)] fixed left-0 bottom-5;
+}
+
+footer .footerDetails {
+  @apply bg-[color:var(--background)] px-3 py-3 rounded-lg dark:bg-[color:var(--dark-background-dark)];
+}
+
+/*  */
+
+/* 🌐 Custom Table CSS Start */
+
+/* normal table */
+.customTable::-webkit-scrollbar-track {
+  background-color: var(--primary) !important;
+}
+
+.customTable::-webkit-scrollbar-thumb {
+  background-color: var(--primary) !important;
+}
+
+.customTable td {
+  @apply px-[12px] py-[10px] text-sm font-medium;
+}
+
+.customTable tr {
+  @apply border-b border-[var(--border)];
+}
+
+.customTable thead {
+  @apply bg-[color:var(--table-heading)];
+}
+
+.customTable thead tr th {
+  @apply font-medium text-sm px-[12px] py-[10px];
+}
+
+/* color table  */
+.customTable.color thead {
+  @apply bg-[color:var(--primary-light)];
+}
+
+.customTable.color tbody tr {
+  @apply odd:bg-[var(--background-light)];
+}
+
+/* Sticky Columns */
+.customTable.color th.sticky,
+.customTable.color td.sticky {
+  position: sticky;
+  z-index: 5;
+}
+
+.customTable.color thead tr th {
+  @apply text-white font-medium text-sm px-[12px] py-[10px];
+}
+
+/* color table end  */
+
+/* Body Rows */
+
+.customTable tr:nth-child(odd) td.sticky {
+  color: inherit;
+  background-color: var(--background) !important;
+  z-index: 15;
+}
+
+.customTable tr:nth-child(even) td.sticky {
+  color: inherit;
+  background-color: var(--background) !important;
+  z-index: 15;
+}
+
+.rs-dropdown-menu {
+  background-color: var(--background) !important;
+  padding: 0 !important;
+}
+
+/* custom table end */
+
+
+/* dashboard css start */
+
+
+/* .dashboardCard {
+  background:
+    linear-gradient(to top right,
+      rgba(255, 255, 255, 0.85) 60%,
+      var(--primary-tp) 100%),
+    url(../Assets/images/dashboard/memphis2.webp);
+
+  background-position: left;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+} */
+
+body.dark .dashboardCard {
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: white;
+  overflow: hidden;
+  border: none;
+}
+
+body.dark .dashboardCard:nth-child(1) {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.71), rgba(21, 21, 21, 0.651)),
+    url(../Assets/images/dashboard/one.avif);
+  background-position: center center;
+
+}
+
+body.dark .dashboardCard:nth-child(2) {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.598), rgba(21, 21, 21, 0.607)),
+    url(../Assets/images/dashboard/two.jpg);
+
+  background-position: center center;
+}
+
+body.dark .dashboardCard:nth-child(3) {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.078), rgba(21, 21, 21, 0.128)),
+    url(../Assets/images/dashboard/three.avif);
+
+  background-position: center center;
+}
+
+body.dark .dashboardCard:nth-child(4) {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.078), rgba(21, 21, 21, 0.128)),
+    url(../Assets/images/dashboard/four.avif);
+
+  background-position: center center;
+  background-size: cover;
+}
+
+body.dark .dashboardCard:nth-child(5) {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.598), rgba(21, 21, 21, 0.621)),
+    url(../Assets/images/dashboard/five.jfif);
+
+  background-position: center center;
+  background-size: cover;
+}
+
+body.dark .dashboardCard:nth-child(6) {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.42), rgba(21, 21, 21, 0.384)),
+    url(../Assets/images/dashboard/seven.jpg);
+
+  background-position: center center;
+  background-size: cover;
+}
+
+body.dark .dashboardCard:nth-child(7) {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.598), rgba(21, 21, 21, 0.607)),
+    url(../Assets/images/dashboard/two.jpg);
+
+  background-position: center center;
+}
+
+body.dark .dashboardCard:nth-child(8) {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.598), rgba(21, 21, 21, 0.607)),
+    url(../Assets/images/dashboard/one.avif);
+
+  background-position: center center;
+}
+
+.recharts-default-tooltip {
+  background-color: var(--background) !important;
+  color: var(--text) !important;
+}
+
+
+/* rsuite picker */
+.rs-picker-popup {
+  background-color: var(--background) !important;
+}
+
+body.dark .rs-picker-default .rs-btn,
+body.dark .rs-picker-default .rs-picker-toggle,
+body.dark .rs-picker-input .rs-btn,
+body.dark .rs-search-box-input.rs-input,
+body.dark .rs-input-group.rs-input-group-inside,
+body.dark .rs-picker-input .rs-picker-toggle {
+  background-color: var(--background) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* dahboard */

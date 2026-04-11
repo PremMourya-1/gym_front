@@ -1,0 +1,176 @@
+import Table from "../../../Components/Table/Table";
+import moment from "moment/moment";
+import toCamelCase from "../../../Utils/modifyString";
+import ActionDropDown from "../../../Components/Common/ActionButtons/ActionDropDown";
+import { MdLoop } from "react-icons/md";
+import { DATE_MONTH_FORMATE } from "../../../Utils/formateDate";
+import { Link } from "react-router-dom";
+import Switch from "../../../Components/Switch";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+
+function ClientTable({ data, onEditClick, onChangeStatus, paginate, onDeleteClick, onRenewalClick, isPending, onClearPending }) {
+  const columnsData = [
+    {
+      title: "Client Name",
+      width: "120px",
+      selector: (row) => (
+        <Link to={`/clients/${row.id}`} className="text-blue-500 hover:underline">
+          {toCamelCase(row.clientName)}
+        </Link>
+      ),
+    },
+    {
+      title: "Mobile No",
+      selector: (row) => row.mobileNo,
+    },
+    {
+      title: "Plan",
+      selector: (row) => toCamelCase(row.plan?.name),
+    },
+    {
+      title: "Plan Price",
+      width: "100px",
+
+      selector: (row) => `₹ ${row.plan?.amount}`,
+    },
+    {
+      title: "Client Paid",
+      width: "100px",
+      selector: (row) => (
+        <span className="text-green-700">
+          ₹ {row?.paidAmount || row.plan?.amount}
+        </span>
+      ),
+    },
+    {
+      title: "Discount",
+      width: "100px",
+      selector: (row) => (
+        <span className="text-red-700">
+          ₹ {row?.discountAmount || 0}
+        </span>
+      ),
+    },
+    {
+      title: "Pending",
+      width: "100px",
+      selector: (row) => (
+        <span className="text-red-700">
+          ₹ {row?.pendingAmount || 0}
+        </span>
+      ),
+    },
+    {
+      title: "Total Pending",
+      width: "100px",
+      selector: (row) => (
+        <span className="text-red-700">
+          ₹ {row?.totalPendingAmount || 0}
+        </span>
+      ),
+    },
+    {
+      title: "Last Renewal",
+      width: "120px",
+      selector: (row) =>
+        row.lastRenewalDate
+          ? moment(row.lastRenewalDate).format("D MMM YYYY")
+          : "-",
+    },
+
+    // 🔥 SINGLE FIELD LOGIC
+    {
+      title: "Expire ?",
+      width: "120px",
+      selector: (row) => {
+        const date = moment(row.expiryDate).format(DATE_MONTH_FORMATE);
+
+        return row.expired < 0 ? (
+          <div className="text-red-600">
+            <div className="font-medium text-sm">{date}</div>
+            <div className="text-xs">
+              {Math.abs(row.expired)} days ago
+            </div>
+          </div>
+        ) : row.expired === 0 ? (
+          <div className="text-orange-500">
+            <div className="font-medium text-sm">{date}</div>
+            <div className="text-xs">Expiring Today</div>
+          </div>
+        ) : (
+          <div className="text-yellow-600">
+            <div className="font-medium text-sm">{date}</div>
+            <div className="text-xs">
+              {row.expired} days left
+            </div>
+          </div>
+        );
+      },
+    }
+    ,
+    // ❌ hide active toggle for expired page only
+    {
+      title: "Active",
+      selector: (row) => (
+        <Switch
+          item={row}
+          onChangeStatus={onChangeStatus}
+          checked={Boolean(row.active)}
+          type={"active"}
+        />
+      ),
+    },
+
+    // ❌ hide actions for expired page only
+    {
+      title: "Action",
+      width: "40px",
+      fixed: "right",
+      selector: (item) => (
+        <ActionDropDown
+          onEditClick={onEditClick}
+          onDeleteClick={onDeleteClick}
+          row={item}
+          title="Client"
+        >
+          {item.expired < 0 &&
+            <li
+              className="flex border-b items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
+              onClick={() => {
+                onRenewalClick(item);
+              }}
+            >
+              <MdLoop className=" text-lg" />
+              renew Plan
+            </li>
+          }
+          {isPending &&
+            <li
+              className="flex border-b items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
+              onClick={() => {
+                onClearPending(item);
+              }}
+            >
+              <IoMdCheckmarkCircleOutline className=" text-lg" />
+              Clear Pendings
+            </li>
+          }
+          {/* <li
+            className="flex border-b items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
+            onClick={() => {
+              onUploadPhotoClick(item);
+            }}
+          >
+            <IoCameraOutline className=" text-lg" />
+            Upload Photo
+          </li> */}
+        </ActionDropDown>
+      ),
+    },
+  ].filter(Boolean);
+
+  return <Table columns={columnsData} data={data} page={paginate.page} limit={paginate.limit} />;
+}
+
+
+export default ClientTable;

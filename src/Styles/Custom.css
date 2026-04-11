@@ -1,0 +1,839 @@
+body::-webkit-scrollbar {
+  width: 0;
+}
+
+aside::-webkit-scrollbar {
+  display: none;
+}
+
+aside::-webkit-scrollbar-thumb {
+  background-color: var(--background-light);
+}
+
+body.dark aside::-webkit-scrollbar-thumb {
+  background-color: var(--background-light);
+}
+
+.transition3 {
+  transition: all ease 0.5 !important;
+}
+
+aside {
+  height: calc(100vh - 40px);
+}
+
+header,
+footer {
+  width: calc(100vw - 260px);
+}
+
+@media (max-width: 768px) {
+  header,
+  footer {
+    width: calc(100vw - 40px) !important;
+  }
+}
+
+main {
+  max-height: calc(100vh - 60px);
+}
+
+main::-webkit-scrollbar,
+.ant-table-body::-webkit-scrollbar {
+  display: none !important;
+}
+
+header.small,
+footer.small {
+  width: calc(100vw - 80px);
+}
+
+/* shake bell */
+.shakeBell {
+  animation: bellshake 1s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+}
+
+@keyframes bellshake {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(15deg);
+  }
+
+  50% {
+    transform: rotate(-15deg);
+  }
+
+  75% {
+    transform: rotate(15deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+#login {
+  height: 100vh;
+}
+
+.inputBox label {
+  transition: all ease 0.2s;
+}
+
+/* /spiner css */
+
+.spiner {
+  border: 2px solid white;
+}
+
+.spiner.color {
+  border: 2px solid var(--background);
+  border-top-color: transparent;
+}
+
+body.dark .spiner.color {
+  border: 2px solid white;
+  border-top-color: transparent;
+}
+
+.spinerTp {
+  border: 3px solid var(--background);
+}
+
+/* body.dark .spinerTp {
+    border: 3px solid white;
+    border-top-color: transparent;
+} */
+
+.spiner,
+.spinerTp {
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: lds-ring 1.2s linear infinite;
+}
+
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.ant-dropdown-menu {
+  position: absolute !important;
+  width: max-content;
+  bottom: -200px !important;
+}
+
+.Toastify__toast {
+  background-color: white;
+  color: black;
+  font-size: 14px;
+}
+
+body.dark .Toastify__toast {
+  background-color: var(--background-dark) !important;
+  color: white;
+}
+
+/*  */
+.shine {
+  --shine-bg-color: #f6f7f8;
+  --shine-gradient-start: #ffffff33;
+  --shine-gradient-middle1: #edeef14f;
+  --shine-gradient-middle2: #ffffff54;
+  --shine-gradient-end: #ffffff21;
+  --shine-size: 800px 200px;
+  --shine-animation-duration: 5s;
+  /* Slowed down animation duration */
+
+  background: var(--shine-bg-color);
+  background-image: linear-gradient(
+    to right,
+    var(--shine-gradient-start) 0%,
+    var(--shine-gradient-middle1) 20%,
+    var(--shine-gradient-middle2) 40%,
+    var(--shine-gradient-end) 100%
+  );
+  background-repeat: no-repeat;
+  background-size: var(--shine-size);
+
+  position: relative;
+
+  animation-duration: var(--shine-animation-duration);
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeholderShimmer;
+  animation-timing-function: linear;
+}
+
+/* Dark mode styles */
+body.dark .shine {
+  --shine-bg-color: #333;
+  --shine-gradient-start: #444;
+  --shine-gradient-middle1: #555;
+  --shine-gradient-middle2: #666;
+  --shine-gradient-end: #777;
+
+  background: var(--shine-bg-color);
+  background-image: linear-gradient(
+    to right,
+    var(--shine-gradient-start) 0%,
+    var(--shine-gradient-middle1) 20%,
+    var(--shine-gradient-middle2) 40%,
+    var(--shine-gradient-end) 100%
+  );
+
+  animation-duration: var(--shine-animation-duration);
+  /* Ensure the dark mode uses the same animation duration */
+}
+
+@keyframes placeholderShimmer {
+  0% {
+    background-position: -468px 0;
+  }
+
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+/* ===========Drawer=============== */
+
+.rs-drawer-content:is(.dark *) {
+  background-color: var(--background-dark);
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.rs-drawer-header:is(.dark *) {
+  background-color: var(--background-light);
+  border: none;
+}
+
+.rs-drawer-header {
+  padding: 12px 20px !important;
+  background-color: var(--background-light);
+}
+
+.rs-drawer-header .rs-drawer-header-close {
+  left: inherit !important;
+  top: 20px !important;
+  right: 18px;
+  color: white;
+}
+
+.rs-drawer-header .rs-drawer-header-close {
+  color: rgb(0, 0, 0);
+  background-color: transparent;
+}
+
+.rs-drawer-header .rs-drawer-header-close:hover {
+  background-color: #d0d0d0;
+}
+
+.rs-drawer-header .rs-drawer-header-close:is(.dark *) {
+  color: white;
+  background-color: transparent;
+}
+
+.rs-drawer-header .rs-drawer-header-close:hover:is(.dark *) {
+  background-color: rgb(48, 48, 48);
+}
+
+.rs-drawer-body {
+  padding: 30px 30px !important;
+}
+
+/* ================tabs================ */
+
+.rs-nav-pills {
+  padding: 10px !important;
+  gap: 6px;
+  /* background-color: white !important; */
+}
+
+.rs-nav-pills {
+  @apply dark:bg-[color:var(--background-dark)];
+}
+
+.rs-nav-pills .rs-nav-item-active {
+  background-color: var(--background) !important;
+  color: white !important;
+  padding: 6px 12px !important;
+}
+
+.rs-nav-pills .rs-nav-item {
+  background-color: var(--background-light);
+}
+
+.rs-nav-pills .rs-nav-item {
+  @apply dark:bg-[color:var(--dark-bg-highlight)] dark:text-gray-400;
+}
+
+.rs-nav {
+  width: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .rs-nav-pills {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .rs-drawer-header {
+    padding: 12px 10px !important;
+  }
+
+  .rs-drawer-header .rs-drawer-header-close {
+    right: 4px;
+  }
+}
+
+/* ::-webkit-scrollbar {
+  display: none;
+} */
+
+.rs-btn-close:hover svg path {
+  stroke: rgb(40, 40, 40) !important;
+}
+
+.rs-btn-close:hover {
+  background-color: #d0d0d0 !important;
+}
+
+.rs-btn-close {
+  background-color: #e2e8f0 !important;
+  padding: 6px !important;
+  border-radius: 5px;
+  color: rgb(11, 11, 11) !important;
+  z-index: 99;
+}
+
+.rs-btn-close:is(.dark *) {
+  background-color: var(--background-light) !important;
+  color: rgb(255, 255, 255) !important;
+}
+
+.rs-btn-close:hover:is(.dark *) {
+  background-color: var(--background) !important;
+}
+
+.rs-btn-close:hover:is(.dark *) svg path {
+  stroke: white !important;
+}
+
+.rs-radio-blue.rs-radio-checked .rs-radio-inner:before {
+  background-color: var(--background) !important;
+  border-color: var(--background) !important;
+}
+
+.rs-radio-blue .rs-radio-control:before,
+.rs-radio-blue label:hover .rs-radio-inner:before {
+  border-color: var(--background) !important;
+}
+
+.rs-radio-control:before {
+  border: 1px solid var(--background) !important;
+}
+
+/* =============celendar======================= */
+
+.rs-calendar-panel
+  .rs-calendar-table-cell-is-today
+  .rs-calendar-table-cell-day {
+  display: grid;
+  place-items: center;
+  height: 30px !important;
+  width: 30px !important;
+  background-color: var(--background) !important;
+}
+
+.rs-calendar-bordered
+  .rs-calendar-table-row
+  .rs-calendar-table-cell:is(.dark *) {
+  border: none !important;
+}
+
+.rs-calendar-bordered .rs-calendar-table:is(.dark *) {
+  border: none;
+}
+
+.rs-calendar-bordered
+  .rs-calendar-table-header-row
+  .rs-calendar-table-header-cell:is(.dark *) {
+  border-bottom: 1px solid #686868;
+}
+
+.rs-calendar-table-cell-content:hover:is(.dark *) {
+  background-color: var(--background) !important;
+  color: white !important;
+}
+
+.rs-calendar-table-cell-content:hover {
+  background-color: var(--background-light) !important;
+}
+
+.rs-calendar-panel.rs-calendar-compact
+  .rs-calendar-table-row:not(.rs-calendar-table-header-row)
+  .rs-calendar-table-cell-content {
+  display: grid;
+  place-items: center;
+}
+
+.rs-calendar-panel
+  .rs-calendar-table-header-row
+  .rs-calendar-table-header-cell-content:is(.dark *) {
+  color: white;
+}
+
+.rs-btn-subtle:is(.dark *) {
+  color: white;
+}
+
+.rs-btn-subtle:hover:is(.dark *) {
+  background-color: var(--background);
+  color: white;
+}
+
+.rs-calendar-btn-today:is(.dark *) {
+  background-color: var(--background-light) !important;
+  color: white !important;
+}
+
+.rs-btn:hover:is(.dark *) {
+  background-color: var(--background) !important;
+}
+
+.rs-calendar-month-view .rs-calendar-header-title-date {
+  background: var(--background) !important;
+  color: white !important;
+}
+
+.rs-btn-subtle:focus:is(.dark *) {
+  background-color: var(--background) !important;
+  color: white;
+}
+
+.rs-calendar-month-dropdown-cell-content {
+  color: black;
+}
+
+.rs-calendar-month-dropdown-year {
+  color: black;
+}
+
+/* ================modal-title=========== */
+.rs-modal-title {
+  font-weight: 600 !important;
+}
+
+.rs-modal-content {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.rs-modal-body {
+  padding: 20px;
+  margin-top: 0 !important;
+  max-height: inherit !important;
+}
+
+/* input */
+.inputBox input {
+  position: relative;
+}
+
+/* .inputBox input::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  height: 1px;
+  width: 0;
+  background-color: var(--primary-dark);
+  transform: translateX(-50%);
+  transition: all 0.3s ease;
+} */
+
+/* .inputBox input:focus::before,
+.inputBox:focus-within::before {
+  width: 100%;
+} */
+
+/* .formControl.notRequired ~ label {
+  font-size: 15px;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+
+.formControl.notRequired ~ label.editLabel {
+  top: 0px !important;
+  font-size: 12px;
+} */
+
+#customDatePicker input {
+  display: none;
+}
+
+body.dark #customDatePicker .rmdp-calendar {
+  background-color: var(--background-dark);
+}
+
+#customDatePicker .rmdp-shadow {
+  box-shadow: none !important;
+}
+
+#customDatePicker div:not(.rmdp-day) {
+  width: 100% !important;
+  box-shadow: none;
+}
+
+.green .rmdp-arrow-container:hover {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+#customDatePicker .rmdp-day span {
+  border-radius: 4px !important;
+}
+
+#customDatePicker .ep-arrow {
+  display: none !important;
+}
+
+body.dark .rmdp-header-values,
+body.dark .rmdp-day,
+body.dark .rmdp-week-day {
+  color: white !important;
+}
+
+/* .rmdp-week>div {
+    border-right: 1px solid gray;
+} */
+
+#customDatePicker .month .rmdp-day.rmdp-selected span:not(.highlight) {
+  background-color: #25b825;
+  box-shadow: none;
+  color: #fff;
+}
+
+.rmdp-calendar {
+  margin-top: -36px;
+}
+
+.rmdp-header {
+  pointer-events: none;
+}
+
+.rmdp-header button {
+  display: none;
+}
+
+.rmdp-container .ep-arrow {
+  position: static !important;
+  transform: translate(0, 0) !important;
+}
+
+/* .rs-anim-bounce-in.rs-modal {
+    min-height: 100vh;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+} */
+
+.rs-modal-body {
+  padding: 0 !important;
+}
+
+.payment_summary-cutout:after,
+.payment_summary-cutout:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.payment_summary-cutout:after {
+  /* top */
+  height: 16px;
+  top: 100%;
+  background:
+    linear-gradient(-135deg, #ffffff 8px, transparent 0) 0 8px,
+    linear-gradient(135deg, #ffffff 8px, transparent 0) 0 8px;
+  background-position: 0 0;
+  background-repeat: repeat-x;
+  background-size: 16px 16px;
+}
+
+body.dark .payment_summary-cutout:after {
+  /* top */
+  height: 16px;
+  top: 100%;
+  background:
+    linear-gradient(-135deg, var(--background-dark) 8px, transparent 0) 0 8px,
+    linear-gradient(135deg, var(--background-dark) 8px, transparent 0) 0 8px;
+  background-position: 0 0;
+  background-repeat: repeat-x;
+  background-size: 16px 16px;
+}
+
+.payment_summary-cutout:before {
+  height: 12px;
+  top: 110%;
+  background:
+    linear-gradient(-135deg, #e6e9f2 8px, transparent 0) 0 8px,
+    linear-gradient(135deg, #e6e9f2 8px, transparent 0) 0 8px;
+  background-position: 0 0;
+  background-repeat: repeat-x;
+  background-size: 16px 16px;
+}
+
+body.dark .Toastify__close-button svg {
+  fill: white;
+}
+
+/* rect date picker  ===============*/
+.monthlyReportCalender .react-datepicker__header {
+  background-color: var(--background);
+  border: none;
+}
+
+.monthlyReportCalender
+  .react-datepicker__header
+  .react-datepicker__day-names
+  .react-datepicker__day-name,
+.monthlyReportCalender
+  .react-datepicker__header
+  .react-datepicker__current-month {
+  color: white;
+}
+
+.react-datepicker {
+  border: none !important;
+}
+
+.monthlyReportCalender.disabled .react-datepicker {
+  pointer-events: none;
+}
+
+.monthlyReportCalender .react-datepicker {
+  background-color: var(--background-light);
+  color: rgb(71, 68, 68) !important;
+}
+
+body.dark .monthlyReportCalender .react-datepicker {
+  background-color: var(--background-light);
+  color: white !important;
+}
+
+.monthlyReportCalender .react-datepicker__day {
+  font-weight: 700;
+  margin: 8px;
+}
+
+body.dark .monthlyReportCalender .react-datepicker__day {
+  color: white;
+}
+
+.monthlyReportCalender .react-datepicker button {
+  display: none;
+}
+
+.green-day {
+  background-color: green !important;
+  color: white !important;
+  border-radius: 6px !important;
+}
+
+.holiday,
+.sunday {
+  /* pointer-events: none !important; */
+  border-radius: 6px !important;
+  background-color: rgb(255, 187, 0) !important;
+  color: white !important;
+}
+
+.red-day {
+  background-color: red !important;
+  color: white !important;
+  border-radius: 6px !important;
+}
+
+.not-working-day {
+  border-radius: 6px !important;
+  background-color: rgb(197, 197, 197) !important;
+  opacity: 0.5;
+  pointer-events: none !important;
+}
+
+body.dark .not-working-day {
+  background-color: var(--background-dark) !important;
+}
+
+/* day default */
+.react-datepicker__day:not([aria-disabled="true"]),
+.react-datepicker__month-text:not([aria-disabled="true"]),
+.react-datepicker__quarter-text:not([aria-disabled="true"]),
+.react-datepicker__year-text:not([aria-disabled="true"]) {
+  color: rgb(53, 52, 52);
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--selected:not(.green-day),
+.react-datepicker__day--selected:not(.red) {
+  background-color: transparent;
+}
+
+.react-datepicker__day--selected:not(.green-day):hover,
+.react-datepicker__day--selected:not(.red):hover {
+  background-color: var(--background);
+}
+
+/* day on hover default */
+.react-datepicker__day:not(.green-day):not(.red-day):not(.sunday):not(
+    .holiday
+  ):not([aria-disabled="true"]):hover,
+.react-datepicker__day:not(.green-day):not(.red-day):not(.sunday):not(
+    .holiday
+  ):not([aria-disabled="true"]):hover,
+.react-datepicker__month-text:not(.green-day):not(.red-day):not(.sunday):not(
+    .holiday
+  ):not([aria-disabled="true"]):hover,
+.react-datepicker__quarter-text:not(.green-day):not(.red-day):not(.sunday):not(
+    .holiday
+  ):not([aria-disabled="true"]):hover,
+.react-datepicker__year-text:not(.green-day):not(.red-day):not(.sunday):not(
+    .holiday
+  ):not([aria-disabled="true"]):hover {
+  background-color: rgb(182, 182, 182) !important;
+}
+
+/*dark day on hover default */
+body.dark
+  .react-datepicker__day:not(.green-day):not(.red-day):not(.sunday):not(
+    .holiday
+  ):not([aria-disabled="true"]):hover,
+body.dark
+  .react-datepicker__month-text:not(.green-day):not(.red-day):not(.sunday):not(
+    .holiday
+  ):not([aria-disabled="true"]):hover,
+body.dark
+  .react-datepicker__quarter-text:not(.green-day):not(.red-day):not(
+    .sunday
+  ):not(.holiday):not([aria-disabled="true"]):hover,
+body.dark
+  .react-datepicker__year-text:not(.green-day):not(.red-day):not(.sunday):not(
+    .holiday
+  ):not([aria-disabled="true"]):hover {
+  background-color: rgb(75, 74, 74) !important;
+}
+
+.yearly .react-datepicker {
+  height: 100%;
+}
+
+body.dark .rs-steps-item-title {
+  color: gainsboro !important;
+}
+
+.rs-drawer-wrapper {
+  outline: none !important;
+}
+
+.react-datepicker__day-name,
+.react-datepicker__day,
+.react-datepicker__time-name {
+  margin: 8px !important;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  /* Firefox */
+}
+
+.CustomScrollBar::-webkit-scrollbar {
+  height: 8px;
+}
+
+body.dark .CustomScrollBar::-webkit-scrollbar-thumb {
+  background-color: #444;
+}
+
+.CustomScrollBar::-webkit-scrollbar-thumb {
+  background-color: gainsboro;
+}
+
+/* user login bg */
+#userLoginBg {
+  background-image: url("https://img.freepik.com/free-photo/young-fitness-man-studio_7502-5008.jpg?semt=ais_rp_50_assets&w=740&q=80");
+  background-image: url("https://m.media-amazon.com/images/I/81tUc5CqlBL.jpg");
+  background-image: url("https://wallpapers.com/images/featured/workout-tbx6fzhe2jsty564.jpg");
+  background-image: url("https://wallpapercave.com/wp/wp2333032.jpg");
+  background-image: url("https://getwallpapers.com/wallpaper/full/5/3/8/256438.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.corner-shine {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+  filter: blur(8px);
+  opacity: 0.8;
+  animation: cornerGlow 3s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.top-left {
+  top: -20px;
+  left: -20px;
+}
+.top-right {
+  top: -20px;
+  right: -20px;
+}
+.bottom-left {
+  bottom: -20px;
+  left: -20px;
+}
+.bottom-right {
+  bottom: -20px;
+  right: -20px;
+}
+
+@keyframes cornerGlow {
+  from {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  to {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+
+
+.rs-picker-select-menu-item.rs-picker-select-menu-item-focus,
+.rs-picker-select-menu-item,
+.rs-picker-select-menu-item {
+  color: var(--text) !important;
+  font-size: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.rs-picker-select-menu-item.rs-picker-select-menu-item-focus,
+.rs-picker-select-menu-item:focus,
+.rs-picker-select-menu-item:hover {
+  background-color: var(--primary-light) !important;
+  color: white !important;
+}
