@@ -1,6 +1,10 @@
 {
     "rewrites": [
         {
+            "source": "/api/(.*)",
+            "destination": "https://gym-backend-8189.onrender.com/$1"
+        },
+        {
             "source": "/(.*)",
             "destination": "/"
         }
