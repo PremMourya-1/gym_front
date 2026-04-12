@@ -23,7 +23,7 @@ function Layout() {
         }}
         className={`${
           theme.isSideBarSmall ? "md:ms-0 ms-20" : "ms-[260px] md:ms-0"
-        } p-5 overflow-y-scroll pt-[114px] md:ms-12 md:pt-[86px] md:p-3 min-h-screen !pb-20`}
+        } p-5 overflow-y-scroll pt-[114px] md:ms-0 md:pt-[86px] md:p-3 min-h-screen !pb-20`}
       >
         {/* <BreadCrumb /> */}
         <Outlet />

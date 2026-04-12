@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import logo from "../../../Assets/images/logo/softway.png";
 
 import LoaderSpiner from "../../../Components/Loaders/LoaderSpiner";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
@@ -15,7 +14,7 @@ function Login() {
   const dispatch = useDispatch();
   const [isShow, setIsShow] = useState(false);
 
-  const { register, handleSubmit, setValue, watch } = useForm();
+  const { register, handleSubmit, watch } = useForm();
 
   const [isForgoting, setIsForgoting] = useState(false);
   const [contact, setContact] = useState();
