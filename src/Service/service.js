@@ -4,9 +4,8 @@ import { ADMIN_DETAILS, USER_DETAILS } from "../Constant/Constant";
 
 // export const COMMON_IMAGE_URL = "http://localhost:3000/api/";
 // export const BASE_URL = "http://localhost:3000/api/";
-
-export const COMMON_IMAGE_URL = import.meta.env.COMMON_IMAGE_URL;
 export const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+export const COMMON_IMAGE_URL = import.meta.env.VITE_COMMON_IMAGE_URL;
 const createApiForClient = (contentType) => {
   const headers = { "Cache-Control": "no-cache" };
 
