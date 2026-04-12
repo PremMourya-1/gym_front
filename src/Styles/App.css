@@ -559,7 +559,7 @@ aside .sideBarContent .navItem:not(.active):hover svg {
 } */
 
 aside .sideBarContent .navItem.active .navLink {
-  @apply text-white bg-[color:var(--primary-light)];
+  @apply text-white bg-[color:var(--primary-tp)];
 }
 
 aside .sideBarContent .navItem .navLink span.icon {
@@ -641,11 +641,11 @@ header .headerDetails {
 /* xxxxxxxxxxxxxxxxxxxxxxxxxxxxx footer css start xxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
 
 footer {
-  @apply bg-[color:var(--background-light)] fixed left-0 bottom-5;
+  @apply bg-[color:var(--background-light)] fixed left-0 bottom-0 pb-5 md:pb-0;
 }
 
 footer .footerDetails {
-  @apply bg-[color:var(--background)] px-3 py-3 rounded-lg dark:bg-[color:var(--dark-background-dark)];
+  @apply !bg-[color:var(--background)] px-3 py-3 rounded-lg dark:bg-[color:var(--dark-background-dark)] md:rounded-none;
 }
 
 /*  */

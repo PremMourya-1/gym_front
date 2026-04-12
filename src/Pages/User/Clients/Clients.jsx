@@ -10,7 +10,11 @@ import BreadCrumb from "../../../Components/Common/BreadCrumb/BreadCrumb";
 import UseShortKey from "../../../Hooks/UseShortKey";
 import Button from "../../../Components/Button/Button";
 import GymClientTable from "./ClientTable";
-import addEditClient, { deleteClient, getClients, receivePending } from "./clientService";
+import addEditClient, {
+  deleteClient,
+  getClients,
+  receivePending,
+} from "./clientService";
 import { getPlans } from "../Plan/planService";
 import SearchAndChangePage from "../../../Components/Common/GlobleSearch/SearchAndChangePage";
 import { showDefaultDataLimit } from "../../../Constant/Constant";
@@ -63,10 +67,10 @@ function GymClient() {
         isExpired: isExpiredPage ? 1 : 0, // 👈 KEY
         isDeactive: isDeactivePage ? 1 : 0, // 👈 KEY
         isPending: isPending ? 1 : 0,
-        search
+        search,
       }),
       setData,
-      setDataInDB
+      setDataInDB,
     );
   }
 
@@ -74,9 +78,20 @@ function GymClient() {
     !planList && getPlans(setPlanList); // 👈 only for normal page
   }, []);
 
-  const { register, handleSubmit, watch, setValue, reset } = useForm({ gender: "male" });
-  const { register: register2, handleSubmit: handleSubmit2, watch: watch2, setValue: setValue2, } = useForm();
-  const { register: register3, handleSubmit: handleSubmit3, watch: watch3, setValue: setValue3, } = useForm();
+  const { register, handleSubmit, watch, setValue, reset } = useForm({
+    gender: "male",
+  });
+  const {
+    register: register2,
+    handleSubmit: handleSubmit2,
+    watch: watch2,
+    setValue: setValue2,
+  } = useForm();
+  const {
+    register: register3,
+    handleSubmit: handleSubmit3,
+    watch: watch3,
+  } = useForm();
 
   function handleForm(data) {
     const plan = Number(data.planAmount) || 0;
@@ -94,9 +109,8 @@ function GymClient() {
       paidAmount: paid,
       pendingAmount: pending,
       discountAmount: discount,
-      lastRenewalDate: data.joiningDate
+      lastRenewalDate: data.joiningDate,
     };
-
 
     const formData = new FormData();
 
@@ -125,19 +139,10 @@ function GymClient() {
       paidAmount: paid,
       pendingAmount: pending,
       discountAmount: discount,
-      clientId: selectedRow.id
+      clientId: selectedRow.id,
     };
 
-
-
-
-    renewPlan(
-      payload,
-      setRenewalModal,
-      null,
-      setIsLoading,
-      setReload
-    )
+    renewPlan(payload, setRenewalModal, null, setIsLoading, setReload);
     // return
 
     // addEditClient(payload, listId, setDrawer, setData, setIsLoading);
@@ -171,12 +176,11 @@ function GymClient() {
     currentSetValue("paidAmount", paid);
     currentSetValue("pendingAmount", pending);
     currentSetValue("discountAmount", discount);
-
   }, [
     currentWatch("planAmount"),
     currentWatch("paidAmount"),
     currentWatch("pendingAmount"),
-    isRenewal
+    isRenewal,
   ]);
 
   const handlePendingChange = (value) => {
@@ -195,7 +199,6 @@ function GymClient() {
     currentSetValue("pendingAmount", pending);
     currentSetValue("discountAmount", discount);
   };
-
 
   const handleDiscountChange = (value) => {
     const plan = Number(currentWatch("planAmount")) || 0;
@@ -229,11 +232,8 @@ function GymClient() {
     setValue("pendingAmount", row.pendingAmount);
     setValue("discountAmount", row.discountAmount);
 
-
     setDrawer(true);
   }
-
-
 
   function onChangeStatus(status, id, type) {
     addEditClient(
@@ -241,7 +241,7 @@ function GymClient() {
       id,
       setDrawer,
       setData,
-      setTpLoader
+      setTpLoader,
     );
   }
 
@@ -270,28 +270,31 @@ function GymClient() {
         isPending: isPending ? 1 : 0,
       }),
       setData,
-      setDataInDB
+      setDataInDB,
     );
   }
-
 
   const [renewalModal, setRenewalModal] = useState(false);
 
   function onRenewalClick(client) {
-    setRenewalModal(true)
-    setSelectedRow(client)
-    setIsRenewal(true)
-
+    setRenewalModal(true);
+    setSelectedRow(client);
+    setIsRenewal(true);
   }
-  const [pendingModal, setPendingModal] = useState()
+  const [pendingModal, setPendingModal] = useState();
   function onClearPending(item) {
-    setSelectedRow(item)
-    setPendingModal(true)
+    setSelectedRow(item);
+    setPendingModal(true);
   }
 
   function handleClearPending(data) {
-    const payload = { ...data, markAsDiscount: Number(data.markAsDiscount) }
-    receivePending({ id: selectedRow.id, data: payload }, setIsLoading, setPendingModal, setReload)
+    const payload = { ...data, markAsDiscount: Number(data.markAsDiscount) };
+    receivePending(
+      { id: selectedRow.id, data: payload },
+      setIsLoading,
+      setPendingModal,
+      setReload,
+    );
   }
 
   const pageTitle = isExpiredPage
@@ -321,7 +324,7 @@ function GymClient() {
               setDrawer(true);
               reset();
               setListId(null);
-              setIsRenewal(false)
+              setIsRenewal(false);
             }}
           >
             Add Client
@@ -350,7 +353,7 @@ function GymClient() {
             ]}
             cleanable
             placeholder={"Filter By Gender"}
-            className="min-w-[220px] md:w-full picker"
+            className="min-w-[160px] md:w-full picker"
           />
         )}
       </SearchAndChangePage>
@@ -380,7 +383,6 @@ function GymClient() {
 
       {/* ❌ Modals only for normal */}
       <>
-
         <DrawerComponent
           size={"480px"}
           body={
@@ -410,7 +412,6 @@ function GymClient() {
                   </label>
                 </div>
                 <div className="col-span-full">
-
                   <RadioSelect
                     label="Gender"
                     name="gender"
@@ -421,14 +422,11 @@ function GymClient() {
                       { label: "Male", value: "male" },
                       { label: "Female", value: "female" },
                     ]}
-
                   />
                 </div>
 
-
-                {!listId ?
+                {!listId ? (
                   <>
-
                     {/* Plan Selection with Amount Pill */}
                     <div className="relative inputBox col-span-full">
                       <select
@@ -437,7 +435,7 @@ function GymClient() {
                         {...register("planId", {
                           onChange: (e) => {
                             const selectedPlan = planList.find(
-                              (p) => p.id === e.target.value
+                              (p) => p.id === e.target.value,
                             );
                             setValue("planAmount", selectedPlan?.price || 0);
                             setValue("paidAmount", selectedPlan?.price || 0);
@@ -447,12 +445,18 @@ function GymClient() {
                       >
                         <option value="">Select Plan</option>
                         {planList?.map((plan) => (
-                          <option key={plan.id} value={plan.id} className="capitalize">
+                          <option
+                            key={plan.id}
+                            value={plan.id}
+                            className="capitalize"
+                          >
                             {plan.name}
                           </option>
                         ))}
                       </select>
-                      <label>Plan <span className="text-red-600">*</span></label>
+                      <label>
+                        Plan <span className="text-red-600">*</span>
+                      </label>
 
                       {/* Pill inside the inputBox, top-right corner */}
                       <div className="absolute right-2 top-1/2 -translate-y-1/2 bg-green-100 text-green-800 rounded-full px-3 py-1 text-sm font-medium pointer-events-none">
@@ -467,7 +471,9 @@ function GymClient() {
                         className="formControl notRequired"
                         {...register("paidAmount")}
                       />
-                      <label className={`${watch("paidAmount") ? "editLabel" : ""}`}>
+                      <label
+                        className={`${watch("paidAmount") ? "editLabel" : ""}`}
+                      >
                         Paid Amount (optional)
                       </label>
                     </div>
@@ -478,10 +484,13 @@ function GymClient() {
                         type="number"
                         className="formControl notRequired"
                         {...register("pendingAmount", {
-                          onChange: (e) => handlePendingChange(Number(e.target.value)),
+                          onChange: (e) =>
+                            handlePendingChange(Number(e.target.value)),
                         })}
                       />
-                      <label className={`${watch("pendingAmount") ? "editLabel" : ""}`}>
+                      <label
+                        className={`${watch("pendingAmount") ? "editLabel" : ""}`}
+                      >
                         Pending Amount (optional)
                       </label>
                     </div>
@@ -492,14 +501,16 @@ function GymClient() {
                         type="number"
                         className="formControl notRequired"
                         {...register("discountAmount", {
-                          onChange: (e) => handleDiscountChange(Number(e.target.value)),
+                          onChange: (e) =>
+                            handleDiscountChange(Number(e.target.value)),
                         })}
                       />
-                      <label className={`${watch("discountAmount") ? "editLabel" : ""}`}>
+                      <label
+                        className={`${watch("discountAmount") ? "editLabel" : ""}`}
+                      >
                         Discount Amount (optional)
                       </label>
                     </div>
-
 
                     <div className="inputBox">
                       <input
@@ -508,11 +519,14 @@ function GymClient() {
                         className="formControl"
                         {...register("joiningDate")}
                       />
-                      <label>Joining Date <span className="text-red-600">*</span></label>
+                      <label>
+                        Joining Date <span className="text-red-600">*</span>
+                      </label>
                     </div>
-                  </> : ""
-                }
-
+                  </>
+                ) : (
+                  ""
+                )}
 
                 {/* <CameraCapture setValue={setValue} /> */}
               </div>
@@ -547,30 +561,28 @@ function GymClient() {
         >
           <Modal.Body>
             <div className="relative">
-
               {/* Close Icon */}
               <div className="bg-light p-2.5">
-
                 <button
                   onClick={() => setRenewalModal(false)}
                   className="absolute right-3 top-3 hover:text-red-600"
                 >
                   <RxCross2 />
-
                 </button>
 
                 {/* Title */}
                 <div className="capitalize">
-
-                  <span className="text-primary font-semibold"> Renew  {selectedRow?.clientName}{"'s"} Plan</span>
+                  <span className="text-primary font-semibold">
+                    {" "}
+                    Renew {selectedRow?.clientName}
+                    {"'s"} Plan
+                  </span>
                 </div>
               </div>
 
               <div className="p-3">
-
                 <form onSubmit={handleSubmit2(handleRenewPlan)}>
                   <div className="grid grid-cols-2 gap-3">
-
                     {/* Plan */}
                     <div className="relative inputBox col-span-full">
                       <select
@@ -579,7 +591,7 @@ function GymClient() {
                         {...register2("planId", {
                           onChange: (e) => {
                             const selectedPlan = planList.find(
-                              (p) => p.id === e.target.value
+                              (p) => p.id === e.target.value,
                             );
                             setValue2("planAmount", selectedPlan?.price || 0);
                             setValue2("paidAmount", selectedPlan?.price || 0);
@@ -612,22 +624,26 @@ function GymClient() {
                         className="formControl notRequired"
                         {...register2("paidAmount")}
                       />
-                      <label className={watch2("paidAmount") ? "editLabel" : ""}>
+                      <label
+                        className={watch2("paidAmount") ? "editLabel" : ""}
+                      >
                         Paid Amount
                       </label>
                     </div>
-
 
                     {/* Pending */}
                     <div className="inputBox">
                       <input
                         type="number"
                         {...register2("pendingAmount", {
-                          onChange: (e) => handlePendingChange(Number(e.target.value)),
+                          onChange: (e) =>
+                            handlePendingChange(Number(e.target.value)),
                         })}
                         className="formControl notRequired"
                       />
-                      <label className={watch2("pendingAmount") ? "editLabel" : ""}>
+                      <label
+                        className={watch2("pendingAmount") ? "editLabel" : ""}
+                      >
                         Pending Amount
                       </label>
                     </div>
@@ -637,12 +653,15 @@ function GymClient() {
                       <input
                         type="number"
                         {...register2("discountAmount", {
-                          onChange: (e) => handleDiscountChange(Number(e.target.value)),
+                          onChange: (e) =>
+                            handleDiscountChange(Number(e.target.value)),
                         })}
                         className="formControl notRequired"
                       />
 
-                      <label className={watch2("discountAmount") ? "editLabel" : ""}>
+                      <label
+                        className={watch2("discountAmount") ? "editLabel" : ""}
+                      >
                         Discount Amount
                       </label>
                     </div>
@@ -659,11 +678,14 @@ function GymClient() {
                         Renewal Date <span className="text-red-600">*</span>
                       </label>
                     </div>
-
                   </div>
 
-                  <button disabled={isLoading} className="btn btn-primary mt-6 ms-auto !text-xs">
-                    <MdLoop size={16} />     {isLoading ? <LoaderSpiner /> : "Renew Plan"}
+                  <button
+                    disabled={isLoading}
+                    className="btn btn-primary mt-6 ms-auto !text-xs"
+                  >
+                    <MdLoop size={16} />{" "}
+                    {isLoading ? <LoaderSpiner /> : "Renew Plan"}
                   </button>
                 </form>
               </div>
@@ -679,7 +701,6 @@ function GymClient() {
         >
           <Modal.Body>
             <div className="relative">
-
               {/* Close Icon */}
               <div className="bg-light p-2.5">
                 <button
@@ -704,9 +725,7 @@ function GymClient() {
 
               <div className="p-3">
                 <form onSubmit={handleSubmit3(handleClearPending)}>
-
                   <div className="grid grid-cols-2 gap-3">
-
                     {/* 🔥 Pending Amount Input */}
                     <div className="inputBox col-span-full">
                       <input
@@ -724,8 +743,8 @@ function GymClient() {
                       Remaining Pending: ₹{" "}
                       {Math.max(
                         (selectedRow?.pendingAmount || 0) -
-                        (Number(watch3("amount")) || 0),
-                        0
+                          (Number(watch3("amount")) || 0),
+                        0,
                       )}
                     </div>
 
@@ -740,7 +759,6 @@ function GymClient() {
                         Convert remaining to discount
                       </label>
                     </div>
-
                   </div>
 
                   {/* Submit */}
@@ -750,14 +768,12 @@ function GymClient() {
                   >
                     {isLoading ? <LoaderSpiner /> : "Clear Pending"}
                   </button>
-
                 </form>
               </div>
             </div>
           </Modal.Body>
         </Modal>
       </>
-
     </>
   );
 }

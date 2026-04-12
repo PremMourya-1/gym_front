@@ -15,7 +15,6 @@ import { getLoggedInUserDetails } from "../../../Store/Slices/AuthSlice";
 
 function UserProfile({ isAdmin, logo }) {
   const userDetails = useSelector(getLoggedInUserDetails);
-  console.log(userDetails);
   const disptach = useDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);

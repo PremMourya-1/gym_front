@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import logo from "../../../Assets/images/logo/softwayxgymcut.png";
+import logo from "../../../Assets/images/logo/softway.png";
 
 import LoaderSpiner from "../../../Components/Loaders/LoaderSpiner";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
@@ -77,8 +77,8 @@ function Login() {
   }
 
   useEffect(() => {
-    setValue("phone", 8824644769);
-    setValue("password", "123");
+    // setValue("phone", 8824644769);
+    // setValue("password", "123");
   }, []);
 
   return (
@@ -118,15 +118,15 @@ function Login() {
 "
           >
             {/* Logo */}
-            <div className="text-center py-3 border-b border-[#4a4949] ">
+            {/* <div className="text-center py-3 border-b border-[#4a4949] ">
               <img
-                className="w-32 m-auto drop-shadow-lg"
+                className="w-[340px] m-auto drop-shadow-lg"
                 src={logo}
                 alt="logo"
               />
-            </div>
+            </div> */}
 
-            <div className="px-8 pt-3 text-center ">
+            <div className="p-8 pb-3 text-center ">
               {isForgoting ? (
                 <>
                   <h3 className="text-xl font-bold tracking-wider text-white">
@@ -138,8 +138,11 @@ function Login() {
                 </>
               ) : (
                 <>
-                  <h3 className="text-xl font-bold tracking-wider text-white">
-                    GYM LOGIN
+                  <h3 className="text-xl font-bold tracking-wider text-white uppercase">
+                    Softway x Gym management
+                    <br />
+                    LOGIN
+                    {/* GYM LOGIN */}
                   </h3>
                 </>
               )}
@@ -165,7 +168,7 @@ function Login() {
               </div>
 
               {/* Password */}
-              <div className="flex">
+              <div className="flex mb-4">
                 <div
                   className={`w-full transition-all ${
                     isForgoting
@@ -218,13 +221,13 @@ function Login() {
               </div>
 
               {/* Forgot */}
-              <button
+              {/* <button
                 type="button"
                 onClick={() => setIsForgoting(!isForgoting)}
                 className="text-sm text-[var(--muted)] hover:text-[var(--primary)] underline mb-6 block ml-auto"
               >
                 {isForgoting ? "Back to Login" : "Forgot Password ?"}
-              </button>
+              </button> */}
 
               {/* Buttons */}
               {!isForgoting ? (
@@ -242,7 +245,7 @@ function Login() {
                       disabled={otpSubmitLoading || !otpData || !contact}
                       type="button"
                       onClick={hadleSubmitOtp}
-                      className="w-full bg-[var(--primary)] text-white py-3 rounded-lg font-semibold disabled:opacity-50"
+                      className="w-full bg-[var(--primary)] text-white py-3 rounded-lg font-semibold disabled:opacity-50 "
                     >
                       {otpSubmitLoading ? (
                         <LoaderSpiner hw={20} />

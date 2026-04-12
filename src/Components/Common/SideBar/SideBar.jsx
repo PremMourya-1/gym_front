@@ -12,6 +12,7 @@ import { AppDataContext } from "../../../Context/AppDataContext";
 import Tippy from "@tippyjs/react";
 function SideBar() {
   const { setTheme, theme } = useContext(ThemeContext);
+  console.log(theme);
   const path = useLocation().pathname;
   // const isSoftwareDisable = getLocaleStorageItem("theme")?.disable || false;
 
@@ -55,7 +56,7 @@ function SideBar() {
     setActiveLink({
       link:
         window.location.pathname.split("/")[
-        path.split("/")[1] === "admin" ? 2 : 1
+          path.split("/")[1] === "admin" ? 2 : 1
         ] || "dashboard",
       active: true,
     });
@@ -70,10 +71,13 @@ function SideBar() {
   }, [path]);
 
   return (
-    <div className={`${theme.isSideBarDark && "dark"}`}>
+    <div className={`dark  `}>
       <aside
-        className={`ml-5 mt-5  ${theme.isSideBarSmall ? "w-14 small" : "w-60 overflow-y-scroll"
-          } fixed z-50 md:ml-0 md:mt-0 md:h-full`}
+        className={`ml-5 mt-5  ${
+          theme.isSideBarSmall
+            ? "w-14 small md:-translate-x-[100%]"
+            : "w-60 overflow-y-scroll md:-translate-x-[0%]"
+        } fixed z-50 md:ml-0 md:mt-0 md:h-full `}
       >
         <SideBarHeader isSideBarSmall={theme.isSideBarSmall} />
         {/* <SideBarSettings theme={theme} setTheme={setTheme} /> */}
@@ -93,7 +97,6 @@ function SideBar() {
                   placement="right"
                   disabled={!theme.isSideBarSmall || iscontent}
                 >
-
                   <li
                     key={item.id}
                     onClick={() => {
@@ -105,17 +108,20 @@ function SideBar() {
                         link: item.title,
                       });
                     }}
-                    className={`navItem group ${theme.isSideBarSmall ? "relative " : ""
-                      }${iscontent ? "dropDown" : ""} ${activeLink.active && activeLink.link === item.title
+                    className={`navItem group ${
+                      theme.isSideBarSmall ? "relative " : ""
+                    }${iscontent ? "dropDown" : ""} ${
+                      activeLink.active && activeLink.link === item.title
                         ? "active"
                         : ""
-                      }`}
+                    }`}
                   >
                     <Link
-                      className={`navLink flex  ${theme.isSideBarSmall
-                        ? "justify-center"
-                        : "justify-between "
-                        } items-center w-full`}
+                      className={`navLink flex  ${
+                        theme.isSideBarSmall
+                          ? "justify-center"
+                          : "justify-between "
+                      } items-center w-full`}
                       to={item.link}
                     >
                       <div className="flex gap-2 items-center">
@@ -131,11 +137,13 @@ function SideBar() {
                         <span className="arrow">
                           {
                             <MdKeyboardArrowRight
-                              className={` ${activeLink.active &&
-                                activeLink.link === item.key || item.title
-                                ? "rotate-90 fill-white "
-                                : ""
-                                } fill-gray-400 dark:file:bg-gray-500  text-xl  `}
+                              className={` ${
+                                (activeLink.active &&
+                                  activeLink.link === item.key) ||
+                                item.title
+                                  ? "rotate-90 fill-white "
+                                  : ""
+                              } fill-gray-400 dark:file:bg-gray-500  text-xl  `}
                             />
                           }
                         </span>

@@ -11,7 +11,6 @@ export default function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(
     getLocaleStorageItem("theme") || {
       isDark: false,
-      isSideBarDark: false,
       isSideBarSmall: false,
       themeColor: "default",
     },

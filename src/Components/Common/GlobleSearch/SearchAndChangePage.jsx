@@ -15,7 +15,7 @@ function SearchAndChangePage({
   getButton,
   children,
   callAfterSearch,
-  placeholder
+  placeholder,
 }) {
   const debouncedSearch = useDebounce(search, 500);
   useEffect(() => {
@@ -23,13 +23,13 @@ function SearchAndChangePage({
   }, [debouncedSearch]);
   return (
     <Card isBorder className=" rounded-b-none border-b-0">
-      <div className="flex justify-between  gap-4 ">
+      <div className="flex justify-between md:flex-col gap-4 ">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSearch();
           }}
-          className={`flex gap-4  items-center w-full max-w-[200px]  `}
+          className={`flex gap-4  items-center w-full max-w-[200px] md:max-w-full `}
         >
           <div className={`inputBox  w-full shrink-0`}>
             <input
@@ -48,14 +48,13 @@ function SearchAndChangePage({
           )}
         </form>
         <div className="flex gap-2 items-center">
-
           {children}
           <div className="flex gap-3 shrink-0">
             <label
               htmlFor="limit"
               className="flex items-center gap-2 text-sm border border-color p rounded-md ps-2"
             >
-              <span className=" font-medium ">Records Per Page</span>
+              <span className=" font-medium "> Per Page</span>
 
               <div className="relative">
                 <select
@@ -108,7 +107,6 @@ function SearchAndChangePage({
           /> */}
           </div>
         </div>
-
       </div>
     </Card>
   );

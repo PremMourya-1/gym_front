@@ -1,5 +1,5 @@
 import logoSmall from "../../../Assets/images/logo/softxfav.png";
-import logo from "../../../Assets/images/logo/gymLogoBottom.png";
+import logo from "../../../Assets/images/logo/softway.png";
 import { Link } from "react-router-dom";
 
 function SideBarHeader({ isSideBarSmall }) {
@@ -7,8 +7,9 @@ function SideBarHeader({ isSideBarSmall }) {
     <>
       <div
         id="sideBarHeader"
-        className={`py-4 sticky top-0 ${isSideBarSmall ? "h-[70px]" : "h-[90px]"
-          } px-2.5   flex justify-center items-center`}
+        className={`py-4 sticky top-0 ${
+          isSideBarSmall ? "h-[70px]" : "h-[90px]"
+        } px-2.5   flex justify-center items-center`}
       >
         <Link to={"/"} className="logo">
           <span className="text-[color:var(--primary)]  ">

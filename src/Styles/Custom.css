@@ -28,9 +28,10 @@ footer {
 }
 
 @media (max-width: 768px) {
+
   header,
   footer {
-    width: calc(100vw - 40px) !important;
+    width: calc(100vw - 0px) !important;
   }
 }
 
@@ -154,13 +155,11 @@ body.dark .Toastify__toast {
   /* Slowed down animation duration */
 
   background: var(--shine-bg-color);
-  background-image: linear-gradient(
-    to right,
-    var(--shine-gradient-start) 0%,
-    var(--shine-gradient-middle1) 20%,
-    var(--shine-gradient-middle2) 40%,
-    var(--shine-gradient-end) 100%
-  );
+  background-image: linear-gradient(to right,
+      var(--shine-gradient-start) 0%,
+      var(--shine-gradient-middle1) 20%,
+      var(--shine-gradient-middle2) 40%,
+      var(--shine-gradient-end) 100%);
   background-repeat: no-repeat;
   background-size: var(--shine-size);
 
@@ -182,13 +181,11 @@ body.dark .shine {
   --shine-gradient-end: #777;
 
   background: var(--shine-bg-color);
-  background-image: linear-gradient(
-    to right,
-    var(--shine-gradient-start) 0%,
-    var(--shine-gradient-middle1) 20%,
-    var(--shine-gradient-middle2) 40%,
-    var(--shine-gradient-end) 100%
-  );
+  background-image: linear-gradient(to right,
+      var(--shine-gradient-start) 0%,
+      var(--shine-gradient-middle1) 20%,
+      var(--shine-gradient-middle2) 40%,
+      var(--shine-gradient-end) 100%);
 
   animation-duration: var(--shine-animation-duration);
   /* Ensure the dark mode uses the same animation duration */
@@ -345,9 +342,7 @@ body.dark .shine {
 
 /* =============celendar======================= */
 
-.rs-calendar-panel
-  .rs-calendar-table-cell-is-today
-  .rs-calendar-table-cell-day {
+.rs-calendar-panel .rs-calendar-table-cell-is-today .rs-calendar-table-cell-day {
   display: grid;
   place-items: center;
   height: 30px !important;
@@ -355,9 +350,7 @@ body.dark .shine {
   background-color: var(--background) !important;
 }
 
-.rs-calendar-bordered
-  .rs-calendar-table-row
-  .rs-calendar-table-cell:is(.dark *) {
+.rs-calendar-bordered .rs-calendar-table-row .rs-calendar-table-cell:is(.dark *) {
   border: none !important;
 }
 
@@ -365,9 +358,7 @@ body.dark .shine {
   border: none;
 }
 
-.rs-calendar-bordered
-  .rs-calendar-table-header-row
-  .rs-calendar-table-header-cell:is(.dark *) {
+.rs-calendar-bordered .rs-calendar-table-header-row .rs-calendar-table-header-cell:is(.dark *) {
   border-bottom: 1px solid #686868;
 }
 
@@ -380,16 +371,12 @@ body.dark .shine {
   background-color: var(--background-light) !important;
 }
 
-.rs-calendar-panel.rs-calendar-compact
-  .rs-calendar-table-row:not(.rs-calendar-table-header-row)
-  .rs-calendar-table-cell-content {
+.rs-calendar-panel.rs-calendar-compact .rs-calendar-table-row:not(.rs-calendar-table-header-row) .rs-calendar-table-cell-content {
   display: grid;
   place-items: center;
 }
 
-.rs-calendar-panel
-  .rs-calendar-table-header-row
-  .rs-calendar-table-header-cell-content:is(.dark *) {
+.rs-calendar-panel .rs-calendar-table-header-row .rs-calendar-table-header-cell-content:is(.dark *) {
   color: white;
 }
 
@@ -606,13 +593,8 @@ body.dark .Toastify__close-button svg {
   border: none;
 }
 
-.monthlyReportCalender
-  .react-datepicker__header
-  .react-datepicker__day-names
-  .react-datepicker__day-name,
-.monthlyReportCalender
-  .react-datepicker__header
-  .react-datepicker__current-month {
+.monthlyReportCalender .react-datepicker__header .react-datepicker__day-names .react-datepicker__day-name,
+.monthlyReportCalender .react-datepicker__header .react-datepicker__current-month {
   color: white;
 }
 
@@ -698,41 +680,19 @@ body.dark .not-working-day {
 }
 
 /* day on hover default */
-.react-datepicker__day:not(.green-day):not(.red-day):not(.sunday):not(
-    .holiday
-  ):not([aria-disabled="true"]):hover,
-.react-datepicker__day:not(.green-day):not(.red-day):not(.sunday):not(
-    .holiday
-  ):not([aria-disabled="true"]):hover,
-.react-datepicker__month-text:not(.green-day):not(.red-day):not(.sunday):not(
-    .holiday
-  ):not([aria-disabled="true"]):hover,
-.react-datepicker__quarter-text:not(.green-day):not(.red-day):not(.sunday):not(
-    .holiday
-  ):not([aria-disabled="true"]):hover,
-.react-datepicker__year-text:not(.green-day):not(.red-day):not(.sunday):not(
-    .holiday
-  ):not([aria-disabled="true"]):hover {
+.react-datepicker__day:not(.green-day):not(.red-day):not(.sunday):not(.holiday):not([aria-disabled="true"]):hover,
+.react-datepicker__day:not(.green-day):not(.red-day):not(.sunday):not(.holiday):not([aria-disabled="true"]):hover,
+.react-datepicker__month-text:not(.green-day):not(.red-day):not(.sunday):not(.holiday):not([aria-disabled="true"]):hover,
+.react-datepicker__quarter-text:not(.green-day):not(.red-day):not(.sunday):not(.holiday):not([aria-disabled="true"]):hover,
+.react-datepicker__year-text:not(.green-day):not(.red-day):not(.sunday):not(.holiday):not([aria-disabled="true"]):hover {
   background-color: rgb(182, 182, 182) !important;
 }
 
 /*dark day on hover default */
-body.dark
-  .react-datepicker__day:not(.green-day):not(.red-day):not(.sunday):not(
-    .holiday
-  ):not([aria-disabled="true"]):hover,
-body.dark
-  .react-datepicker__month-text:not(.green-day):not(.red-day):not(.sunday):not(
-    .holiday
-  ):not([aria-disabled="true"]):hover,
-body.dark
-  .react-datepicker__quarter-text:not(.green-day):not(.red-day):not(
-    .sunday
-  ):not(.holiday):not([aria-disabled="true"]):hover,
-body.dark
-  .react-datepicker__year-text:not(.green-day):not(.red-day):not(.sunday):not(
-    .holiday
-  ):not([aria-disabled="true"]):hover {
+body.dark .react-datepicker__day:not(.green-day):not(.red-day):not(.sunday):not(.holiday):not([aria-disabled="true"]):hover,
+body.dark .react-datepicker__month-text:not(.green-day):not(.red-day):not(.sunday):not(.holiday):not([aria-disabled="true"]):hover,
+body.dark .react-datepicker__quarter-text:not(.green-day):not(.red-day):not(.sunday):not(.holiday):not([aria-disabled="true"]):hover,
+body.dark .react-datepicker__year-text:not(.green-day):not(.red-day):not(.sunday):not(.holiday):not([aria-disabled="true"]):hover {
   background-color: rgb(75, 74, 74) !important;
 }
 
@@ -798,14 +758,17 @@ body.dark .CustomScrollBar::-webkit-scrollbar-thumb {
   top: -20px;
   left: -20px;
 }
+
 .top-right {
   top: -20px;
   right: -20px;
 }
+
 .bottom-left {
   bottom: -20px;
   left: -20px;
 }
+
 .bottom-right {
   bottom: -20px;
   right: -20px;
@@ -816,6 +779,7 @@ body.dark .CustomScrollBar::-webkit-scrollbar-thumb {
     transform: scale(0.8);
     opacity: 0.5;
   }
+
   to {
     transform: scale(1.2);
     opacity: 1;
@@ -831,6 +795,7 @@ body.dark .CustomScrollBar::-webkit-scrollbar-thumb {
   font-size: 12px;
   border-bottom: 1px solid var(--border);
 }
+
 .rs-picker-select-menu-item.rs-picker-select-menu-item-focus,
 .rs-picker-select-menu-item:focus,
 .rs-picker-select-menu-item:hover {
