@@ -6,7 +6,7 @@ export default async function renewPlan(
   setDrawer,
   setClientList,
   setIsLoading,
-  setReload
+  setReload,
 ) {
   try {
     setIsLoading(true);
@@ -14,17 +14,15 @@ export default async function renewPlan(
     setIsLoading(false);
 
     if (res.data.action) {
-      setReload((prev => prev+1))
+      setReload((prev) => prev + 1);
       setDrawer(false);
       toast.success(res.data.message);
 
       // 🔥 updated client replace (assuming API updated client return kare)
       setClientList?.((prev) =>
         prev
-          ? prev.map((x) =>
-              x.id === data.clientId ? res.data.data : x
-            )
-          : prev
+          ? prev.map((x) => (x.id === data.clientId ? res.data.data : x))
+          : prev,
       );
     } else {
       toast.error(res.data.message);
@@ -35,14 +33,11 @@ export default async function renewPlan(
     setIsLoading(false);
   }
 }
-export  async function getRenewals(
-  data,
-  setData
-) {
+export async function getRenewals(data, setData) {
   try {
     const res = await userApi.renewalList(data);
-    setData(res.data.data)
+    setData(res.data.data);
   } catch (e) {
     console.log(e);
-  } 
+  }
 }

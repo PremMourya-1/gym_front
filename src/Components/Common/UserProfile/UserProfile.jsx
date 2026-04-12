@@ -1,6 +1,6 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { CiLock } from "react-icons/ci";
-import { ImUser } from "react-icons/im";
+// import { ImUser } from "react-icons/im";
 
 import { MdOutlineLogout, MdOutlineSettings } from "react-icons/md";
 import CustomModal from "../../Modal/Modal";
@@ -56,18 +56,14 @@ function UserProfile({ isAdmin, logo }) {
           className="data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in absolute right-7 top-10 z-10 mt-4 w-max origin-top-right divide-y divide-gray-100 rounded-lg bg-[var(--background)] shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none ] font-semibold  border border-[color:var(--primary-dark)]  border-none overflow-hidden"
         >
           <div className="">
-            <MenuItem className="dropdownLink hover:bg-[var(--primary-tp)] hover:text-primary border-b border-color cursor-pointer  p-2 flex items-center gap-2">
-              <span
-                onClick={() => {
-                  setModal(true);
-                }}
-              >
+            {/* <MenuItem className="dropdownLink hover:bg-[var(--primary-tp)] hover:text-primary border-b border-color cursor-pointer  p-2 flex items-center gap-2">
+              <span>
                 <span className="text-lg ">
                   <ImUser />
                 </span>
                 My Profile
               </span>
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem className="dropdownLink hover:bg-[var(--primary-tp)] hover:text-primary border-b border-color cursor-pointer  p-2 flex items-center gap-2">
               <Link to={`/change-password`}>
                 <CiLock size={20} />

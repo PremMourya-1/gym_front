@@ -68,7 +68,7 @@ function Dashboard() {
     {
       label: "Add Member",
       icon: <FaUserPlus />,
-      link: "/clients/add",
+      link: "/clients/all/add-client",
       enabled: true,
     },
     {
@@ -92,7 +92,6 @@ function Dashboard() {
   ];
 
   const user = useSelector((state) => state.auth);
-  console.log(user);
   return (
     <div className="space-y-4">
       <div

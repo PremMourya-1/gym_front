@@ -421,9 +421,20 @@ body.dark .shine {
   font-weight: 600 !important;
 }
 
+@media (max-width:576px) {
+
+  .rs-anim-bounce-in.rs-modal {
+    width: 100% !important;
+    max-width: 420px !important;
+    padding: 10px !important;
+  }
+
+}
+
 .rs-modal-content {
   padding: 0 !important;
   overflow: hidden;
+  background-color: var(--background) !important;
 }
 
 .rs-modal-body {

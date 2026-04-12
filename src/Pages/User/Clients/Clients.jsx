@@ -43,6 +43,12 @@ function GymClient() {
   const [isEditing, setIsEditing] = useState(false);
   const [planList, setPlanList] = useState();
 
+  useEffect(() => {
+    if (location.pathname.includes("add-client")) {
+      setDrawer(true);
+    }
+  }, [location]);
+
   const { reload, setReload } = useContext(ThemeContext);
 
   const [data, setData] = useState();
@@ -403,7 +409,8 @@ function GymClient() {
                 <div className="inputBox">
                   <input
                     required
-                    type="text"
+                    type="number"
+                    minLength={10}
                     className="formControl"
                     {...register("mobileNo")}
                   />

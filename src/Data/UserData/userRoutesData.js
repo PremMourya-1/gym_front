@@ -21,6 +21,10 @@ const userRoutes = [
   },
   {
     element: Clients,
+    path: "/clients/all/add-client",
+  },
+  {
+    element: Clients,
     path: "/clients/deactive",
   },
   {
