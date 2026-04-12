@@ -620,9 +620,9 @@ aside.small .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem 
 }
 
 /* small sidebar dropDown */
-aside.small .sideBarContent .navItem.dropDown .dropDownContentOne {
+/* aside.small .sideBarContent .navItem.dropDown .dropDownContentOne {
   @apply absolute transition-none shadow-sm top-0 w-[220px] left-[56px] bg-[color:var(--background)] rounded-e-lg
-}
+} */
 
 aside.small .sideBarContent .navItem.dropDown .dropDownNavLink.active {
   @apply before:border-[color:var(--dark-primary-dark)] dark:text-[color:var(--dark-primary-dark)] hover:dark:text-[color:var(--dark-primary-dark)];

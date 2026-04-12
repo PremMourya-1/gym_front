@@ -11,7 +11,6 @@ import { AppDataContext } from "../../../Context/AppDataContext";
 import Tippy from "@tippyjs/react";
 function SideBar() {
   const { setTheme, theme } = useContext(ThemeContext);
-  console.log(theme);
   const path = useLocation().pathname;
   // const isSoftwareDisable = getLocaleStorageItem("theme")?.disable || false;
 
@@ -106,7 +105,7 @@ function SideBar() {
                             : true,
                         link: item.title,
                       });
-                      if (window.innerWidth < 768) {
+                      if (window.innerWidth < 768 && !iscontent) {
                         setTheme((prev) => {
                           return { ...prev, isSideBarSmall: true };
                         });

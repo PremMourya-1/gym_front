@@ -2,11 +2,11 @@ import axios from "axios";
 import { removeLoaleStorageItem } from "../Utils/localeStorage";
 import { ADMIN_DETAILS, USER_DETAILS } from "../Constant/Constant";
 
-// export const COMMON_IMAGE_URL = "http://localhost:3000/api/";
-// export const BASE_URL = "http://localhost:3000/api/";
+export const COMMON_IMAGE_URL = "http://localhost:3000/api/";
+export const BASE_URL = "http://localhost:3000/api/";
 
-export const COMMON_IMAGE_URL = "https://api.softwayx.in";
-export const BASE_URL = "https://api.softwayx.in/api";
+// export const COMMON_IMAGE_URL = "https://api.softwayx.in";
+// export const BASE_URL = "https://api.softwayx.in/api";
 const createApiForClient = (contentType) => {
   const headers = { "Cache-Control": "no-cache" };
 
@@ -38,9 +38,14 @@ const createApiForClient = (contentType) => {
     },
     function (error) {
       if (error.status === 401) {
-        removeLoaleStorageItem(ADMIN_DETAILS);
-        removeLoaleStorageItem(USER_DETAILS);
-        // window.location.replace("/admin/login");
+        const currentpath = window.location.pathname;
+        if (currentpath.includes("/admin")) {
+          removeLoaleStorageItem(ADMIN_DETAILS);
+          window.location.replace("/admin/login");
+        } else {
+          removeLoaleStorageItem(USER_DETAILS);
+          window.location.replace("/login");
+        }
       }
       return Promise.reject(error);
     },
