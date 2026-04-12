@@ -2,7 +2,6 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { CiLock } from "react-icons/ci";
 import { ImUser } from "react-icons/im";
 
-
 import { MdOutlineLogout, MdOutlineSettings } from "react-icons/md";
 import CustomModal from "../../Modal/Modal";
 import { useEffect, useState } from "react";
@@ -16,6 +15,7 @@ import { getLoggedInUserDetails } from "../../../Store/Slices/AuthSlice";
 
 function UserProfile({ isAdmin, logo }) {
   const userDetails = useSelector(getLoggedInUserDetails);
+  console.log(userDetails);
   const disptach = useDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -26,10 +26,15 @@ function UserProfile({ isAdmin, logo }) {
   const [adminProfile, setAdminProfile] = useState("A");
   const [userProfileText, setUserProfileText] = useState("A");
   useEffect(() => {
+    let firstLetter = userDetails?.ownerName?.[0];
+    let secondLetter = userDetails?.ownerName?.split(" ")?.[1]?.[0];
     if (!isAdmin) {
-
       setAdminProfile(userDetails?.ownerName?.[0]);
-      setUserProfileText(`${userDetails?.ownerName?.[0]}${userDetails?.ownerName?.split(" ")[1][0]}`);
+      if (secondLetter) {
+        setUserProfileText(`${firstLetter}${secondLetter}`);
+      } else {
+        setUserProfileText(firstLetter);
+      }
     }
   }, []);
   return (
@@ -65,15 +70,13 @@ function UserProfile({ isAdmin, logo }) {
               </span>
             </MenuItem>
             <MenuItem className="dropdownLink hover:bg-[var(--primary-tp)] hover:text-primary border-b border-color cursor-pointer  p-2 flex items-center gap-2">
-              <Link to={`/change-password`} >
-
+              <Link to={`/change-password`}>
                 <CiLock size={20} />
                 Change Password
               </Link>
             </MenuItem>
             <MenuItem className="dropdownLink hover:bg-[var(--primary-tp)] hover:text-primary border-b border-color cursor-pointer  p-2 flex items-center gap-2">
-
-              <Link to={`/app-settings`} >
+              <Link to={`/app-settings`}>
                 <MdOutlineSettings size={20} />
                 App Settings
               </Link>
@@ -92,7 +95,7 @@ function UserProfile({ isAdmin, logo }) {
             </MenuItem>
           </div>
         </MenuItems>
-      </Menu >
+      </Menu>
 
       <CustomModal
         onConfirm={handleLogout}
