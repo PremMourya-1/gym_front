@@ -2,12 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../../../Context/ThemeContext";
 import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher";
 import UserProfile from "../UserProfile/UserProfile";
-import { IoClose, IoSearch } from "react-icons/io5";
 import { months, weekdays } from "../../../Utils/dates";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router";
 import { FaAnglesLeft, FaRotate } from "react-icons/fa6";
-import { FaAngleRight } from "react-icons/fa";
 function Header() {
   const { theme, reload, setReload, setTheme } = useContext(ThemeContext);
   const date = new Date();
@@ -45,7 +43,7 @@ function Header() {
 
     return () => clearInterval(interval);
   }, []);
-  const [isSearching, setIsSearching] = useState(false);
+  const [isSearching] = useState(false);
   const user = useSelector((state) => state.auth);
 
   const naviagate = useNavigate();

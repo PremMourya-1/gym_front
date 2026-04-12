@@ -7,31 +7,34 @@ function SideBarDropDown({
   isShow,
   activeSubLink,
   setActiveSubLink,
-  parentTitle
+  parentTitle,
   //   child
 }) {
-  const { theme } = useContext(ThemeContext);
+  const { theme, setTheme } = useContext(ThemeContext);
   return (
     <>
       <ul
-        className={`${isShow && !theme.isSideBarSmall
-          ? "show max-h-[1000px]"
-          : "max-h-0 overflow-hidden"
-          } ${theme.isSideBarSmall && "group-hover:max-h-[1000px]"
-          }  dropDownContent dropDownContentOne`}
+        className={`${
+          isShow && !theme.isSideBarSmall
+            ? "show max-h-[1000px]"
+            : "max-h-0 overflow-hidden"
+        } ${
+          theme.isSideBarSmall && "group-hover:max-h-[1000px]"
+        }  dropDownContent dropDownContentOne`}
       >
-        {theme.isSideBarSmall &&
+        {theme.isSideBarSmall && (
           <li className="dropDownNavItem  px-4 parentTitle capitalize bg-[color:var(--primary-dark)] p-2 text-white">
             {parentTitle}
           </li>
-        }
+        )}
         {data?.map((item) => {
           return (
             <li
-              className={`dropDownNavItem  ${activeSubLink.link === item.title && activeSubLink.active
-                ? ""
-                : "bg-transparent"
-                } `}
+              className={`dropDownNavItem  ${
+                activeSubLink.link === item.title && activeSubLink.active
+                  ? ""
+                  : "bg-transparent"
+              } `}
               key={item.id}
             >
               <Link
@@ -45,12 +48,18 @@ function SideBarDropDown({
                         : !activeSubLink.active,
                     link: item.title,
                   });
+                  if (window.innerWidth < 768) {
+                    setTheme((prev) => {
+                      return { ...prev, isSideBarSmall: true };
+                    });
+                  }
                 }}
-                className={`  ${activeSubLink.link?.toLowerCase() ===
+                className={`  ${
+                  activeSubLink.link?.toLowerCase() ===
                   (item.key?.toLowerCase() || item.title?.toLowerCase())
-                  ? "active "
-                  : ""
-                  }  capitalize dropDownNavLink  flex items-center  justify-between w-full`}
+                    ? "active "
+                    : ""
+                }  capitalize dropDownNavLink  flex items-center  justify-between w-full`}
               >
                 {item.title}
                 {/* {iscontent ? (

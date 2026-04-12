@@ -5,7 +5,6 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import SideBarDropDown from "./SideBarDropDown";
 import { ThemeContext } from "../../../Context/ThemeContext";
 
-import SideBarSettings from "./SideBarSettings";
 import userSideBarData from "../../../Data/UserData/sideBarData";
 import adminSideBarData from "../../../Data/AdminData/adminSideBarData";
 import { AppDataContext } from "../../../Context/AppDataContext";
@@ -107,6 +106,11 @@ function SideBar() {
                             : true,
                         link: item.title,
                       });
+                      if (window.innerWidth < 768) {
+                        setTheme((prev) => {
+                          return { ...prev, isSideBarSmall: true };
+                        });
+                      }
                     }}
                     className={`navItem group ${
                       theme.isSideBarSmall ? "relative " : ""
