@@ -58,10 +58,9 @@ async function addEditClient(
       } else {
         res = await userApi.editClient({ id, data });
       }
-    } else if (setPhotoFile) {
+    } else {
       res = await userApi.createClient(data);
     }
-
     setIsLoading(false);
 
     if (res.data.action) {
