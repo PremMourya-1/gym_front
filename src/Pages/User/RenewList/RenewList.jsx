@@ -100,12 +100,12 @@ function RenewList() {
 
         {/* 🔹 Client Info (TOP) */}
         <div className="grid grid-cols-4 md:grid-cols-2 gap-3 text-sm mb-4">
-          <div className="flex items-center gap-3 ">
+          <div className="flex  gap-3 lg:col-span-full">
             {/* 🖼️ Client Photo */}
             <img
               src={`${COMMON_IMAGE_URL}${data.client?.photo}`}
               alt="client"
-              className="w-14 h-14 md:w-16 md:h-16 rounded-xl object-cover border border-color cursor-pointer"
+              className="w-20 h-20 md:w-20 md:h-20 rounded-xl object-cover border border-color cursor-pointer"
               onClick={() =>
                 window.open(
                   `${COMMON_IMAGE_URL}${data.client?.photo}`,
