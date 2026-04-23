@@ -819,11 +819,11 @@ function GymClient() {
           onClose={() => setPhotoModal(false)}
         >
           <Modal.Body>
-            <div className="text-center p-4">
+            <div className="text-center p-4 border border-color rounded-md">
               <h3 className="font-semibold mb-4">Upload Client Photo</h3>
 
               {/* Gallery */}
-              <label className="block mb-3 cursor-pointer border p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+              <label className="block mb-3 cursor-pointer border border-color p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
                 📁 Choose from Gallery
                 <input
                   type="file"
@@ -834,7 +834,7 @@ function GymClient() {
               </label>
 
               {/* Camera */}
-              <label className="block mb-3 cursor-pointer border p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+              <label className="block mb-3 cursor-pointer border border-color p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
                 📸 Capture Photo
                 <input
                   type="file"
