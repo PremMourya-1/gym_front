@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { userApi } from "../../../Service/api";
 import {
   addShiftData,
@@ -22,7 +22,7 @@ async function addEditShift(
   data,
   setIsLoading,
   setDrawer,
-  dispatch
+  dispatch,
 ) {
   try {
     setIsLoading(true);

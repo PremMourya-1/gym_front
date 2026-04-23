@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { userApi } from "../../../Service/api";
 
 export default async function getDeviceData(setDeviceList) {
@@ -17,7 +17,7 @@ async function addEditDevice(
   data,
   setIsLoading,
   setDrawer,
-  setDeviceList
+  setDeviceList,
 ) {
   try {
     setIsLoading(true);

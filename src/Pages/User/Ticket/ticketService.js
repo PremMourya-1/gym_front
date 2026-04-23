@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { userApi } from "../../../Service/api";
 
 export default async function getSmsTamplateData(setTicketList) {
@@ -17,7 +17,7 @@ async function addEditTicket(
   data,
   setIsLoading,
   setDrawer,
-  setTicketList
+  setTicketList,
 ) {
   try {
     setIsLoading(true);

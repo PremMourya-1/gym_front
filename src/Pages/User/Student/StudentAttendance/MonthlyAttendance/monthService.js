@@ -1,10 +1,10 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { userApi } from "../../../../../Service/api";
 
 export default async function getMonthlyAttendanceData(
   payload,
   setStudentList,
-  setIsLoading
+  setIsLoading,
 ) {
   try {
     setIsLoading(true);
@@ -20,7 +20,7 @@ async function getMonthlyOrYearyStudentDataAttendance(
   type, // type should be year or month
   payload,
   setIsLoading,
-  setData //it can be montyly or yeary depending on the type,
+  setData, //it can be montyly or yeary depending on the type,
 ) {
   try {
     setIsLoading(true);
@@ -40,7 +40,7 @@ async function getMonthlyOrYearyStudentDataAttendance(
 async function getAttendanceTableData(
   payload,
   setIsLoading,
-  setData //it can be montyly or yeary depending on the type,
+  setData, //it can be montyly or yeary depending on the type,
 ) {
   try {
     setIsLoading(true);
@@ -56,7 +56,7 @@ async function applyMonthlyAttendance(
   payload,
   setIsLoading,
   setDrawer,
-  setStudentList
+  setStudentList,
 ) {
   try {
     setIsLoading(true);
@@ -67,7 +67,7 @@ async function applyMonthlyAttendance(
       toast.success(res.data.message);
       setStudentList((prev) => {
         return prev.map((it) =>
-          it.promotionId === res.data.data.promotionId ? res.data.data : it
+          it.promotionId === res.data.data.promotionId ? res.data.data : it,
         );
       });
     } else toast.error(res.data.message);

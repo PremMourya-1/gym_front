@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import adminApi from "../../../Service/api";
 
 async function getPlanData(setPlanList) {

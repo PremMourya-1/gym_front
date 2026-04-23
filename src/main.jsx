@@ -5,7 +5,6 @@ import App from "./App";
 import ThemeProvider from "./Context/ThemeContext";
 import { Provider } from "react-redux";
 import { store } from "./Store/store";
-import "react-toastify/dist/ReactToastify.css";
 import LoaderProvider from "./Context/LoaderContext";
 import "tippy.js/dist/tippy.css"; // Optional for styling
 import AppDataProvider from "./Context/AppDataContext";

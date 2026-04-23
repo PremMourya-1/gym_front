@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { userApi } from "../../../../Service/api";
 import { setExistingStudentData } from "../../../../Store/Slices/ExistingStudent";
 import {
@@ -96,7 +96,7 @@ async function bulkAdmission(
   payload,
   dispatch,
   setIsLoading,
-  setBulkStudentListDrawer
+  setBulkStudentListDrawer,
 ) {
   try {
     setIsLoading(true);

@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import adminApi from "../../../Service/api";
 
 export default async function getRoleData(setRoleList) {
@@ -17,7 +17,7 @@ async function addEditRole(
   data,
   setIsLoading,
   setDrawer,
-  setRoleList
+  setRoleList,
 ) {
   try {
     setIsLoading(true);

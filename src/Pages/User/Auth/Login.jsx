@@ -6,7 +6,7 @@ import LoaderSpiner from "../../../Components/Loaders/LoaderSpiner";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import { useForm } from "react-hook-form";
 import login, { forgotPassword, sendOtp } from "../../Admin/Auth/authService";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 function Login() {
   const [isLoading, setIsLoading] = useState(false);

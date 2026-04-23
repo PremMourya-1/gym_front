@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { USER_DETAILS } from "../../../Constant/Constant";
 import { userApi } from "../../../Service/api";
 import {
@@ -38,7 +38,7 @@ async function addAndEditMaster(
   data,
   setIsLoading,
   setDrawer,
-  dispatch
+  dispatch,
 ) {
   try {
     setIsLoading(true);
@@ -60,11 +60,11 @@ async function addAndEditMaster(
       setDrawer(false);
       if (isEditing) {
         dispatch(
-          updateMasterData({ type: slug, id: listId, data: res.data.data })
+          updateMasterData({ type: slug, id: listId, data: res.data.data }),
         );
       } else
         dispatch(
-          addMasterData({ type: slug, id: listId, data: res.data.data })
+          addMasterData({ type: slug, id: listId, data: res.data.data }),
         );
     } else toast.error(res.data.message);
     return res;

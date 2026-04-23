@@ -1,11 +1,11 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { userApi } from "../../../Service/api";
 
 export default async function studentPromotionList(
   payload,
   setStudentList,
   setIsLoading,
-  setStep
+  setStep,
 ) {
   try {
     setIsLoading(true);
@@ -27,7 +27,7 @@ async function promoteStudent(
   setStep,
   reset,
   reset2,
-  setModal
+  setModal,
 ) {
   try {
     setLoading(true);

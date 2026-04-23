@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { USER_DETAILS } from "../../../Constant/Constant";
 import { userApi } from "../../../Service/api";
 import {

@@ -1,10 +1,10 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { userApi } from "../../../Service/api";
 
 export default async function getLogfileData(
   payload,
   setIsLoading,
-  setLogData
+  setLogData,
 ) {
   try {
     setIsLoading(true);

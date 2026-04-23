@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { userApi } from "../../../Service/api";
 import {
   addHolidayData,
@@ -21,7 +21,7 @@ async function addAndEditHoliday(
   data,
   setIsLoading,
   setDrawer,
-  dispatch
+  dispatch,
 ) {
   try {
     setIsLoading(true);

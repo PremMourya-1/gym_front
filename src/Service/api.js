@@ -42,11 +42,14 @@ const userApi = {
   deletePlan: ({ id }) => apiJson.delete(`${userUrl.plan}/${id}`),
   //
   createClient: (payload) => apiJson.post(userUrl.client + "/add", payload),
+
   client: (payload) => apiJson.get(`${userUrl.client}${payload}`),
   expiredClients: (payload) =>
     apiJson.get(`${userUrl.client + "/expired"}${payload}`),
   editClient: (payload) =>
     apiJson.put(`${userUrl.client}/${payload.id}`, payload.data),
+  uploadClientPhoto: (payload) =>
+    apiJson.put(`${userUrl.client}/client-photo/${payload.id}`, payload.data),
   deleteClient: ({ id }) => apiJson.delete(`${userUrl.client}/${id}`),
   //
   renewalList: (payload) => apiJson.get(userUrl.renew + "/" + payload.id),

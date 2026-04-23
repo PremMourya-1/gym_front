@@ -7,17 +7,47 @@ import { DATE_MONTH_FORMATE } from "../../../Utils/formateDate";
 import { Link } from "react-router-dom";
 import Switch from "../../../Components/Switch";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { IoCameraOutline } from "react-icons/io5";
+import { COMMON_IMAGE_URL } from "../../../Service/service";
 
-function ClientTable({ data, onEditClick, onChangeStatus, paginate, onDeleteClick, onRenewalClick, isPending, onClearPending }) {
+function ClientTable({
+  data,
+  onEditClick,
+  onChangeStatus,
+  paginate,
+  onDeleteClick,
+  onRenewalClick,
+  isPending,
+  onClearPending,
+  onUploadPhotoClick,
+}) {
   const columnsData = [
     {
-      title: "Client Name",
-      width: "120px",
-      selector: (row) => (
-        <Link to={`/clients/${row.id}`} className="text-blue-500 hover:underline">
-          {toCamelCase(row.clientName)}
-        </Link>
-      ),
+      title: "Client",
+      width: "200px",
+      selector: (row) => {
+        const name = toCamelCase(row.clientName);
+
+        return (
+          <Link to={`/clients/${row.id}`} className="flex items-center gap-3">
+            {/* 🔥 Avatar */}
+            {row.photo ? (
+              <img
+                src={`${COMMON_IMAGE_URL}${row.photo}`}
+                alt={name}
+                className="w-10 h-10 rounded-full object-cover border"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-sm font-semibold">
+                {name?.charAt(0)}
+              </div>
+            )}
+
+            {/* 🔥 Name */}
+            <span className="text-blue-500 hover:underline">{name}</span>
+          </Link>
+        );
+      },
     },
     {
       title: "Mobile No",
@@ -46,27 +76,21 @@ function ClientTable({ data, onEditClick, onChangeStatus, paginate, onDeleteClic
       title: "Discount",
       width: "100px",
       selector: (row) => (
-        <span className="text-red-700">
-          ₹ {row?.discountAmount || 0}
-        </span>
+        <span className="text-red-700">₹ {row?.discountAmount || 0}</span>
       ),
     },
     {
       title: "Pending",
       width: "100px",
       selector: (row) => (
-        <span className="text-red-700">
-          ₹ {row?.pendingAmount || 0}
-        </span>
+        <span className="text-red-700">₹ {row?.pendingAmount || 0}</span>
       ),
     },
     {
       title: "Total Pending",
       width: "100px",
       selector: (row) => (
-        <span className="text-red-700">
-          ₹ {row?.totalPendingAmount || 0}
-        </span>
+        <span className="text-red-700">₹ {row?.totalPendingAmount || 0}</span>
       ),
     },
     {
@@ -88,9 +112,7 @@ function ClientTable({ data, onEditClick, onChangeStatus, paginate, onDeleteClic
         return row.expired < 0 ? (
           <div className="text-red-600">
             <div className="font-medium text-sm">{date}</div>
-            <div className="text-xs">
-              {Math.abs(row.expired)} days ago
-            </div>
+            <div className="text-xs">{Math.abs(row.expired)} days ago</div>
           </div>
         ) : row.expired === 0 ? (
           <div className="text-orange-500">
@@ -100,14 +122,11 @@ function ClientTable({ data, onEditClick, onChangeStatus, paginate, onDeleteClic
         ) : (
           <div className="text-yellow-600">
             <div className="font-medium text-sm">{date}</div>
-            <div className="text-xs">
-              {row.expired} days left
-            </div>
+            <div className="text-xs">{row.expired} days left</div>
           </div>
         );
       },
-    }
-    ,
+    },
     // ❌ hide active toggle for expired page only
     {
       title: "Active",
@@ -133,7 +152,7 @@ function ClientTable({ data, onEditClick, onChangeStatus, paginate, onDeleteClic
           row={item}
           title="Client"
         >
-          {item.expired < 0 &&
+          {item.expired < 0 && (
             <li
               className="flex border-b items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
               onClick={() => {
@@ -143,8 +162,8 @@ function ClientTable({ data, onEditClick, onChangeStatus, paginate, onDeleteClic
               <MdLoop className=" text-lg" />
               renew Plan
             </li>
-          }
-          {isPending &&
+          )}
+          {isPending && (
             <li
               className="flex border-b items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
               onClick={() => {
@@ -154,8 +173,8 @@ function ClientTable({ data, onEditClick, onChangeStatus, paginate, onDeleteClic
               <IoMdCheckmarkCircleOutline className=" text-lg" />
               Clear Pendings
             </li>
-          }
-          {/* <li
+          )}
+          <li
             className="flex border-b items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
             onClick={() => {
               onUploadPhotoClick(item);
@@ -163,14 +182,20 @@ function ClientTable({ data, onEditClick, onChangeStatus, paginate, onDeleteClic
           >
             <IoCameraOutline className=" text-lg" />
             Upload Photo
-          </li> */}
+          </li>
         </ActionDropDown>
       ),
     },
   ].filter(Boolean);
 
-  return <Table columns={columnsData} data={data} page={paginate.page} limit={paginate.limit} />;
+  return (
+    <Table
+      columns={columnsData}
+      data={data}
+      page={paginate.page}
+      limit={paginate.limit}
+    />
+  );
 }
-
 
 export default ClientTable;

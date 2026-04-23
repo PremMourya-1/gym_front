@@ -2,7 +2,6 @@ import { lazy, Suspense, useContext, useEffect } from "react";
 import "./Styles/App.css";
 import "./Styles/Custom.css";
 
-import { ToastContainer } from "react-toastify";
 import { PulseLoader } from "react-spinners";
 import { LoaderContext } from "./Context/LoaderContext";
 import TpLoader from "./Components/Common/Loader/TpLoader";
@@ -11,6 +10,7 @@ import { ADMIN_DETAILS, USER_DETAILS } from "./Constant/Constant";
 import { useDispatch } from "react-redux";
 import { loginToggleAction } from "./Store/Slices/AuthSlice";
 import { AppDataContext } from "./Context/AppDataContext";
+import { Toaster } from "react-hot-toast";
 
 const RoutesData = lazy(() => import("./Routes/Route"));
 
@@ -30,13 +30,19 @@ function App() {
       dispatch(loginToggleAction(userData));
     }
   }, []);
+  const isDark = document.body.classList.contains("dark");
 
   return (
     <>
-      <ToastContainer
-        bodyClassName={"dark"}
-        position="top-center"
-        autoClose={6000}
+      <Toaster
+        position="bottom-center"
+        toastOptions={{
+          icon: "💪",
+          style: {
+            background: isDark ? "#282928" : "#fff",
+            color: isDark ? "#fff" : "#000",
+          },
+        }}
       />
       {tpLoader && <TpLoader />}
       <Suspense

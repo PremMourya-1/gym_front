@@ -7,7 +7,7 @@ import ConfirmModal from "../../../../Components/Modal/ConfirmModal";
 import { userApi } from "../../../../Service/api";
 import CustomModal from "../../../../Components/Modal/Modal";
 import getStudentLimit from "../../Plan/planService";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import Pagination from "../../../../Components/Pagination/Pagination";
 
 function DeActiveStudentList() {
@@ -37,7 +37,7 @@ function DeActiveStudentList() {
     (async () => {
       const res = await getOldStudentData({ sessionMasterId }, dispatch);
       setExistingStudentData(
-        res.data.data?.filter((it) => it.status === 1)?.length
+        res.data.data?.filter((it) => it.status === 1)?.length,
       );
     })();
   }, [studentData]);

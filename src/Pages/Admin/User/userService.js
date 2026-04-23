@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import adminApi from "../../../Service/api";
 
 export default async function getUserData(setUserList) {
@@ -17,7 +17,7 @@ async function addEditUser(
   data,
   setIsLoading,
   setDrawer,
-  setUserList
+  setUserList,
 ) {
   try {
     setIsLoading(true);

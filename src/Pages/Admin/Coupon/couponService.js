@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import adminApi from "../../../Service/api";
 
 async function getCouponList(setCouponList) {
@@ -15,7 +15,7 @@ async function addEditCoupon(
   id,
   setIsLoading,
   setDrawer,
-  setCouponList
+  setCouponList,
 ) {
   try {
     // setIsLoading(true);

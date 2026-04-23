@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { userApi } from "../../../Service/api";
 
 const getClients = async (payload, setData, setDataIndb, setIsLoading) => {
@@ -41,13 +41,26 @@ const getExpiredClients = async (
   }
 };
 
-async function addEditClient(data, id, setDrawer, setClientList, setIsLoading) {
+async function addEditClient(
+  data,
+  id,
+  setDrawer,
+  setClientList,
+  setIsLoading,
+  setPhotoFile,
+) {
   try {
     setIsLoading(true);
-
-    let res = id
-      ? await userApi.editClient({ id, data })
-      : await userApi.createClient(data);
+    let res;
+    if (id) {
+      if (setPhotoFile) {
+        res = await userApi.uploadClientPhoto({ id, data });
+      } else {
+        res = await userApi.editClient({ id, data });
+      }
+    } else if (setPhotoFile) {
+      res = await userApi.createClient(data);
+    }
 
     setIsLoading(false);
 
@@ -61,12 +74,14 @@ async function addEditClient(data, id, setDrawer, setClientList, setIsLoading) {
             prev &&
             prev.map((x) => (x.id === id ? { ...x, ...res.data.data } : x)),
         );
+        setPhotoFile?.();
       } else {
         setClientList((prev) =>
           prev ? [res.data.data, ...prev] : [res.data.data],
         );
       }
     } else toast.error(res.data.message);
+    return res;
   } catch (e) {
     console.log(e);
   } finally {

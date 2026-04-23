@@ -4,7 +4,7 @@ import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import changePassword from "./passwordService";
 import { useDispatch } from "react-redux";
 import { logout } from "../../Admin/Auth/authService";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { useLocation } from "react-router";
 
 function ChangePassword() {

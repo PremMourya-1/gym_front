@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import adminApi from "../../../Service/api";
 
 async function createSchool(
@@ -6,7 +6,7 @@ async function createSchool(
   setIsLoading,
   setSchoolList,
   setDrawer,
-  reset
+  reset,
 ) {
   try {
     setIsLoading(true);
@@ -52,7 +52,7 @@ async function editSchool(
   setDrawer,
   setSchoolList,
   setIsLoading,
-  reset
+  reset,
 ) {
   try {
     setIsLoading(true);

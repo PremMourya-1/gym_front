@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { userApi } from "../../../../Service/api";
 
 export default async function getSmsData(setSmsList) {

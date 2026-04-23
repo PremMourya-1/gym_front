@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import adminApi from "../../../Service/api";
 import { setNotification } from "../../../Store/Slices/NotificationSlice";
 
@@ -17,7 +17,7 @@ async function replayToUser(
   setTicketList,
   setModalOpen,
   notification,
-  dispatch
+  dispatch,
 ) {
   try {
     setIsLoading(true);

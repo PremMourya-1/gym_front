@@ -1,10 +1,10 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { userApi } from "../../../../../Service/api";
 
 export default async function getDailyAttendanceData(
   payload,
   setClassData,
-  setIsLoading
+  setIsLoading,
 ) {
   try {
     setIsLoading && setIsLoading(true);

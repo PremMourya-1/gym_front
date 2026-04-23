@@ -8,7 +8,7 @@ import { ThemeContext } from "../../../Context/ThemeContext";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import { useForm } from "react-hook-form";
 import login, { forgotPassword, sendOtp } from "./authService";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 function AdminLogin() {
   const { theme } = useContext(ThemeContext);

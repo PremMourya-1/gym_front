@@ -310,6 +310,37 @@ function GymClient() {
       : isPending
         ? "Pending Payents"
         : "Clients";
+
+  // upload photo system
+
+  const [photoModal, setPhotoModal] = useState(false);
+  const [photoFile, setPhotoFile] = useState(null);
+
+  function onUploadPhotoClick(item) {
+    setSelectedRow(item);
+    setPhotoModal(true);
+  }
+  function handleFileChange(e) {
+    const file = e.target.files[0];
+    if (file) {
+      setPhotoFile(file);
+    }
+  }
+  async function handleUploadPhoto() {
+    if (!photoFile) return;
+
+    const formData = new FormData();
+    formData.append("photo", photoFile);
+
+    await addEditClient(
+      formData,
+      selectedRow.id,
+      setPhotoModal,
+      setData,
+      setIsLoading,
+      setPhotoFile,
+    );
+  }
   return (
     <>
       {/* 🔥 Header */}
@@ -376,6 +407,7 @@ function GymClient() {
           onRenewalClick={onRenewalClick}
           onClearPending={onClearPending}
           isPending={isPending}
+          onUploadPhotoClick={onUploadPhotoClick}
         />
       </Card>
 
@@ -777,6 +809,59 @@ function GymClient() {
                   </button>
                 </form>
               </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+
+        <Modal
+          size="350px"
+          open={photoModal}
+          onClose={() => setPhotoModal(false)}
+        >
+          <Modal.Body>
+            <div className="text-center p-4">
+              <h3 className="font-semibold mb-4">Upload Client Photo</h3>
+
+              {/* Gallery */}
+              <label className="block mb-3 cursor-pointer border p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+                📁 Choose from Gallery
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+              </label>
+
+              {/* Camera */}
+              <label className="block mb-3 cursor-pointer border p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+                📸 Capture Photo
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+              </label>
+
+              {/* Preview */}
+              {photoFile && (
+                <img
+                  src={URL.createObjectURL(photoFile)}
+                  alt="preview"
+                  className="w-24 h-24 object-cover rounded-full mx-auto mb-3"
+                />
+              )}
+
+              {/* Upload Button */}
+              <button
+                onClick={handleUploadPhoto}
+                disabled={isLoading}
+                className="btn btn-primary w-full mt-2"
+              >
+                {isLoading ? <LoaderSpiner /> : "Upload"}
+              </button>
             </div>
           </Modal.Body>
         </Modal>
