@@ -8,12 +8,14 @@ import toCamelCase from "../../../Utils/modifyString";
 import { DATE_MONTH_FORMATE } from "../../../Utils/formateDate";
 import Card from "../../../Components/Card/Card";
 import { FaArrowLeft } from "react-icons/fa";
+import { COMMON_IMAGE_URL } from "../../../Service/service";
 
 function RenewList() {
   const { reload } = useContext(ThemeContext);
   const { id } = useParams();
 
   const [data, setData] = useState(null);
+  console.log(data);
 
   useEffect(() => {
     getRenewals({ id }, setData);
@@ -98,20 +100,28 @@ function RenewList() {
 
         {/* 🔹 Client Info (TOP) */}
         <div className="grid grid-cols-4 md:grid-cols-2 gap-3 text-sm mb-4">
-          <div>
-            <p className="text-gray-400 text-xs">Name</p>
-            <p className="font-medium dark:text-gray-200">
-              {toCamelCase(data.client?.clientName)}
-            </p>
-          </div>
+          <div className="flex items-center gap-3 ">
+            {/* 🖼️ Client Photo */}
+            <img
+              src={`${COMMON_IMAGE_URL}${data.client?.photo}`}
+              alt="client"
+              className="w-14 h-14 md:w-16 md:h-16 rounded-xl object-cover border border-color cursor-pointer"
+              onClick={() =>
+                window.open(
+                  `${COMMON_IMAGE_URL}${data.client?.photo}`,
+                  "_blank",
+                )
+              }
+            />
 
-          <div>
-            <p className="text-gray-400 text-xs">Mobile</p>
-            <p className="font-medium dark:text-gray-200">
-              {data.client?.mobileNo}
-            </p>
+            {/* 👤 Name + Mobile */}
+            <div>
+              <p className="font-semibold text-base dark:text-gray-200">
+                {toCamelCase(data.client?.clientName)}
+              </p>
+              <p className="text-sm text-gray-500">{data.client?.mobileNo}</p>
+            </div>
           </div>
-
           <div>
             <p className="text-gray-400 text-xs">Joining</p>
             <p className="font-medium dark:text-gray-200">

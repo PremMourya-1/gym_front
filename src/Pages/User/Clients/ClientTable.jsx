@@ -9,6 +9,7 @@ import Switch from "../../../Components/Switch";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { IoCameraOutline } from "react-icons/io5";
 import { COMMON_IMAGE_URL } from "../../../Service/service";
+import { useState } from "react";
 
 function ClientTable({
   data,
@@ -21,6 +22,7 @@ function ClientTable({
   onClearPending,
   onUploadPhotoClick,
 }) {
+  const [previewImg, setPreviewImg] = useState(null);
   const columnsData = [
     {
       title: "Client",
@@ -36,6 +38,10 @@ function ClientTable({
                 src={`${COMMON_IMAGE_URL}${row.photo}`}
                 alt={name}
                 className="w-10 h-10 rounded-full object-cover border"
+                onClick={(e) => {
+                  e.preventDefault(); // link click stop
+                  setPreviewImg(`${COMMON_IMAGE_URL}${row.photo}`);
+                }}
               />
             ) : (
               <div className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-sm font-semibold">
@@ -189,12 +195,49 @@ function ClientTable({
   ].filter(Boolean);
 
   return (
-    <Table
-      columns={columnsData}
-      data={data}
-      page={paginate.page}
-      limit={paginate.limit}
-    />
+    <>
+      <Table
+        columns={columnsData}
+        data={data}
+        page={paginate.page}
+        limit={paginate.limit}
+      />
+      {previewImg && (
+        <div className="fixed inset-0 z-50 flex border border-color items-center justify-center bg-black/70">
+          {/* ❌ Close on background click */}
+          <div
+            className="absolute inset-0"
+            onClick={() => setPreviewImg(null)}
+          />
+
+          {/* 🔥 Image Box */}
+          <div className="relative z-10">
+            {/* ❌ Close button */}
+            <button
+              onClick={() => setPreviewImg(null)}
+              className="absolute -top-3 -right-3 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center shadow"
+            >
+              ✖
+            </button>
+
+            {/* 🖼️ Square Image */}
+            <img
+              src={previewImg}
+              alt="preview"
+              className="w-72 h-72 object-cover rounded-xl shadow-xl"
+            />
+
+            {/* 👉 Circle version (agar chahiye to ye use kar)
+      <img
+        src={previewImg}
+        alt="preview"
+        className="w-72 h-72 object-cover rounded-full shadow-xl"
+      />
+      */}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
