@@ -56,7 +56,7 @@ function ClientTable({
             )}
 
             {/* 🔥 Name */}
-            <span className="text-blue-500 hover:underline">{name}</span>
+            <span className=" hover:underline">{name}</span>
           </Link>
         );
       },
@@ -67,6 +67,7 @@ function ClientTable({
     },
     {
       title: "Plan",
+      width: "110px",
       selector: (row) => toCamelCase(row.plan?.name),
     },
     {
@@ -100,7 +101,7 @@ function ClientTable({
     },
     {
       title: "Total Pending",
-      width: "100px",
+      width: "120px",
       selector: (row) => (
         <span className="text-red-700">₹ {row?.totalPendingAmount || 0}</span>
       ),
@@ -166,7 +167,7 @@ function ClientTable({
         >
           {item.expired < 0 && (
             <li
-              className="flex border-b items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
+              className="flex border-b border-color items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
               onClick={() => {
                 onRenewalClick(item);
               }}
@@ -177,7 +178,7 @@ function ClientTable({
           )}
           {isPending && (
             <li
-              className="flex border-b items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
+              className="flex border-b border-color items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
               onClick={() => {
                 onClearPending(item);
               }}
@@ -187,7 +188,7 @@ function ClientTable({
             </li>
           )}
           <li
-            className="flex border-b items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
+            className="flex border-b border-color items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
             onClick={() => {
               onUploadPhotoClick(item);
             }}

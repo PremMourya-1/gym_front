@@ -19,7 +19,7 @@ function ActionDropDown({
               <Link
                 to={editUrl}
                 state={row}
-                className="flex  gap-2  border-b items-center  hover:bg-[var(--info)]  px-2 py-1.5 dark:!text-white !text-black hover:!text-white cursor-pointer !no-underline"
+                className="flex  gap-2  border-b border-color items-center  hover:bg-[var(--info)]  px-2 py-1.5 dark:!text-white !text-black hover:!text-white cursor-pointer !no-underline"
                 onClick={() => {
                   onclose();
                 }}
@@ -29,7 +29,7 @@ function ActionDropDown({
               </Link>
             ) : (
               <li
-                className="flex border-b items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
+                className="flex border-b border-color items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
                 onClick={() => {
                   onEditClick(row);
                   onclose();
