@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import { userApi } from "../../../Service/api";
+import axios from "axios";
 
 const getClients = async (payload, setData, setDataIndb, setIsLoading) => {
   try {
@@ -122,5 +123,24 @@ async function receivePending(payload, setIsLoading, setModal, setReload) {
   }
 }
 
-export { getClients, deleteClient, getExpiredClients, receivePending };
+const uploadToCloudinary = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "gym_management"); // tera preset
+
+  const res = await axios.post(
+    "https://api.cloudinary.com/v1_1/dzjsltijj/image/upload",
+    formData,
+  );
+
+  return res.data.secure_url;
+};
+
+export {
+  getClients,
+  deleteClient,
+  getExpiredClients,
+  receivePending,
+  uploadToCloudinary,
+};
 export default addEditClient;

@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import Switch from "../../../Components/Switch";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { IoCameraOutline } from "react-icons/io5";
-import { COMMON_IMAGE_URL } from "../../../Service/service";
 import { useState } from "react";
 
 function ClientTable({
@@ -35,16 +34,23 @@ function ClientTable({
             {/* 🔥 Avatar */}
             {row.photo ? (
               <img
-                src={`${COMMON_IMAGE_URL}${row.photo}`}
+                src={`${row.photo}`}
                 alt={name}
-                className="w-10 h-10 rounded-full object-cover border"
+                className="w-10 h-10 rounded-full object-cover border border-color"
                 onClick={(e) => {
                   e.preventDefault(); // link click stop
-                  setPreviewImg(`${COMMON_IMAGE_URL}${row.photo}`);
+                  setPreviewImg(`${row.photo}`);
                 }}
               />
             ) : (
-              <div className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-sm font-semibold">
+              <div
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onUploadPhotoClick(row);
+                }}
+                className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-sm font-semibold"
+              >
                 {name?.charAt(0)}
               </div>
             )}

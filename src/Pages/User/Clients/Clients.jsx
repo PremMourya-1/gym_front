@@ -14,6 +14,7 @@ import addEditClient, {
   deleteClient,
   getClients,
   receivePending,
+  uploadToCloudinary,
 } from "./clientService";
 import { getPlans } from "../Plan/planService";
 import SearchAndChangePage from "../../../Components/Common/GlobleSearch/SearchAndChangePage";
@@ -329,18 +330,28 @@ function GymClient() {
   async function handleUploadPhoto() {
     if (!photoFile) return;
 
-    const formData = new FormData();
-    formData.append("photo", photoFile);
+    try {
+      setIsLoading(true);
 
-    await addEditClient(
-      formData,
-      selectedRow.id,
-      setPhotoModal,
-      setData,
-      setIsLoading,
-      setPhotoFile,
-    );
+      // 1. upload to cloudinary
+      const imageUrl = await uploadToCloudinary(photoFile);
+
+      // 2. backend ko URL bhej
+      await addEditClient(
+        { photo: imageUrl }, // 👈 IMPORTANT
+        selectedRow.id,
+        setPhotoModal,
+        setData,
+        setIsLoading,
+      );
+
+      setPhotoFile(null);
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+    }
   }
+
   return (
     <>
       {/* 🔥 Header */}
@@ -860,7 +871,7 @@ function GymClient() {
                 disabled={isLoading}
                 className="btn btn-primary w-full mt-2"
               >
-                {isLoading ? <LoaderSpiner /> : "Upload"}
+                {isLoading ? "Uploading..." : "Upload"}
               </button>
             </div>
           </Modal.Body>
