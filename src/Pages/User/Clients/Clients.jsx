@@ -28,8 +28,13 @@ import { ThemeContext } from "../../../Context/ThemeContext";
 import RadioSelect from "../../../Components/Form/InputBox/RadioSelect";
 import renewPlan from "../RenewList/renewService";
 import { MdLoop } from "react-icons/md";
+import ClientGrid from "./ClientGrid";
+import { BsGrid } from "react-icons/bs";
+import { IoListSharp } from "react-icons/io5";
+import { FaListCheck } from "react-icons/fa6";
 
 function GymClient() {
+  const [view, setView] = useState("grid");
   const location = useLocation(); // 👈
   const isExpiredPage = location.pathname.includes("expired"); // 👈
   const isDeactivePage = location.pathname.includes("deactive"); // 👈
@@ -389,38 +394,78 @@ function GymClient() {
         setSearch={setSearch}
         callAfterSearch={callAfterSearch}
       >
-        {!isExpiredPage && (
-          <SelectPicker
-            onChange={(val) => {
-              setFilter((prev) => ({ ...prev, gender: val }));
-              setPage(1);
-            }}
-            data={[
-              { label: "Male", value: "male" },
-              { label: "Female", value: "female" },
-            ]}
-            cleanable
-            placeholder={"Filter By Gender"}
-            className="min-w-[160px] md:w-full picker"
-          />
-        )}
+        <>
+          {!isExpiredPage && (
+            <SelectPicker
+              onChange={(val) => {
+                setFilter((prev) => ({ ...prev, gender: val }));
+                setPage(1);
+              }}
+              data={[
+                { label: "Male", value: "male" },
+                { label: "Female", value: "female" },
+              ]}
+              cleanable
+              placeholder={"Filter By Gender"}
+              className="min-w-[160px] lg:w-full picker"
+            />
+          )}
+          <div className="flex shrink-0 border border-color rounded-md overflow-hidden w-fit">
+            <button
+              onClick={() => setView("grid")}
+              className={`px-4 py-2.5 text-sm transition 
+    ${
+      view === "grid"
+        ? "bg-[var(--primary)] text-white"
+        : "bg-transparent text-[var(--text)] hover:bg-[var(--background-light)] "
+    }`}
+            >
+              <BsGrid size={14} />
+            </button>
+
+            <button
+              onClick={() => setView("table")}
+              className={`px-4 py-2.5 text-sm transition border-l border-color
+    ${
+      view === "table"
+        ? "bg-[var(--primary)] text-white"
+        : "bg-transparent text-[var(--text)] hover:bg-[var(--background-light)] "
+    }`}
+            >
+              <FaListCheck size={14} />
+            </button>
+          </div>
+        </>
       </SearchAndChangePage>
 
       {/* 🔥 Table */}
-      <Card className="!rounded-none !p-0" isBorder>
-        <GymClientTable
-          paginate={{ page, limit }}
+      {view === "table" ? (
+        <Card className="!rounded-none !p-0" isBorder>
+          <GymClientTable
+            paginate={{ page, limit }}
+            data={data}
+            isExpired={isExpiredPage}
+            onEditClick={onEditClick}
+            onDeleteClick={onDeleteClick}
+            onChangeStatus={onChangeStatus}
+            onRenewalClick={onRenewalClick}
+            onClearPending={onClearPending}
+            isPending={isPending}
+            onUploadPhotoClick={onUploadPhotoClick}
+          />
+        </Card>
+      ) : (
+        <ClientGrid
           data={data}
-          isExpired={isExpiredPage}
           onEditClick={onEditClick}
           onDeleteClick={onDeleteClick}
-          onChangeStatus={onChangeStatus}
           onRenewalClick={onRenewalClick}
+          onUploadPhotoClick={onUploadPhotoClick}
           onClearPending={onClearPending}
           isPending={isPending}
-          onUploadPhotoClick={onUploadPhotoClick}
         />
-      </Card>
+      )}
+      {/* 🔥 Grid View */}
 
       {/* 🔥 Pagination */}
       <Pagination
@@ -769,7 +814,7 @@ function GymClient() {
 
                 {/* 🔥 Total Pending */}
                 <div className="text-xs text-red-600 mt-1">
-                  Total Pending: ₹ {selectedRow?.pendingAmount || 0}
+                  Total Pending: ₹ {selectedRow?.totalPendingAmount || 0}
                 </div>
               </div>
 
@@ -792,7 +837,7 @@ function GymClient() {
                     <div className="col-span-full text-xs text-gray-500">
                       Remaining Pending: ₹{" "}
                       {Math.max(
-                        (selectedRow?.pendingAmount || 0) -
+                        (selectedRow?.totalPendingAmount || 0) -
                           (Number(watch3("amount")) || 0),
                         0,
                       )}

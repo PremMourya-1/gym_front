@@ -6,6 +6,7 @@ import { months, weekdays } from "../../../Utils/dates";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router";
 import { FaAnglesLeft, FaRotate } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 function Header() {
   const { theme, reload, setReload, setTheme } = useContext(ThemeContext);
   const date = new Date();
@@ -75,7 +76,9 @@ function Header() {
               >
                 <FaAnglesLeft size={16} />
               </button>{" "}
-              {user && !isAdmin ? user.gymName : user?.fullName}
+              <Link to="/">
+                {user && !isAdmin ? user.gymName : user?.fullName}
+              </Link>
               {/* {user && !isAdmin ? user.ownerName : user?.fullName} */}
             </p>
             <p className="flex items-center gap-2">

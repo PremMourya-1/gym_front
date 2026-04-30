@@ -23,13 +23,13 @@ function SearchAndChangePage({
   }, [debouncedSearch]);
   return (
     <Card isBorder className=" rounded-b-none border-b-0">
-      <div className="flex justify-between md:flex-col gap-4 ">
+      <div className="flex justify-between lg:flex-col gap-4 ">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSearch();
           }}
-          className={`flex gap-4  items-center w-full max-w-[200px] md:max-w-full `}
+          className={`flex gap-4  items-center w-full max-w-[200px] lg:max-w-full `}
         >
           <div className={`inputBox  w-full shrink-0`}>
             <input

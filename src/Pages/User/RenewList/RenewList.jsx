@@ -41,10 +41,17 @@ function RenewList() {
       selector: (row) => `₹ ${row.plan?.amount}`,
     },
     {
-      title: "Paid",
+      title: "Client Paid",
       width: "110px",
       selector: (row) => (
         <span className="text-green-700">₹ {row.paidAmount}</span>
+      ),
+    },
+    {
+      title: "Discount",
+      width: "110px",
+      selector: (row) => (
+        <span className="text-red-700">₹ {row.discountAmount}</span>
       ),
     },
     {
@@ -186,6 +193,22 @@ function RenewList() {
 
             {/* 💰 Summary (BOTTOM - separate cards feel) */}
             <div className="grid grid-cols-3 md:grid-cols-2 gap-3 text-sm">
+              <div className="bg-green-50 dark:bg-green-900/20 px-3 py-2 rounded">
+                <p className="text-xs text-gray-500 dark:text-gray-300">
+                  Total Collected
+                </p>
+                <p className="text-green-600 dark:text-green-400 font-semibold">
+                  ₹ {data.summary?.totalCollectedAmount || 0}
+                </p>
+              </div>
+              <div className="bg-yellow-50 dark:bg-yellow-900/20 px-3 py-2 rounded">
+                <p className="text-xs text-gray-500 dark:text-gray-300">
+                  Discount
+                </p>
+                <p className="text-yellow-600 dark:text-yellow-400 font-semibold">
+                  ₹ {data.summary?.totalDiscount || 0}
+                </p>
+              </div>
               <div className="bg-red-50 dark:bg-red-900/20 px-3 py-2 rounded">
                 <p className="text-xs text-gray-500 dark:text-gray-300">
                   Total Pendings
@@ -222,24 +245,6 @@ function RenewList() {
                 </p>
                 <p className="text-pink-600 dark:text-pink-400 font-semibold">
                   ₹ {data.summary?.totalDiscountOnPending || 0}
-                </p>
-              </div>
-
-              <div className="bg-green-50 dark:bg-green-900/20 px-3 py-2 rounded">
-                <p className="text-xs text-gray-500 dark:text-gray-300">
-                  Total Collected
-                </p>
-                <p className="text-green-600 dark:text-green-400 font-semibold">
-                  ₹ {data.summary?.totalPaid || 0}
-                </p>
-              </div>
-
-              <div className="bg-yellow-50 dark:bg-yellow-900/20 px-3 py-2 rounded">
-                <p className="text-xs text-gray-500 dark:text-gray-300">
-                  Discount
-                </p>
-                <p className="text-yellow-600 dark:text-yellow-400 font-semibold">
-                  ₹ {data.summary?.totalDiscount || 0}
                 </p>
               </div>
             </div>

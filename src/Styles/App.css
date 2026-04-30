@@ -838,4 +838,11 @@ body.dark .rs-picker-input .rs-picker-toggle {
   border: 1px solid var(--border) !important;
 }
 
-/* dahboard */
+.shimmer {
+  @apply relative overflow-hidden bg-[var(--background-light)] dark:bg-[#2a2a2a];
+}
+
+.shimmer::before {
+  content: "";
+  @apply absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/60 to-transparent dark:via-white/10;
+}

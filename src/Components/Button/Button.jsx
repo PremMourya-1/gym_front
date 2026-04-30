@@ -11,7 +11,8 @@ const VARIANTS = {
 
   info: "bg-[var(--info)] text-white  hover:shadow-lg active:scale-[0.97]",
 
-  outline: "border text-[var(--text)] bg-transparent  hover:shadow-lg ",
+  outline:
+    "border  border-color text-[var(--text)] bg-transparent  hover:shadow-lg ",
 
   ghost: "bg-transparent text-[var(--text)]  hover:shadow-lg",
 
