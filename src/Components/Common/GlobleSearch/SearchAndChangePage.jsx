@@ -16,6 +16,7 @@ function SearchAndChangePage({
   children,
   callAfterSearch,
   placeholder,
+  afterform,
 }) {
   const debouncedSearch = useDebounce(search, 500);
   useEffect(() => {
@@ -24,29 +25,32 @@ function SearchAndChangePage({
   return (
     <Card isBorder className=" rounded-b-none border-b-0">
       <div className="flex justify-between lg:flex-col gap-4 ">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSearch();
-          }}
-          className={`flex gap-4  items-center w-full max-w-[200px] lg:max-w-full `}
-        >
-          <div className={`inputBox  w-full shrink-0`}>
-            <input
-              onChange={(e) => setSearch(e.target.value)}
-              required
-              value={search}
-              type="text"
-              className="formControl"
-              placeholder={placeholder}
-            />
-            <label htmlFor="">Search</label>
-            <ClearSearch search={search} setSearch={setSearch} />
-          </div>
-          {getButton && (
-            <Button>{searchLoading ? <LoaderSpiner /> : "Get"}</Button>
-          )}
-        </form>
+        <div className="flex items-center gap-3">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSearch();
+            }}
+            className={`flex gap-4  items-center w-full max-w-[200px] lg:max-w-full `}
+          >
+            <div className={`inputBox  w-full shrink-0`}>
+              <input
+                onChange={(e) => setSearch(e.target.value)}
+                required
+                value={search}
+                type="text"
+                className="formControl"
+                placeholder={placeholder}
+              />
+              <label htmlFor="">Search</label>
+              <ClearSearch search={search} setSearch={setSearch} />
+            </div>
+            {getButton && (
+              <Button>{searchLoading ? <LoaderSpiner /> : "Get"}</Button>
+            )}
+          </form>
+          {afterform}
+        </div>
         <div className="flex gap-2 items-center">
           {children}
           <div className="flex gap-3 shrink-0">

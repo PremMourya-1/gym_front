@@ -29,9 +29,7 @@ import RadioSelect from "../../../Components/Form/InputBox/RadioSelect";
 import renewPlan from "../RenewList/renewService";
 import { MdLoop } from "react-icons/md";
 import ClientGrid from "./ClientGrid";
-import { BsGrid } from "react-icons/bs";
-import { IoListSharp } from "react-icons/io5";
-import { FaListCheck } from "react-icons/fa6";
+import Tabs from "./Tabs";
 
 function GymClient() {
   const [view, setView] = useState("grid");
@@ -393,6 +391,9 @@ function GymClient() {
         setLimit={setLimit}
         setSearch={setSearch}
         callAfterSearch={callAfterSearch}
+        afterform={
+          <Tabs view={view} setView={setView} className={`md:block hidden`} />
+        }
       >
         <>
           {!isExpiredPage && (
@@ -410,31 +411,7 @@ function GymClient() {
               className="min-w-[160px] lg:w-full picker"
             />
           )}
-          <div className="flex shrink-0 border border-color rounded-md overflow-hidden w-fit">
-            <button
-              onClick={() => setView("grid")}
-              className={`px-4 py-2.5 text-sm transition 
-    ${
-      view === "grid"
-        ? "bg-[var(--primary)] text-white"
-        : "bg-transparent text-[var(--text)] hover:bg-[var(--background-light)] "
-    }`}
-            >
-              <BsGrid size={14} />
-            </button>
-
-            <button
-              onClick={() => setView("table")}
-              className={`px-4 py-2.5 text-sm transition border-l border-color
-    ${
-      view === "table"
-        ? "bg-[var(--primary)] text-white"
-        : "bg-transparent text-[var(--text)] hover:bg-[var(--background-light)] "
-    }`}
-            >
-              <FaListCheck size={14} />
-            </button>
-          </div>
+          <Tabs view={view} setView={setView} className={`md:hidden`} />
         </>
       </SearchAndChangePage>
 
