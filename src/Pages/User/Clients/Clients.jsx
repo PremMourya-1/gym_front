@@ -32,7 +32,7 @@ import ClientGrid from "./ClientGrid";
 import Tabs from "./Tabs";
 
 function GymClient() {
-  const [view, setView] = useState("grid");
+  const [view, setView] = useState("table");
   const location = useLocation(); // 👈
   const isExpiredPage = location.pathname.includes("expired"); // 👈
   const isDeactivePage = location.pathname.includes("deactive"); // 👈

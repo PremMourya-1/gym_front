@@ -155,13 +155,18 @@ function RenewList() {
             {/* 🔹 Client Info (TOP) */}
             <div className="grid grid-cols-4 md:grid-cols-2 gap-3 text-sm mb-4">
               <div className="flex  gap-3 lg:col-span-full">
-                {/* 🖼️ Client Photo */}
-                <img
-                  src={`${data.client?.photo}`}
-                  alt="client"
-                  className="w-20 h-20 md:w-20 md:h-20 rounded-xl object-cover border border-color cursor-pointer"
-                  onClick={() => setPreviewImg(`${data.client?.photo}`)}
-                />
+                {data.client?.photo ? (
+                  <img
+                    src={`${data.client?.photo}`}
+                    alt="client"
+                    className="w-20 h-20 md:w-20 md:h-20 rounded-xl object-cover border border-color cursor-pointer"
+                  />
+                ) : (
+                  <div className="w-20 h-20 md:w-20 md:h-20 rounded-xl bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-4xl">
+                    {data.client?.clientName?.charAt(0)}
+                    {data.client?.clientName.split(" ")[1]?.charAt(0)}
+                  </div>
+                )}
 
                 {/* 👤 Name + Mobile */}
                 <div>

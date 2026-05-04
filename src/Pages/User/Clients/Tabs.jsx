@@ -7,18 +7,6 @@ function Tabs({ setView, view, className }) {
       {" "}
       <div className="flex shrink-0 border border-color rounded-md overflow-hidden w-fit">
         <button
-          onClick={() => setView("grid")}
-          className={`px-4 py-2.5 text-sm transition 
-    ${
-      view === "grid"
-        ? "bg-[var(--primary)] text-white"
-        : "bg-transparent text-[var(--text)] hover:bg-[var(--background-light)] "
-    }`}
-        >
-          <BsGrid size={14} />
-        </button>
-
-        <button
           onClick={() => setView("table")}
           className={`px-4 py-2.5 text-sm transition border-l border-color
     ${
@@ -28,6 +16,17 @@ function Tabs({ setView, view, className }) {
     }`}
         >
           <FaListCheck size={14} />
+        </button>
+        <button
+          onClick={() => setView("grid")}
+          className={`px-4 py-2.5 text-sm transition 
+    ${
+      view === "grid"
+        ? "bg-[var(--primary)] text-white"
+        : "bg-transparent text-[var(--text)] hover:bg-[var(--background-light)] "
+    }`}
+        >
+          <BsGrid size={14} />
         </button>
       </div>
     </div>
