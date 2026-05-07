@@ -377,10 +377,9 @@ function GymClient() {
 
             <Link
               to="/plans"
-              className="text-primary font-semibold hover:underline shrink-0 flex "
+              className="text-primary font-semibold hover:underline  "
             >
               <span>Create Plan </span>{" "}
-              <span className="sm:block inline">First</span>
             </Link>
           </div>
         ) : (
