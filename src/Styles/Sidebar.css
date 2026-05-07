@@ -1,0 +1,125 @@
+/* xxxxxxxxxxxxxxxxxxxxxxxxxxxxx sidebar css start xxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
+
+/* sidebar main */
+aside {
+    @apply shadow-md bg-[color:var(--background-dark)] rounded-lg md:rounded-l-none md:rounded-r-lg;
+
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.425), rgba(21, 21, 21, 0.374)),
+        url(../Assets/images/sidebar/sidebar3.jpg);
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* sidebar header */
+#sideBarHeader {
+    @apply bg-white dark:bg-white rounded-t-lg md:rounded-l-none;
+}
+
+/* nav item */
+aside .sideBarContent .navItem {
+    @apply border-b border-gray-600;
+}
+
+/* nav link */
+aside .sideBarContent .navItem .navLink {
+    @apply text-[16px] px-2.5 py-1 flex gap-2 items-center text-[color:var(--text-light)] hover:text-white;
+}
+
+/* hover icon */
+aside .sideBarContent .navItem:not(.active):hover svg {
+    @apply dark:fill-white fill-white;
+}
+
+/* active nav link */
+aside .sideBarContent .navItem.active .navLink {
+    @apply text-white bg-[color:var(--primary-tp)];
+}
+
+/* nav icon */
+aside .sideBarContent .navItem .navLink span.icon {
+    @apply border-2 border-transparent h-8 w-8 flex items-center justify-center fill-gray-200 dark:fill-gray-400;
+}
+
+/* active nav icon */
+aside .sideBarContent .navItem.active .navLink span.icon {
+    @apply dark:fill-white fill-[color:var(--background-light)];
+}
+
+/* disabled link */
+.disableLink {
+    @apply opacity-30 pointer-events-none;
+}
+
+/* dropdown nav link */
+aside .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink {
+    @apply relative ps-10 p-2 text-[15px] text-[var(--text-light)] hover:text-white;
+
+    @apply before:absolute before:left-6 before:top-1/2 before:-translate-y-1/2;
+    @apply before:block before:h-[8px] before:w-[8px];
+    @apply before:rounded-full before:border-2 before:border-[var(--text-light)];
+
+    @apply hover:before:border-white;
+}
+
+/* active dropdown nav link */
+aside .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink.active {
+    @apply text-white font-semibold before:border-white;
+}
+
+/* hover dropdown svg */
+aside .sideBarContent .navItem:not(.active).dropDown .dropDownContent .dropDownNavItem:hover svg {
+    @apply fill-white;
+}
+
+/* svg fill utility */
+.svgFillLightBg {
+    @apply fill-gray-500 dark:fill-gray-200;
+}
+
+/* ================= SMALL SIDEBAR ================= */
+
+aside.small .sideBarContent .navItem.dropDown {
+    @apply relative;
+}
+
+/* popup dropdown */
+aside.small .sideBarContent .navItem.dropDown .dropDownContent {
+    @apply absolute top-0 left-full min-w-[220px] z-50 rounded-r-lg shadow-lg;
+
+    background: var(--background);
+    border: 1px solid var(--border);
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(10px);
+
+    transition: all 0.2s ease;
+}
+
+/* show popup on hover */
+aside.small .sideBarContent .navItem.dropDown:hover .dropDownContent {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+/* small sidebar dropdown items */
+aside.small .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem {
+    @apply border-b border-[var(--border)];
+}
+
+/* small sidebar dropdown links */
+aside.small .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink {
+    @apply text-[var(--text)] hover:text-[color:var(--primary)];
+
+    @apply before:border-[color:var(--text)];
+    @apply hover:before:border-[color:var(--primary)];
+}
+
+/* small sidebar active dropdown link */
+aside.small .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink.active {
+    @apply !text-[var(--primary)] before:border-[color:var(--primary)];
+}

@@ -444,7 +444,7 @@ function Dashboard() {
           </div>
         </Card>
 
-        <Card className="p-4">
+        <Card className="p-4 mb-16">
           {/* Header */}
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-semibold text-[var(--text)]">

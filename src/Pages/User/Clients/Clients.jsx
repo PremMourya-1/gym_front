@@ -1,6 +1,6 @@
 import { RxCross2 } from "react-icons/rx";
 import { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom"; // 👈 ADD
+import { Link, useLocation } from "react-router-dom"; // 👈 ADD
 import CustomModal from "../../../Components/Modal/Modal";
 import DrawerComponent from "../../../Components/Drawer/Drawer";
 import { useForm } from "react-hook-form";
@@ -369,17 +369,33 @@ function GymClient() {
           ]}
         />
 
-        {!isExpiredPage && (
-          <Button
-            onClick={() => {
-              setDrawer(true);
-              reset();
-              setListId(null);
-              setIsRenewal(false);
-            }}
-          >
-            Add Client
-          </Button>
+        {!planList?.length ? (
+          <div className="flex items-center gap-2 text-sm">
+            <span className="text-light sm:hidden">
+              Create a membership plan before adding clients.
+            </span>
+
+            <Link
+              to="/plans"
+              className="text-primary font-semibold hover:underline shrink-0 flex "
+            >
+              <span>Create Plan </span>{" "}
+              <span className="sm:block inline">First</span>
+            </Link>
+          </div>
+        ) : (
+          !isExpiredPage && (
+            <Button
+              onClick={() => {
+                setDrawer(true);
+                reset();
+                setListId(null);
+                setIsRenewal(false);
+              }}
+            >
+              Add Client
+            </Button>
+          )
         )}
       </div>
 

@@ -528,109 +528,6 @@ textarea.formControl.notRequired~label {
 
 /* xxxxxxxxxxxxxxxxxxxxxxxxxxxxx sidebar css start xxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
 
-/* sidebar css light */
-aside {
-  @apply shadow-md bg-[color:var(--background-dark)] rounded-lg md:rounded-l-none md:rounded-r-lg;
-}
-
-aside {
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.425), rgba(21, 21, 21, 0.374)),
-    url(../Assets/images/sidebar/sidebar3.jpg);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-#sideBarHeader {
-  @apply bg-white rounded-t-lg md:rounded-l-none;
-}
-
-aside .sideBarContent .navItem {
-  @apply border-b border-gray-600;
-}
-
-aside .sideBarContent .navItem .navLink {
-  @apply text-[16px] px-2.5 py-1 flex gap-2 items-center text-[color:var(--text-light)] hover:text-white;
-}
-
-aside .sideBarContent .navItem:not(.active):hover svg {
-  @apply dark:fill-white;
-}
-
-/* aside .sideBarContent .navItem.active {
-  @apply bg-[color:var(--background)];
-} */
-
-aside .sideBarContent .navItem.active .navLink {
-  @apply text-white bg-[color:var(--primary-tp)];
-}
-
-aside .sideBarContent .navItem .navLink span.icon {
-  @apply border-2 border-transparent h-8 w-8 flex items-center justify-center fill-gray-200 dark:fill-gray-400;
-}
-
-aside .sideBarContent .navItem.active .navLink span.icon {
-  @apply dark:fill-white fill-[color:var(--background-light)];
-}
-
-.disableLink {
-  @apply opacity-30 pointer-events-none;
-}
-
-/* for dorp down */
-
-/* dropdown item with bullet */
-aside .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink {
-  @apply ps-10 p-2 hover:before:border-white before:left-6 relative before:absolute before:top-1/2 before:-translate-y-1/2 before:block before:h-[8px] before:w-[8px] before:rounded-full before:border-2 before:border-[var(--text-light)];
-}
-
-aside .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink.active {
-  @apply before:border-white;
-}
-
-aside.small .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink.active {
-  @apply dark:before:border-[color:var(--dark-primary-dark)];
-}
-
-aside .sideBarContent .navItem:not(.active).dropDown .dropDownContent .dropDownNavItem:hover svg {
-  @apply fill-white;
-}
-
-/* dropdown item with bullet end */
-
-aside .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink {
-  @apply text-[var(--text-light)] hover:text-white text-[15px];
-}
-
-aside.small .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink {
-  @apply border-b border-[var(--border)] text-[var(--text)] hover:text-[color:var(--primary)] before:border-[color:var(--text)] hover:before:border-[color:var(--primary)] text-[15px];
-}
-
-aside .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink.active {
-  @apply text-white font-semibold;
-}
-
-aside.small .sideBarContent .navItem.dropDown .dropDownContent .dropDownNavItem .dropDownNavLink.active {
-  @apply !text-[var(--primary)] before:border-[color:var(--primary)]
-}
-
-#sideBarHeader {
-  @apply dark:bg-white;
-}
-
-.svgFillLightBg {
-  @apply fill-gray-500 dark:fill-gray-200;
-}
-
-/* small sidebar dropDown */
-/* aside.small .sideBarContent .navItem.dropDown .dropDownContentOne {
-  @apply absolute transition-none shadow-sm top-0 w-[220px] left-[56px] bg-[color:var(--background)] rounded-e-lg
-} */
-
-aside.small .sideBarContent .navItem.dropDown .dropDownNavLink.active {
-  @apply before:border-[color:var(--dark-primary-dark)] dark:text-[color:var(--dark-primary-dark)] hover:dark:text-[color:var(--dark-primary-dark)];
-}
 
 /* xxxxxxxxxxxxxxxxxxxxxxxxxxxxx header css start xxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
 
@@ -793,11 +690,12 @@ body.dark .dashboardCard:nth-child(5) {
 
 body.dark .dashboardCard:nth-child(6) {
   background:
-    linear-gradient(rgba(0, 0, 0, 0.42), rgba(21, 21, 21, 0.384)),
-    url(../Assets/images/dashboard/seven.jpg);
+    linear-gradient(rgba(0, 0, 0, 0.598), rgba(21, 21, 21, 0.607)),
+    url(../Assets/images/dashboard/four.avif);
 
   background-position: center center;
   background-size: cover;
+
 }
 
 body.dark .dashboardCard:nth-child(7) {
@@ -810,10 +708,11 @@ body.dark .dashboardCard:nth-child(7) {
 
 body.dark .dashboardCard:nth-child(8) {
   background:
-    linear-gradient(rgba(0, 0, 0, 0.598), rgba(21, 21, 21, 0.607)),
-    url(../Assets/images/dashboard/one.avif);
+    linear-gradient(rgba(0, 0, 0, 0.42), rgba(21, 21, 21, 0.384)),
+    url(../Assets/images/dashboard/seven.jpg);
 
   background-position: center center;
+  background-size: cover;
 }
 
 .recharts-default-tooltip {

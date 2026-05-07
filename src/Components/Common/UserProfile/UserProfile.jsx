@@ -12,6 +12,7 @@ import ConfirmModal from "../../Modal/ConfirmModal";
 import Image from "../Image/Image";
 import { Link } from "react-router-dom";
 import { getLoggedInUserDetails } from "../../../Store/Slices/AuthSlice";
+import { FaUserTie } from "react-icons/fa";
 
 function UserProfile({ isAdmin, logo }) {
   const userDetails = useSelector(getLoggedInUserDetails);
@@ -56,7 +57,7 @@ function UserProfile({ isAdmin, logo }) {
           className="data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in absolute right-7 top-10 z-10 mt-4 w-max origin-top-right divide-y divide-gray-100 rounded-lg bg-[var(--background)] shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none ] font-semibold  border border-[color:var(--primary-dark)]  border-none overflow-hidden"
         >
           <div className="">
-            {/* <MenuItem className="dropdownLink hover:bg-[var(--primary-tp)] hover:text-primary border-b border-color cursor-pointer  p-2 flex items-center gap-2">
+            {/* <MenuItem className="dropdownLink text-sm hover:bg-[var(--primary-tp)] hover:text-primary border-b border-color cursor-pointer  p-2 flex items-center gap-2">
               <span>
                 <span className="text-lg ">
                   <ImUser />
@@ -64,19 +65,25 @@ function UserProfile({ isAdmin, logo }) {
                 My Profile
               </span>
             </MenuItem> */}
-            <MenuItem className="dropdownLink hover:bg-[var(--primary-tp)] hover:text-primary border-b border-color cursor-pointer  p-2 flex items-center gap-2">
+            <MenuItem className="dropdownLink text-sm hover:bg-[var(--primary-tp)] hover:text-primary border-b border-color cursor-pointer  p-2 flex items-center gap-2">
               <Link to={`/change-password`}>
                 <CiLock size={20} />
                 Change Password
               </Link>
             </MenuItem>
-            <MenuItem className="dropdownLink hover:bg-[var(--primary-tp)] hover:text-primary border-b border-color cursor-pointer  p-2 flex items-center gap-2">
+            <MenuItem className="dropdownLink text-sm hover:bg-[var(--primary-tp)] hover:text-primary border-b border-color cursor-pointer  p-2 flex items-center gap-2">
+              <Link to={`/gym-profile`}>
+                <FaUserTie size={18} />
+                My Profile
+              </Link>
+            </MenuItem>
+            <MenuItem className="dropdownLink text-sm hover:bg-[var(--primary-tp)] hover:text-primary border-b border-color cursor-pointer  p-2 flex items-center gap-2">
               <Link to={`/app-settings`}>
-                <MdOutlineSettings size={20} />
+                <MdOutlineSettings size={18} />
                 App Settings
               </Link>
             </MenuItem>
-            <MenuItem className="dropdownLink text-red-500 hover:bg-[var(--primary-tp)] hover:text-primary border-b border-color cursor-pointer  p-2 flex items-center gap-2">
+            <MenuItem className="dropdownLink text-sm text-red-500 hover:bg-[var(--primary-tp)] hover:text-primary border-b border-color cursor-pointer  p-2 flex items-center gap-2">
               <span
                 onClick={() => {
                   setModal(true);

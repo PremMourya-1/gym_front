@@ -74,7 +74,7 @@ function Header() {
                   theme.isSideBarSmall ? "rotate-180" : "rotate-0"
                 } toggleButton group-hover:block `}
               >
-                <FaAnglesLeft size={16} />
+                <FaAnglesLeft size={18} />
               </button>{" "}
               <Link to="/">
                 {user && !isAdmin ? user.gymName : user?.fullName}

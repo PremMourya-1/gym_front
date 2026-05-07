@@ -3,6 +3,7 @@ import ChangePassword from "../../Pages/User/ChangePassword/ChangePassword";
 import Clients from "../../Pages/User/Clients/Clients";
 import Dashboard from "../../Pages/User/Dashboard/Dashboard";
 import Features from "../../Pages/User/Features/Features";
+import GymProfile from "../../Pages/User/GymProfile/GymProfile";
 import Plan from "../../Pages/User/Plan/Plan";
 import RenewList from "../../Pages/User/RenewList/RenewList";
 
@@ -50,6 +51,10 @@ const userRoutes = [
   {
     element: Features,
     path: "/features",
+  },
+  {
+    element: GymProfile,
+    path: "/gym-profile",
   },
 ];
 

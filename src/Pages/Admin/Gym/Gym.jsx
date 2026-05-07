@@ -34,6 +34,7 @@ function Gym() {
   }
 
   function onEditClick(row) {
+    console.log(row);
     setListId(row.id);
     setIsEditing(true);
 
@@ -47,6 +48,7 @@ function Gym() {
     setValue("planId", row.planId);
     setValue("planStartDate", row.planStartDate);
     setValue("planEndDate", row.planEndDate);
+    setValue("username", row.username);
 
     setDrawer(true);
   }
@@ -150,18 +152,19 @@ function Gym() {
                   Username <span className="text-red-600">*</span>
                 </label>
               </div>
-
-              <div className="inputBox">
-                <input
-                  required
-                  type="password"
-                  className="formControl"
-                  {...register("password")}
-                />
-                <label>
-                  Password <span className="text-red-600">*</span>
-                </label>
-              </div>
+              {!listId && (
+                <div className="inputBox">
+                  <input
+                    required
+                    type="password"
+                    className="formControl"
+                    {...register("password")}
+                  />
+                  <label>
+                    Password <span className="text-red-600">*</span>
+                  </label>
+                </div>
+              )}
 
               <div className="inputBox">
                 <input

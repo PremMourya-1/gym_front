@@ -20,7 +20,7 @@ function AdminLogin() {
   const [isForgoting, setIsForgoting] = useState(false);
   const [contact, setContact] = useState();
 
-  const { register, handleSubmit, watch, setValue } = useForm();
+  const { register, handleSubmit, watch } = useForm();
 
   function handleAdminLogin(data) {
     login(true, { ...data, role: "admin" }, dispatch, setIsLoading, navigate);
@@ -78,8 +78,8 @@ function AdminLogin() {
   }
 
   useEffect(() => {
-    setValue("mobileNo", 8824644769);
-    setValue("password", "Admin@12345");
+    // setValue("mobileNo", 8824644769);
+    // setValue("password", "Admin@12345");
   }, []);
 
   return (

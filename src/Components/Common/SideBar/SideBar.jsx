@@ -9,6 +9,7 @@ import userSideBarData from "../../../Data/UserData/sideBarData";
 import adminSideBarData from "../../../Data/AdminData/adminSideBarData";
 import { AppDataContext } from "../../../Context/AppDataContext";
 import Tippy from "@tippyjs/react";
+import "../../../Styles/sidebar.css"; // optional for styling
 function SideBar() {
   const { setTheme, theme } = useContext(ThemeContext);
   const path = useLocation().pathname;
