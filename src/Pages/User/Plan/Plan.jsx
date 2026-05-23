@@ -58,8 +58,8 @@ function GymPlan() {
     <>
       <div className="breadcrumbAndButton">
         <BreadCrumb
-          title={"Gym Plans"}
-          content={[{ title: "Gym Plans", slug: "#" }]}
+          title={"membership plans"}
+          content={[{ title: "Membership Plans", slug: "#" }]}
         />
         <Button
           onClick={() => {
@@ -68,7 +68,7 @@ function GymPlan() {
             setListId(null);
           }}
         >
-          Add Gym Plan
+          Add Membership Plan
         </Button>
       </div>
 

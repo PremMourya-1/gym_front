@@ -2,6 +2,7 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import getDashboardData from "./dashboardService";
 import { ThemeContext } from "../../../Context/ThemeContext";
 import Card from "../../../Components/Card/Card";
+import Button from "../../../Components/Button/Button";
 import RevenueChart from "./RevenueChart";
 import { Link } from "react-router-dom";
 import {
@@ -20,14 +21,17 @@ import toCamelCase from "../../../Utils/modifyString";
 import { planColors } from "../../../Constant/Constant";
 import Tippy from "@tippyjs/react";
 import { useSelector } from "react-redux";
+import { getCurrentSubscription } from "../SubscriptionPlans/subscriptionService";
 
 function Dashboard() {
   const { reload } = useContext(ThemeContext);
   const [data, setData] = useState();
+  const [subscriptionData, setSubscriptionData] = useState();
 
   useEffect(() => {
     setData(); // Clear previous data while loading new data
     getDashboardData(setData);
+    getCurrentSubscription(setSubscriptionData);
   }, [reload]);
 
   const d = data;
@@ -92,8 +96,38 @@ function Dashboard() {
   ];
 
   const user = useSelector((state) => state.auth);
+
+  const notification = subscriptionData?.notification;
+  const isSubscriptionExpired = subscriptionData?.status === "expired";
+
+  const statusConfig = {
+    error:
+      "bg-red-50 border-red-200 text-red-700 dark:bg-red-900/20 dark:border-red-700 dark:text-red-300",
+    warning:
+      "bg-yellow-50 border-yellow-200 text-yellow-700 dark:bg-yellow-900/20 dark:border-yellow-700 dark:text-yellow-300",
+    info: "bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-900/20 dark:border-blue-700 dark:text-blue-300",
+  };
+
   return (
     <div className="space-y-4">
+      {notification && (
+        <Card
+          className={`border ${statusConfig[notification.type] || statusConfig.info}`}
+        >
+          <div className="flex md:flex-col items-center md:items-start justify-between gap-3">
+            <p className="font-medium text-sm">{notification.message}</p>
+            <Link to={notification.actionLink}>
+              <Button
+                variant={isSubscriptionExpired ? "danger" : "primary"}
+                size="sm"
+              >
+                {notification.actionLabel}
+              </Button>
+            </Link>
+          </div>
+        </Card>
+      )}
+
       <div
         className="w-full relative capitalize border dark:border-none
   bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100
@@ -247,6 +281,7 @@ function Dashboard() {
             {actions.map((a, i) => {
               const content = (
                 <div
+                  key={i}
                   className={`p-5 rounded-xl flex flex-col items-center justify-center text-center transition-all
           ${
             a.enabled

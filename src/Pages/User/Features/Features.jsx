@@ -3,18 +3,53 @@ import Card from "../../../Components/Card/Card";
 function Features() {
   const features = [
     {
-      name: "Client Registration",
-      desc: "Add new clients with plan & joining details",
+      name: "Client Registration & Profile",
+      desc: "Add and manage member profile with plan, joining date, and photo",
       status: "Live",
     },
     {
       name: "All Clients List",
-      desc: "View & manage all clients with filters",
+      desc: "Search, filter, and manage all active members",
       status: "Live",
     },
     {
       name: "Expired Clients",
-      desc: "Auto list of expired plans for follow-up",
+      desc: "Auto-segment expired memberships for quick follow-up",
+      status: "Live",
+    },
+    {
+      name: "Pending Payments",
+      desc: "Track clients with pending dues and recover payments",
+      status: "Live",
+    },
+    {
+      name: "Plan Management",
+      desc: "Create and manage gym plans with pricing and duration",
+      status: "Live",
+    },
+    {
+      name: "Plan Renewal",
+      desc: "Renew memberships quickly with pending/discount support",
+      status: "Live",
+    },
+    {
+      name: "Bulk Upload Members",
+      desc: "Import members from Excel with mapping, validation, and rejected row reasons",
+      status: "Live",
+    },
+    {
+      name: "Smart Gender Handling",
+      desc: "Use Excel gender when available, else predict from first name with manual override",
+      status: "Live",
+    },
+    {
+      name: "Smart Plan Detection",
+      desc: "Auto-select nearest plan by paid amount when plan is not mapped directly",
+      status: "Live",
+    },
+    {
+      name: "Auto Discount Calculation",
+      desc: "If discount is missing and paid amount is lower than plan price, discount is auto-calculated",
       status: "Live",
     },
     {
@@ -23,28 +58,38 @@ function Features() {
       status: "Live",
     },
     {
-      name: "Plan Renewal",
-      desc: "Renew plans in one click",
+      name: "Subscription Plans & Billing",
+      desc: "Subscription management for software plan lifecycle",
       status: "Live",
     },
     {
       name: "Attendance System",
-      desc: "Track daily presence (manual/biometric)",
+      desc: "Daily attendance tracking with manual + biometric support",
       status: "Upcoming",
     },
     {
-      name: "Client Photo",
-      desc: "Identify clients quickly via photo",
-      status: "Live",
-    },
-    {
-      name: "Reward System",
-      desc: "Give points to regular clients",
+      name: "Automated Reminder Engine",
+      desc: "Auto WhatsApp/SMS reminders for renewals, dues, and inactivity",
       status: "Upcoming",
     },
     {
-      name: "Auto Reminders",
-      desc: "WhatsApp/SMS before expiry",
+      name: "Receipt & Invoice Module",
+      desc: "Generate and share printable/digital receipts for every transaction",
+      status: "Upcoming",
+    },
+    {
+      name: "Staff & Access Management",
+      desc: "Role-based access for reception, trainer, and admin operations",
+      status: "Upcoming",
+    },
+    {
+      name: "Advanced Reports Export",
+      desc: "Export monthly revenue, collection, and retention reports in Excel/PDF",
+      status: "Upcoming",
+    },
+    {
+      name: "Member Engagement & Rewards",
+      desc: "Reward points and retention programs for regular members",
       status: "Upcoming",
     },
   ];

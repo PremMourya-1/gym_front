@@ -136,11 +136,31 @@ const uploadToCloudinary = async (file) => {
   return res.data.secure_url;
 };
 
+const getClientsExcelData = async (payload, setIsLoading) => {
+  try {
+    setIsLoading?.(true);
+    const res = await userApi.clientExcelData(payload);
+
+    if (res.data.action) {
+      return res.data.data || [];
+    }
+
+    toast.error(res.data.message);
+    return [];
+  } catch (error) {
+    console.log(error);
+    return [];
+  } finally {
+    setIsLoading?.(false);
+  }
+};
+
 export {
   getClients,
   deleteClient,
   getExpiredClients,
   receivePending,
   uploadToCloudinary,
+  getClientsExcelData,
 };
 export default addEditClient;

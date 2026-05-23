@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function BreadCrumb({ content, title }) {
   return (
     <div>
-      <h2 className="text-xl flex gap-2 items-center font-semibold capitalize mb-1 text-[color:var(--secondary-light)] ">
+      <h2 className="text-xl flex gap-2 items-center font-semibold capitalize mb-1 text-[color:var(--primary)] ">
         <button
           onClick={() => {
             history.back();

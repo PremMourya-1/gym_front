@@ -37,7 +37,7 @@ function App() {
       <Toaster
         position="bottom-center"
         toastOptions={{
-          icon: "💪",
+          // icon: "💪",
           style: {
             background: isDark ? "#282928" : "#fff",
             color: isDark ? "#fff" : "#000",

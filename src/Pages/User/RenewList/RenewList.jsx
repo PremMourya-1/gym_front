@@ -16,7 +16,6 @@ function RenewList() {
   const { id } = useParams();
 
   const [data, setData] = useState(null);
-  console.log(data);
 
   useEffect(() => {
     setData();
@@ -65,18 +64,16 @@ function RenewList() {
       width: "120px",
       title: "Expire ?",
       selector: (row) => {
-        const today = moment();
         const expiry = moment(row.expiryDate);
-        const diff = expiry.diff(today, "days");
 
         const date = expiry.format(DATE_MONTH_FORMATE);
 
-        return diff < 0 ? (
+        return row.expired < 0 ? (
           <div className="text-red-600">
             <div className="font-medium text-sm">{date}</div>
-            <div className="text-xs">{Math.abs(diff)} days ago</div>
+            <div className="text-xs">{Math.abs(row.expired)} days ago</div>
           </div>
-        ) : diff === 0 ? (
+        ) : row.expired === 0 ? (
           <div className="text-orange-500">
             <div className="font-medium text-sm">{date}</div>
             <div className="text-xs">Expiring Today</div>
@@ -84,7 +81,7 @@ function RenewList() {
         ) : (
           <div className="text-yellow-600">
             <div className="font-medium text-sm">{date}</div>
-            <div className="text-xs">{diff} days left</div>
+            <div className="text-xs">{row.expired} days left</div>
           </div>
         );
       },

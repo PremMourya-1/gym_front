@@ -12,11 +12,14 @@ import Button from "../../../Components/Button/Button";
 import GymClientTable from "./ClientTable";
 import addEditClient, {
   deleteClient,
+  getClientsExcelData,
   getClients,
   receivePending,
   uploadToCloudinary,
 } from "./clientService";
+import toast from "react-hot-toast";
 import { getPlans } from "../Plan/planService";
+import { getOffers } from "../Offers/offerService";
 import SearchAndChangePage from "../../../Components/Common/GlobleSearch/SearchAndChangePage";
 import { showDefaultDataLimit } from "../../../Constant/Constant";
 import Pagination from "../../../Components/Pagination/Pagination";
@@ -30,6 +33,8 @@ import renewPlan from "../RenewList/renewService";
 import { MdLoop } from "react-icons/md";
 import ClientGrid from "./ClientGrid";
 import Tabs from "./Tabs";
+import downloadXl from "../../../Utils/downloadXl";
+import { getClientExcelColumns } from "./clientExcelConfig";
 
 function GymClient() {
   const [view, setView] = useState("table");
@@ -43,9 +48,13 @@ function GymClient() {
   const [modal, setModal] = useState(false);
   const [drawer, setDrawer] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isExcelLoading, setIsExcelLoading] = useState(false);
   const [listId, setListId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [planList, setPlanList] = useState();
+  const [offerList, setOfferList] = useState();
+  const [selectedPlanOffer, setSelectedPlanOffer] = useState(null);
+  const [selectedRenewPlanOffer, setSelectedRenewPlanOffer] = useState(null);
 
   useEffect(() => {
     if (location.pathname.includes("add-client")) {
@@ -57,6 +66,10 @@ function GymClient() {
 
   const [data, setData] = useState();
   const [dataIndb, setDataInDB] = useState(0);
+
+  const activeClientsCount = data?.filter(
+    (row) => Number(row.active) === 1,
+  ).length;
 
   const [limit, setLimit] = useState(showDefaultDataLimit);
   const [page, setPage] = useState(1);
@@ -85,8 +98,9 @@ function GymClient() {
   }
 
   useEffect(() => {
-    !planList && getPlans(setPlanList); // 👈 only for normal page
-  }, []);
+    getPlans(setPlanList);
+    getOffers(setOfferList);
+  }, [reload]);
 
   const { register, handleSubmit, watch, setValue, reset } = useForm({
     gender: "male",
@@ -102,6 +116,42 @@ function GymClient() {
     handleSubmit: handleSubmit3,
     watch: watch3,
   } = useForm();
+
+  const getOfferDates = (offer) => {
+    const start = new Date(offer?.offerStartDate || "");
+    const end = new Date(offer?.offerEndDate);
+    return { start, end };
+  };
+
+  const isOfferValid = (offer, dateValue) => {
+    if (!offer || !Number(offer?.isActive)) return false;
+    const { start, end } = getOfferDates(offer);
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()))
+      return false;
+    const date = dateValue ? new Date(dateValue) : new Date();
+    return date >= start && date <= end;
+  };
+
+  const getValidOfferForPlan = (planId, dateValue) => {
+    return (
+      (offerList || []).find(
+        (offer) =>
+          String(offer.planId) === String(planId) &&
+          isOfferValid(offer, dateValue),
+      ) || null
+    );
+  };
+
+  const normalizeWithOfferValue = (value) => (value ? 1 : 0);
+
+  const validateAndSetWithOffer = (offer, setValueFn, fieldName) => {
+    if (offer) {
+      setValueFn(fieldName, 1);
+      return offer;
+    }
+    setValueFn(fieldName, 0);
+    return null;
+  };
 
   function handleForm(data) {
     const plan = Number(data.planAmount) || 0;
@@ -314,6 +364,7 @@ function GymClient() {
       : isPending
         ? "Pending Payents"
         : "Clients";
+  const isAllClientPage = !isExpiredPage && !isDeactivePage && !isPending;
 
   // upload photo system
 
@@ -355,6 +406,25 @@ function GymClient() {
     }
   }
 
+  async function handleDownloadExcel() {
+    const query = createParams({
+      gender: filter.gender,
+      search,
+      isExpired: isExpiredPage ? 1 : 0,
+      isDeactive: isDeactivePage ? 1 : 0,
+      isPending: isPending ? 1 : 0,
+    });
+
+    const excelData = await getClientsExcelData(query, setIsExcelLoading);
+    if (!excelData.length) return;
+
+    const columns = getClientExcelColumns();
+    const date = new Date().toISOString().split("T")[0];
+    const fileName = `clients-list-${date}.xlsx`;
+
+    downloadXl(columns, excelData, fileName);
+  }
+
   return (
     <>
       {/* 🔥 Header */}
@@ -383,18 +453,32 @@ function GymClient() {
             </Link>
           </div>
         ) : (
-          !isExpiredPage && (
-            <Button
-              onClick={() => {
-                setDrawer(true);
-                reset();
-                setListId(null);
-                setIsRenewal(false);
-              }}
-            >
-              Add Client
-            </Button>
-          )
+          <div className="flex items-center gap-2">
+            {isAllClientPage && (
+              <div className="flex items-center gap-3">
+                <Button
+                  icon="excel"
+                  variant="success"
+                  disabled={isExcelLoading}
+                  onClick={handleDownloadExcel}
+                >
+                  {isExcelLoading ? <LoaderSpiner /> : "Download Excel"}
+                </Button>
+              </div>
+            )}
+            {!isExpiredPage && (
+              <Button
+                onClick={() => {
+                  setDrawer(true);
+                  reset();
+                  setListId(null);
+                  setIsRenewal(false);
+                }}
+              >
+                Add Client
+              </Button>
+            )}
+          </div>
         )}
       </div>
 
@@ -524,9 +608,23 @@ function GymClient() {
                             const selectedPlan = planList.find(
                               (p) => p.id === e.target.value,
                             );
+                            const selectedDate =
+                              watch("joiningDate") ||
+                              new Date().toISOString().slice(0, 10);
                             setValue("planAmount", selectedPlan?.price || 0);
                             setValue("paidAmount", selectedPlan?.price || 0);
                             setValue("discountAmount", 0);
+
+                            const offer = getValidOfferForPlan(
+                              e.target.value,
+                              selectedDate,
+                            );
+                            setSelectedPlanOffer(offer);
+                            validateAndSetWithOffer(
+                              offer,
+                              setValue,
+                              "withOffer",
+                            );
                           },
                         })}
                       >
@@ -604,12 +702,83 @@ function GymClient() {
                         required
                         type="date"
                         className="formControl"
-                        {...register("joiningDate")}
+                        {...register("joiningDate", {
+                          onChange: (e) => {
+                            const planId = watch("planId");
+                            const offer = getValidOfferForPlan(
+                              planId,
+                              e.target.value,
+                            );
+                            setSelectedPlanOffer(offer);
+                            validateAndSetWithOffer(
+                              offer,
+                              setValue,
+                              "withOffer",
+                            );
+                          },
+                        })}
                       />
                       <label>
                         Joining Date <span className="text-red-600">*</span>
                       </label>
                     </div>
+                    {/* withOffer hidden + checkbox */}
+                    <input type="hidden" {...register("withOffer")} />
+                    <div className="col-span-full flex items-center gap-2">
+                      <input
+                        id="withOfferCheck"
+                        type="checkbox"
+                        checked={Boolean(Number(watch("withOffer")))}
+                        onChange={(e) => {
+                          const isChecked = e.target.checked;
+                          const planId = watch("planId");
+                          const selectedDate =
+                            watch("joiningDate") ||
+                            new Date().toISOString().slice(0, 10);
+                          const offer = getValidOfferForPlan(
+                            planId,
+                            selectedDate,
+                          );
+                          if (isChecked && !offer) {
+                            toast.error(
+                              "No active offer found for this plan and joining date.",
+                            );
+                            setValue("withOffer", 0);
+                            setSelectedPlanOffer(null);
+                            return;
+                          }
+                          setSelectedPlanOffer(offer);
+                          setValue(
+                            "withOffer",
+                            normalizeWithOfferValue(isChecked),
+                          );
+                        }}
+                        className="cursor-pointer"
+                      />
+                      <label htmlFor="withOfferCheck">
+                        Apply available offer
+                      </label>
+                    </div>
+
+                    {/* show selected offer details */}
+                    {selectedPlanOffer && (
+                      <div className="col-span-full border border-color p-3 rounded-md bg-light">
+                        <div className="text-sm font-semibold">
+                          Available Offer
+                        </div>
+                        <div className="text-xs">
+                          {selectedPlanOffer.offerName} —{" "}
+                          {selectedPlanOffer.days || 0} days
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          Valid:{" "}
+                          {selectedPlanOffer.offerStartDate?.slice(0, 10) ||
+                            "-"}{" "}
+                          to{" "}
+                          {selectedPlanOffer.offerEndDate?.slice(0, 10) || "-"}
+                        </div>
+                      </div>
+                    )}
                   </>
                 ) : (
                   ""
@@ -684,6 +853,19 @@ function GymClient() {
                             setValue2("paidAmount", selectedPlan?.price || 0);
                             setValue2("pendingAmount", 0);
                             setValue2("discountAmount", 0);
+                            const selectedDate =
+                              watch2("renewalDate") ||
+                              new Date().toISOString().slice(0, 10);
+                            const offer = getValidOfferForPlan(
+                              e.target.value,
+                              selectedDate,
+                            );
+                            setSelectedRenewPlanOffer(offer);
+                            validateAndSetWithOffer(
+                              offer,
+                              setValue2,
+                              "withOffer",
+                            );
                           },
                         })}
                       >
@@ -759,12 +941,84 @@ function GymClient() {
                         required
                         type="date"
                         className="formControl"
-                        {...register2("renewalDate")}
+                        {...register2("renewalDate", {
+                          onChange: (e) => {
+                            const planId = watch2("planId");
+                            const offer = getValidOfferForPlan(
+                              planId,
+                              e.target.value,
+                            );
+                            setSelectedRenewPlanOffer(offer);
+                            validateAndSetWithOffer(
+                              offer,
+                              setValue2,
+                              "withOffer",
+                            );
+                          },
+                        })}
                       />
                       <label>
                         Renewal Date <span className="text-red-600">*</span>
                       </label>
                     </div>
+                    <input type="hidden" {...register2("withOffer")} />
+                    <div className="col-span-full flex items-center gap-2">
+                      <input
+                        id="withOfferCheck2"
+                        type="checkbox"
+                        checked={Boolean(Number(watch2("withOffer")))}
+                        onChange={(e) => {
+                          const isChecked = e.target.checked;
+                          const planId = watch2("planId");
+                          const selectedDate =
+                            watch2("renewalDate") ||
+                            new Date().toISOString().slice(0, 10);
+                          const offer = getValidOfferForPlan(
+                            planId,
+                            selectedDate,
+                          );
+                          if (isChecked && !offer) {
+                            toast.error(
+                              "No active offer found for this plan and renewal date.",
+                            );
+                            setValue2("withOffer", 0);
+                            setSelectedRenewPlanOffer(null);
+                            return;
+                          }
+                          setSelectedRenewPlanOffer(offer);
+                          setValue2(
+                            "withOffer",
+                            normalizeWithOfferValue(isChecked),
+                          );
+                        }}
+                        className="cursor-pointer"
+                      />
+                      <label htmlFor="withOfferCheck2">
+                        Apply available offer
+                      </label>
+                    </div>
+
+                    {selectedRenewPlanOffer && (
+                      <div className="col-span-full border border-color p-3 rounded-md bg-light">
+                        <div className="text-sm font-semibold">
+                          Available Offer
+                        </div>
+                        <div className="text-xs">
+                          {selectedRenewPlanOffer.offerName} —{" "}
+                          {selectedRenewPlanOffer.days || 0} days
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          Valid:{" "}
+                          {selectedRenewPlanOffer.offerStartDate?.slice(
+                            0,
+                            10,
+                          ) || "-"}{" "}
+                          to{" "}
+                          {selectedRenewPlanOffer.offerEndDate?.slice(0, 10) ||
+                            "-"}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <button

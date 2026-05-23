@@ -63,13 +63,14 @@ function Table({
           className={`customTable ${isHeaderColor ? "color" : ""} rounded-lg text-left w-full`}
         >
           <thead>
-            <tr >
+            <tr>
               {/* Sticky Sr No + Checkbox Header */}
               <th
-                className={`${stickyEnabled
-                  ? `sticky left-0 z-30 ${isHeaderColor ? "bg-[var(--primary-light)]" : "bg-[color:var(--background-light)]"} `
-                  : ""
-                  } font-medium text-center w-[70px]`}
+                className={`${
+                  stickyEnabled
+                    ? `sticky left-0 z-30 ${isHeaderColor ? "bg-[var(--primary-light)]" : "bg-[color:var(--background-light)]"} `
+                    : ""
+                } font-medium text-center w-[70px]`}
                 style={{
                   width: "70px",
                   minWidth: "70px",
@@ -85,8 +86,9 @@ function Table({
                       type="checkbox"
                       checked={selectAll}
                       onChange={(e) => handleSelectAll(e.target.checked)}
-                      className={`${selectAll ? "block" : "hidden group-hover:block"
-                        } w-4 h-4 accent-[color:var(--primary)] cursor-pointer`}
+                      className={`${
+                        selectAll ? "block" : "hidden group-hover:block"
+                      } w-4 h-4 accent-[color:var(--primary)] cursor-pointer`}
                     />
                   </div>
                 ) : (
@@ -126,18 +128,23 @@ function Table({
               const isChecked = multyCheck?.some((obj) => obj.id === item.id);
 
               return (
-                <tr key={i} className={`
-                      group
-                      ${item.expired < 0
-                    ? "!bg-red-100 dark:!bg-red-900/30"
-                    : ""
-                  }
-                    `}>
+                <tr
+                  key={i}
+                  className={`
+                      
+                      ${
+                        item.expired < 0
+                          ? "!bg-red-100 dark:!bg-red-900/30"
+                          : ""
+                      }
+                    `}
+                >
                   <td
-                    className={`${stickyEnabled
-                      ? "sticky left-0 z-20 bg-[color:var(--background-light)]"
-                      : ""
-                      } text-center font-medium w-[70px]`}
+                    className={`${
+                      stickyEnabled
+                        ? "sticky left-0 z-20 bg-[color:var(--background-light)]"
+                        : ""
+                    } text-center font-medium w-[70px]`}
                   >
                     {multyCheck ? (
                       <div className="relative group flex justify-center items-center">
@@ -148,8 +155,9 @@ function Table({
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => handleSingleCheck(item)}
-                          className={`${isChecked ? "block" : "hidden group-hover:block"
-                            } w-4 h-4 accent-[color:var(--primary)] cursor-pointer`}
+                          className={`${
+                            isChecked ? "block" : "hidden group-hover:block"
+                          } w-4 h-4 accent-[color:var(--primary)] cursor-pointer`}
                         />
                       </div>
                     ) : (

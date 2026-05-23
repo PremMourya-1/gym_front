@@ -1,15 +1,11 @@
 import { useContext } from "react";
 import { ThemeContext } from "../../../Context/ThemeContext";
+import sidebar1 from "../../../Assets/images/sidebar/sidebar1.jpg";
+import sidebar2 from "../../../Assets/images/sidebar/sidebar2.avif";
+import sidebar3 from "../../../Assets/images/sidebar/sidebar3.jpg";
 
 function AppSettings() {
   const { theme, setTheme } = useContext(ThemeContext);
-
-  const changePlacement = (value) => {
-    setTheme((prev) => ({
-      ...prev,
-      settingSidebarPlacement: value,
-    }));
-  };
 
   const changeThemeColor = (color) => {
     setTheme((prev) => ({
@@ -18,8 +14,40 @@ function AppSettings() {
     }));
   };
 
-  const currentPlacement = theme?.settingSidebarPlacement || "left";
+  const changeSidebarBg = (sidebarBg) => {
+    setTheme((prev) => ({
+      ...prev,
+      sidebarBg,
+    }));
+  };
+
+  const handleUploadSidebarBg = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setTheme((prev) => ({
+        ...prev,
+        sidebarBg: reader.result,
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
   const currentColor = theme?.themeColor || "default";
+  const currentSidebarBg = theme?.sidebarBg || null;
+  const sidebarOptions = [
+    { id: "default", label: "Default", src: null },
+    { id: "sidebar1", label: "Photo 1", src: sidebar1 },
+    { id: "sidebar2", label: "Photo 2", src: sidebar2 },
+    { id: "sidebar3", label: "Photo 3", src: sidebar3 },
+    {
+      id: "sidebar4",
+      label: "Photo 4",
+      src: "https://instagram.fjai2-7.fna.fbcdn.net/v/t51.82787-15/622954057_18441865084105851_3838993750912232711_n.jpg?stp=dst-jpegr_e35_tt6&_nc_cat=108&ig_cache_key=MzgyMDE0MTM0NzI0OTIxMTM0Mw%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkZFRUQueHBpZHMuMTQ0MC5oZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=VEVGjCf40rEQ7kNvwFhvl0P&_nc_oc=AdoVag0jxlexsOJYVvDP1fLnRQiMKSWzx_fD6N-csJf7j673dtYiNJnRAo0YxnwQGdY&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fjai2-7.fna&_nc_gid=a_HL896eeeC6bMKU-J37RA&_nc_ss=7a22e&oh=00_Af7Lj3Xl3CgVYQXzijsdLJHqiAp4saSB3e_yZW7c36UIrw&oe=6A17BC11",
+    },
+  ];
 
   const colors = [
     { name: "default", code: "#8153ec" },
@@ -43,8 +71,6 @@ function AppSettings() {
   ];
   return (
     <div className="space-y-6">
-
-
       {/* Theme Color */}
       <div className="bg-[var(--background)] border border-[var(--border)] rounded-lg p-4">
         <p className="text-sm text-primary mb-3">Theme Color</p>
@@ -55,13 +81,77 @@ function AppSettings() {
               key={color.name}
               onClick={() => changeThemeColor(color.name)}
               className={`w-8 h-8 rounded-full border-2 transition
-                ${currentColor === color.name
-                  ? "border-black dark:border-white scale-110"
-                  : "border-transparent"
+                ${
+                  currentColor === color.name
+                    ? "border-black dark:border-white scale-110"
+                    : "border-transparent"
                 }`}
               style={{ backgroundColor: color.code }}
             />
           ))}
+        </div>
+      </div>
+
+      {/* Sidebar Background */}
+      <div className="bg-[var(--background)] border border-[var(--border)] rounded-lg p-4">
+        <p className="text-sm text-primary mb-3">Sidebar Background</p>
+
+        <div className="grid gap-3 sm:grid-cols-3 md:grid-cols-4 grid-cols-6">
+          {sidebarOptions.map((option) => {
+            const isActive = currentSidebarBg === option.src;
+            return (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => changeSidebarBg(option.src)}
+                className={`overflow-hidden rounded-2xl border p-1 transition duration-200 ${
+                  isActive
+                    ? "border-[color:var(--primary)] shadow-lg"
+                    : "border-[var(--border)] hover:border-[color:var(--primary)]"
+                }`}
+              >
+                <div
+                  className="h-24 w-full rounded-xl bg-cover bg-center"
+                  style={{
+                    backgroundImage: option.src
+                      ? `url(${option.src})`
+                      : "linear-gradient(135deg, rgba(129,83,236,0.12), rgba(248,250,252,0.8))",
+                  }}
+                >
+                  {!option.src && (
+                    <div className="flex h-full items-center justify-center text-[12px] font-semibold text-[color:var(--text-light)]">
+                      Default
+                    </div>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-4">
+          <label className="group flex cursor-pointer items-center justify-between rounded-2xl border border-[var(--border)] bg-[var(--background-light)] px-4 py-3 text-sm transition hover:border-[color:var(--primary)] dark:bg-[color:var(--background-dark)]">
+            <div>
+              <p className="font-medium">Upload custom background</p>
+              <p className="text-[12px] text-[color:var(--text-light)]">
+                Choose your own image for the sidebar.
+              </p>
+            </div>
+            <input
+              type="file"
+              accept="image/*"
+              className="sr-only"
+              onChange={handleUploadSidebarBg}
+            />
+            <span className="rounded-full bg-[color:var(--primary)] px-3 py-1 text-[10px] text-white">
+              Upload
+            </span>
+          </label>
+          {currentSidebarBg && (
+            <div className="mt-3 text-[12px] text-[color:var(--text-light)]">
+              Custom background applied. To reset, choose Default.
+            </div>
+          )}
         </div>
       </div>
     </div>

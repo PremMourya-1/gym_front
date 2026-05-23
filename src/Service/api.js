@@ -40,10 +40,17 @@ const userApi = {
   editPlan: (payload) =>
     apiJson.put(`${userUrl.plan}/${payload.id}`, payload.data),
   deletePlan: ({ id }) => apiJson.delete(`${userUrl.plan}/${id}`),
+  createOffer: (payload) => apiJson.post(userUrl.offer + "/add", payload),
+  offer: () => apiJson.get(userUrl.offer),
+  editOffer: (payload) =>
+    apiJson.put(`${userUrl.offer}/${payload.id}`, payload.data),
+  deleteOffer: ({ id }) => apiJson.delete(`${userUrl.offer}/${id}`),
   //
   createClient: (payload) => apiJson.post(userUrl.client + "/add", payload),
 
   client: (payload) => apiJson.get(`${userUrl.client}${payload}`),
+  clientExcelData: (payload) =>
+    apiJson.get(`${userUrl.client}/excel-data${payload || ""}`),
   expiredClients: (payload) =>
     apiJson.get(`${userUrl.client + "/expired"}${payload}`),
   editClient: (payload) =>
@@ -51,11 +58,20 @@ const userApi = {
   uploadClientPhoto: (payload) =>
     apiJson.put(`${userUrl.client}/client-photo/${payload.id}`, payload.data),
   deleteClient: ({ id }) => apiJson.delete(`${userUrl.client}/${id}`),
+  bulkImportMembers: (payload) => apiJson.post(userUrl.bulkImport, payload),
   //
   renewalList: (payload) => apiJson.get(userUrl.renew + "/" + payload.id),
   renewPlan: (payload) => apiJson.post(userUrl.renew + "/add", payload),
   receivePending: (payload) =>
     apiJson.post(userUrl.renew + "/receivePending/" + payload.id, payload.data),
+  subscriptionPlans: () => apiJson.get(userUrl.subscriptionPlans),
+  currentSubscription: () => apiJson.get(userUrl.currentSubscription),
+  createSubscriptionOrder: (payload) =>
+    apiJson.post(userUrl.subscriptionCreateOrder, payload),
+  verifySubscriptionPayment: (payload) =>
+    apiJson.post(userUrl.subscriptionVerifyPayment, payload),
+  activateSubscription: (payload) =>
+    apiJson.post(userUrl.subscriptionActivate, payload),
   //  change password
   changePassword: (payload) => apiJson.put(userUrl.changePassword, payload),
 };

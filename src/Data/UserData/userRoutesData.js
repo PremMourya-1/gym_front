@@ -5,7 +5,10 @@ import Dashboard from "../../Pages/User/Dashboard/Dashboard";
 import Features from "../../Pages/User/Features/Features";
 import GymProfile from "../../Pages/User/GymProfile/GymProfile";
 import Plan from "../../Pages/User/Plan/Plan";
+import Offers from "../../Pages/User/Offers/Offers";
 import RenewList from "../../Pages/User/RenewList/RenewList";
+import SubscriptionPlans from "../../Pages/User/SubscriptionPlans/SubscriptionPlans";
+import BulkUploadMembers from "../../Pages/User/BulkUploadMembers/BulkUploadMembers";
 
 const userRoutes = [
   {
@@ -34,7 +37,19 @@ const userRoutes = [
   },
   {
     element: Plan,
-    path: "/plans",
+    path: "/membership-plans",
+  },
+  {
+    element: Offers,
+    path: "/offers",
+  },
+  {
+    element: SubscriptionPlans,
+    path: "/subscription-plans",
+  },
+  {
+    element: BulkUploadMembers,
+    path: "/bulk-upload-members",
   },
   {
     element: RenewList,
@@ -55,6 +70,10 @@ const userRoutes = [
   {
     element: GymProfile,
     path: "/gym-profile",
+  },
+  {
+    element: BulkUploadMembers,
+    path: "/bulk-upload-members",
   },
 ];
 

@@ -77,6 +77,13 @@ function SideBar() {
             ? "w-14 small md:-translate-x-[100%]"
             : "w-60 overflow-y-scroll md:-translate-x-[0%]"
         } fixed z-50 md:ml-0 md:mt-0 md:h-full `}
+        style={
+          theme.sidebarBg
+            ? {
+                backgroundImage: `linear-gradient(rgba(0,0,0,0.425), rgba(21,21,21,0.374)), url("${theme.sidebarBg}")`,
+              }
+            : undefined
+        }
       >
         <SideBarHeader isSideBarSmall={theme.isSideBarSmall} />
         {/* <SideBarSettings theme={theme} setTheme={setTheme} /> */}

@@ -3,7 +3,7 @@ import moment from "moment/moment";
 import toCamelCase from "../../../Utils/modifyString";
 import ActionDropDown from "../../../Components/Common/ActionButtons/ActionDropDown";
 import { MdLoop } from "react-icons/md";
-import { DATE_MONTH_FORMATE } from "../../../Utils/formateDate";
+import formatDate, { DATE_MONTH_FORMATE } from "../../../Utils/formateDate";
 import { Link } from "react-router-dom";
 import Switch from "../../../Components/Switch";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
@@ -73,9 +73,9 @@ function ClientTable({
     {
       title: "Plan Price",
       width: "100px",
-
       selector: (row) => `₹ ${row.plan?.amount}`,
     },
+
     {
       title: "Client Paid",
       width: "100px",
@@ -121,21 +121,97 @@ function ClientTable({
       width: "120px",
       selector: (row) => {
         const date = moment(row.expiryDate).format(DATE_MONTH_FORMATE);
+        const offerName = toCamelCase(row.offerName || row.offer?.name);
+        const offerStart = formatDate(
+          row.offerStartDate ||
+            row.offer?.offerStartDate ||
+            row.offer?.startDate,
+        );
+        const offerEnd = formatDate(
+          row.offerEndDate || row.offer?.offerEndDate || row.offer?.endDate,
+        );
+        const offerDays = row.days ?? row.offer?.days ?? row.offer?.extraDays;
+        const planDuration = row.plan?.duration
+          ? `${row.plan.duration} Month${row.plan.duration > 1 ? "s" : ""}`
+          : null;
+        const hasOffer = Boolean(row.offer?.id);
 
-        return row.expired < 0 ? (
-          <div className="text-red-600">
-            <div className="font-medium text-sm">{date}</div>
-            <div className="text-xs">{Math.abs(row.expired)} days ago</div>
-          </div>
-        ) : row.expired === 0 ? (
-          <div className="text-orange-500">
-            <div className="font-medium text-sm">{date}</div>
-            <div className="text-xs">Expiring Today</div>
-          </div>
-        ) : (
-          <div className="text-yellow-600">
-            <div className="font-medium text-sm">{date}</div>
-            <div className="text-xs">{row.expired} days left</div>
+        const content =
+          row.expired < 0 ? (
+            <div className="text-red-600">
+              <div className="font-medium text-sm">{date}</div>
+              <div className="text-xs">{Math.abs(row.expired)} days ago</div>
+            </div>
+          ) : row.expired === 0 ? (
+            <div className="text-orange-500">
+              <div className="font-medium text-sm">{date}</div>
+              <div className="text-xs">Expiring Today</div>
+            </div>
+          ) : (
+            <div className="text-yellow-600">
+              <div className="font-medium text-sm">{date}</div>
+              <div className="text-xs">{row.expired} days left</div>
+            </div>
+          );
+
+        return (
+          <div className="relative group">
+            <div className="flex items-center gap-2">
+              {hasOffer && (
+                <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse inline-block" />
+              )}
+              {content}
+            </div>
+            {hasOffer && (
+              <div className="offerbox text-xs invisible opacity-0 group-hover:visible group-hover:opacity-100 pointer-events-none absolute left-1/2 -translate-x-1/2 top-full z-50 mt-2 w-[240px] rounded-2xl border border-[color:var(--border)] bg-[color:var(--background)] overflow-hidden text-[12px] text-[color:var(--text)] shadow-lg transition-all duration-200 dark:border-[color:var(--border)] dark:bg-[color:var(--background-dark)] dark:text-[color:var(--text-white)]">
+                {offerName && (
+                  <div className="  text-[color:var(--primary)] items-center justify-between  bg-[color:var(--primary-tp)] px-3 py-2 text-sm ">
+                    <span className="font-medium text-green-500">Offer</span>
+                    <p className="text-xs">{offerName}</p>
+                  </div>
+                )}
+                <div className="space-y-1.5 p-2">
+                  {offerStart && (
+                    <div className="flex rounded-md  items-center justify-between  bg-[color:var(--background-light)] px-3 py-2 ">
+                      <span className="font-medium text-[color:var(--text-light)]">
+                        Valid From
+                      </span>
+                      <span className="text-[color:var(--text)] dark:text-[color:var(--text-white)]">
+                        {offerStart}
+                      </span>
+                    </div>
+                  )}
+                  {offerEnd && (
+                    <div className="flex rounded-md  items-center justify-between  bg-[color:var(--background-light)] px-3 py-2 ">
+                      <span className="font-medium text-[color:var(--text-light)]">
+                        Valid Till
+                      </span>
+                      <span className="text-[color:var(--text)] dark:text-[color:var(--text-white)]">
+                        {offerEnd}
+                      </span>
+                    </div>
+                  )}
+                  {planDuration && (
+                    <div className="flex rounded-md  items-center justify-between  bg-[color:var(--background-light)] px-3 py-2 ">
+                      <span className="font-medium text-[color:var(--text-light)]">
+                        Without Offer
+                      </span>
+                      <span className="text-[color:var(--text)] dark:text-[color:var(--text-white)]">
+                        {planDuration}
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex rounded-md items-center justify-between  bg-[color:var(--background-light)] px-3 py-2 ">
+                    <span className="font-medium text-[color:var(--text-light)]">
+                      Offer Days
+                    </span>
+                    <span className="text-[color:var(--text)] dark:text-[color:var(--text-white)]">
+                      {offerDays ? `${offerDays} Days` : "N/A"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         );
       },
@@ -167,7 +243,7 @@ function ClientTable({
         >
           {item.expired < 0 && (
             <li
-              className="flex border-b border-color items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
+              className="flex  items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
               onClick={() => {
                 onRenewalClick(item);
               }}
@@ -178,7 +254,7 @@ function ClientTable({
           )}
           {isPending && (
             <li
-              className="flex border-b border-color items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
+              className="flex  items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
               onClick={() => {
                 onClearPending(item);
               }}
@@ -188,7 +264,7 @@ function ClientTable({
             </li>
           )}
           <li
-            className="flex border-b border-color items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
+            className="flex  items-center gap-2 hover:bg-[var(--info)] px-2 py-1.5 hover:text-[var(--text-white)] dark:!text-white cursor-pointer"
             onClick={() => {
               onUploadPhotoClick(item);
             }}

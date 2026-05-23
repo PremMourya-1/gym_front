@@ -27,10 +27,17 @@ export const userUrl = {
   dashboard: "/dashboard",
   login: "/login",
   plan: "/gymPlan",
+  offer: "/offer",
   client: "/gymClient",
   renew: "/renew",
+  bulkImport: "/gymClient/bulk-import",
   logout: "/logout",
   changePassword: "/change-password",
+  subscriptionPlans: "/subscription/plans",
+  currentSubscription: "/subscription/current",
+  subscriptionCreateOrder: "/subscription/create-order",
+  subscriptionVerifyPayment: "/subscription/verify-payment",
+  subscriptionActivate: "/subscription/activate",
   //
 
   sendOtp: "institute/sendotp",

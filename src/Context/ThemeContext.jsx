@@ -13,6 +13,7 @@ export default function ThemeProvider({ children }) {
       isDark: false,
       isSideBarSmall: false,
       themeColor: "default",
+      sidebarBg: null,
     },
   );
   // { small: false, open: true }

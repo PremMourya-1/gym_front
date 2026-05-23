@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { getLocaleStorageItem } from "../../../Utils/localeStorage";
+import { USER_DETAILS } from "../../../Constant/Constant";
 
 import LoaderSpiner from "../../../Components/Loaders/LoaderSpiner";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
@@ -15,6 +17,13 @@ function Login() {
   const [isShow, setIsShow] = useState(false);
 
   const { register, handleSubmit, watch } = useForm();
+
+  useEffect(() => {
+    const userDetails = getLocaleStorageItem(USER_DETAILS);
+    if (userDetails) {
+      navigate("/", { replace: true });
+    }
+  }, [navigate]);
 
   const [isForgoting, setIsForgoting] = useState(false);
   const [contact, setContact] = useState();
