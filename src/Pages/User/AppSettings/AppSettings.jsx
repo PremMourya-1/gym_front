@@ -42,11 +42,6 @@ function AppSettings() {
     { id: "sidebar1", label: "Photo 1", src: sidebar1 },
     { id: "sidebar2", label: "Photo 2", src: sidebar2 },
     { id: "sidebar3", label: "Photo 3", src: sidebar3 },
-    {
-      id: "sidebar4",
-      label: "Photo 4",
-      src: "https://instagram.fjai2-7.fna.fbcdn.net/v/t51.82787-15/622954057_18441865084105851_3838993750912232711_n.jpg?stp=dst-jpegr_e35_tt6&_nc_cat=108&ig_cache_key=MzgyMDE0MTM0NzI0OTIxMTM0Mw%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkZFRUQueHBpZHMuMTQ0MC5oZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=VEVGjCf40rEQ7kNvwFhvl0P&_nc_oc=AdoVag0jxlexsOJYVvDP1fLnRQiMKSWzx_fD6N-csJf7j673dtYiNJnRAo0YxnwQGdY&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fjai2-7.fna&_nc_gid=a_HL896eeeC6bMKU-J37RA&_nc_ss=7a22e&oh=00_Af7Lj3Xl3CgVYQXzijsdLJHqiAp4saSB3e_yZW7c36UIrw&oe=6A17BC11",
-    },
   ];
 
   const colors = [

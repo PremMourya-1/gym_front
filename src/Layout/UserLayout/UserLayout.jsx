@@ -28,7 +28,7 @@ function Layout() {
         {/* <BreadCrumb /> */}
         <Outlet />
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
