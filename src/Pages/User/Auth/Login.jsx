@@ -9,6 +9,7 @@ import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import { useForm } from "react-hook-form";
 import login, { forgotPassword, sendOtp } from "../../Admin/Auth/authService";
 import toast from "react-hot-toast";
+import logo from "../../../Assets/images/logo/gymfox.png";
 
 function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -134,10 +135,10 @@ function Login() {
               />
             </div> */}
 
-            <div className="p-8 pb-3 text-center ">
+            <div className="p-4 text-center bg-white">
               {isForgoting ? (
                 <>
-                  <h3 className="text-xl font-bold tracking-wider text-white">
+                  <h3 className="text-xl font-bold tracking-wider">
                     RESET PASSWORD
                   </h3>
                   <p className="text-[var(--muted)] text-sm mt-2">
@@ -146,28 +147,32 @@ function Login() {
                 </>
               ) : (
                 <>
-                  <h3 className="text-xl font-bold tracking-wider text-white uppercase">
-                    Softway x Gym management
-                    <br />
-                    LOGIN
-                    {/* GYM LOGIN */}
-                  </h3>
+                  <img src={logo} alt="logo" className="w-52 m-auto" />
                 </>
               )}
             </div>
 
             <form
-              className="px-8 pb-8 pt-6"
+              className="p-6"
               onSubmit={handleSubmit(
                 isForgoting ? handleForgorPassword : handleUserLogin,
               )}
             >
+              <div className="text-center mb-4">
+                <h3 className="text-xl font-bold tracking-wider text-[var(--text)]  uppercase">
+                  GYM management system
+                  <br />
+                  Login
+                  {/* GYM LOGIN */}
+                </h3>
+              </div>
               {/* Mobile */}
               <div className="mb-3">
                 <label className="text-sm text-[var(--text-light)] block mb-1">
                   Mobile Number
                 </label>
                 <input
+                  placeholder="Enter your registered mobile number "
                   type="text"
                   className="w-full bg-[var(--background-light)] dark:bg-[var(--background-dark)] border border-[var(--border)] rounded-lg px-4 py-3 focus:border-[var(--primary)] outline-none text-[var(--text)] dark:text-[var(--text-white)]"
                   {...register("phone")}
@@ -190,6 +195,7 @@ function Login() {
                     </label>
                     <div className="box relative">
                       <input
+                        placeholder="Enter your password"
                         type={isShow ? "text" : "password"}
                         className="w-full bg-[var(--background-light)] dark:bg-[var(--background-dark)] border border-[var(--border)] rounded-lg px-4 py-3 focus:border-[var(--primary)] outline-none text-[var(--text)] dark:text-[var(--text-white)]"
                         {...register("password")}

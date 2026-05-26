@@ -734,7 +734,7 @@ function BulkUploadMembers() {
                 Please create a membership plan first before uploading members.
               </p>
               <Link
-                to="/plans"
+                to="/membership-plans"
                 className="inline-block mt-3 text-sm font-semibold text-[var(--primary)] hover:underline"
               >
                 Go to Plans Page

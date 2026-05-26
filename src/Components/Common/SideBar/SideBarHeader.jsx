@@ -1,5 +1,5 @@
-import logoSmall from "../../../Assets/images/logo/softxfav.png";
-import logo from "../../../Assets/images/logo/softway.png";
+import logoSmall from "../../../Assets/images/logo/gymfox.png";
+import logo from "../../../Assets/images/logo/gymfoxshort.png";
 import { Link } from "react-router-dom";
 
 function SideBarHeader({ isSideBarSmall }) {
@@ -14,14 +14,14 @@ function SideBarHeader({ isSideBarSmall }) {
         <Link to={"/"} className="logo">
           <span className="text-[color:var(--primary)]  ">
             {isSideBarSmall ? (
-              <img className="w-24 m-auto" src={logoSmall} alt="logo" />
+              <img className="w-40 m-auto" src={logoSmall} alt="logo" />
             ) : (
               ""
             )}
           </span>
 
           {!isSideBarSmall && (
-            <img className="w-64 m-auto" src={logo} alt="logo" />
+            <img className="w-48 m-auto" src={logo} alt="logo" />
           )}
         </Link>
       </div>

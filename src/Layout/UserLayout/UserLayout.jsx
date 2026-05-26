@@ -2,7 +2,7 @@ import { useContext } from "react";
 import Header from "../../Components/Common/Header/Header";
 import { Outlet } from "react-router";
 import SideBar from "../../Components/Common/SideBar/SideBar";
-import Footer from "../../Components/Common/Footer/Footer";
+// import Footer from "../../Components/Common/Footer/Footer";
 import { ThemeContext } from "../../Context/ThemeContext";
 // import BreadCrumb from "../../Components/Common/BreadCrumb/BreadCrumb";
 

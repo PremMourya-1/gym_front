@@ -446,7 +446,7 @@ function GymClient() {
             </span>
 
             <Link
-              to="/plans"
+              to="/membership-plans"
               className="text-primary font-semibold hover:underline  "
             >
               <span>Create Plan </span>{" "}
