@@ -57,6 +57,7 @@ function Plan() {
         <Button
           onClick={() => {
             setDrawer(true);
+            setListId(null);
           }}
         >
           Add new plan

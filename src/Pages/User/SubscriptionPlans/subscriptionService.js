@@ -116,59 +116,34 @@ const startSubscriptionPayment = async ({
   dispatch,
   onSuccess,
   setIsLoading,
-  onMockCheckout,
 }) => {
   try {
     setIsLoading?.(true);
 
-    const orderRes = await userApi.createSubscriptionOrder({ planId: plan.id });
+    const res = await userApi.createSubscriptionOrder({ planId: plan.id });
+    console.log(res);
 
-    if (!orderRes.data.action) {
-      toast.error(orderRes.data.message);
+    if (!res.data.action) {
+      toast.error(res.data.message || "Unable to create payment order");
       return null;
     }
 
-    if (orderRes.data.data?.isFreePlan) {
-      syncUserSession(dispatch, orderRes.data.data?.gym);
-      onSuccess?.(orderRes.data.data);
-      toast.success(orderRes.data.message);
-      return orderRes.data.data;
+    if (res.data.data?.isFreePlan) {
+      syncUserSession(dispatch, res.data.data?.gym);
+      onSuccess?.(res.data.data);
+      toast.success(res.data.message);
+      return res.data.data;
     }
 
-    const order = orderRes.data.data?.order;
+    const order = res.data.data?.order;
     if (!order?.id) {
       toast.error("Invalid payment order response");
       return null;
     }
 
-    if (order.provider === PAYMENT_PROVIDER.MOCK) {
-      setIsLoading?.(false);
-
-      let shouldProceed = true;
-      if (onMockCheckout) {
-        shouldProceed = await onMockCheckout({
-          plan,
-          order,
-          provider: PAYMENT_PROVIDER.MOCK,
-        });
-      }
-
-      if (!shouldProceed) {
-        return null;
-      }
-
-      setIsLoading?.(true);
-      return await verifySubscriptionPayment({
-        payload: {
-          planId: plan.id,
-          razorpay_order_id: order.id,
-          razorpay_payment_id: `pay_mock_${Date.now()}`,
-          razorpay_signature: "mock_signature",
-        },
-        dispatch,
-        onSuccess,
-        setIsLoading,
-      });
+    if (order.provider !== PAYMENT_PROVIDER.RAZORPAY) {
+      toast.error("Payment provider is not configured correctly.");
+      return null;
     }
 
     const scriptLoaded = await loadRazorpayScript();
@@ -178,7 +153,7 @@ const startSubscriptionPayment = async ({
     }
 
     const razorpayKeyId =
-      orderRes.data.data?.razorpayKeyId ||
+      res.data.data?.razorpayKeyId ||
       SUBSCRIPTION_PAYMENT_CONFIG.keyPlaceholder;
     if (!razorpayKeyId) {
       toast.error("Razorpay key is missing in configuration");
@@ -207,15 +182,23 @@ const startSubscriptionPayment = async ({
         },
         onPaymentDismiss: () => {
           setIsLoading?.(false);
+          toast.error("Payment was cancelled.");
           resolve(null);
         },
       });
 
       const instance = new window.Razorpay(options);
+      instance.on("payment.failed", function (response) {
+        setIsLoading?.(false);
+        toast.error("Payment failed. Please try again.");
+        console.error("Razorpay payment failed:", response.error);
+        resolve(null);
+      });
       instance.open();
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    toast.error("An error occurred while starting payment.");
     return null;
   } finally {
     setIsLoading?.(false);

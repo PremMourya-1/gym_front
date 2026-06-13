@@ -159,7 +159,7 @@ function Login() {
               )}
             >
               <div className="text-center mb-4">
-                <h3 className="text-xl font-bold tracking-wider text-[var(--text)]  uppercase">
+                <h3 className="text-xl font-bold tracking-wider text-white uppercase">
                   GYM management system
                   <br />
                   Login
