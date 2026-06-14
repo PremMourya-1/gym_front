@@ -9,6 +9,7 @@ import Offers from "../../Pages/User/Offers/Offers";
 import RenewList from "../../Pages/User/RenewList/RenewList";
 import SubscriptionPlans from "../../Pages/User/SubscriptionPlans/SubscriptionPlans";
 import BulkUploadMembers from "../../Pages/User/BulkUploadMembers/BulkUploadMembers";
+import subscriptionHistory from "../../Pages/User/SubscriptionHistory/SubscriptionHistory";
 
 const userRoutes = [
   {
@@ -46,6 +47,10 @@ const userRoutes = [
   {
     element: SubscriptionPlans,
     path: "/subscription-plans",
+  },
+  {
+    element: subscriptionHistory,
+    path: "/subscription-history",
   },
   {
     element: BulkUploadMembers,

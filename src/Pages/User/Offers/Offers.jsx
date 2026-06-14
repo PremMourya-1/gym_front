@@ -43,7 +43,6 @@ function Offers() {
   const offerStartDate = watch("offerStartDate");
 
   function handleForm(data) {
-    console.log(data);
     if (new Date(data.offerStartDate) > new Date(data.offerEndDate)) {
       toast.error("Offer end date should be after start date");
       return;

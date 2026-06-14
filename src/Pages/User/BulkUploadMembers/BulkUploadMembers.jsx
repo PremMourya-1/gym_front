@@ -529,7 +529,6 @@ function BulkUploadMembers() {
         // Handle rejected rows if any
         if (response?.rejectedRows?.length > 0) {
           setRejectedRows(response.rejectedRows);
-          console.log("Rejected rows ->", response.rejectedRows);
         } else {
           // Only reset if all rows were imported successfully
           resetAll();

@@ -27,7 +27,7 @@ function SideBarDropDown({
             {parentTitle}
           </li>
         )}
-        {data?.map((item) => {
+        {data?.map((item, i) => {
           return (
             <li
               className={`dropDownNavItem  ${
@@ -35,7 +35,7 @@ function SideBarDropDown({
                   ? ""
                   : "bg-transparent"
               } `}
-              key={item.id}
+              key={item.id || i + 1}
             >
               <Link
                 to={item.link}

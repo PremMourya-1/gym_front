@@ -1,7 +1,7 @@
 import { BiSolidDashboard } from "react-icons/bi";
 import { FaUsers, FaRegListAlt, FaUpload, FaCogs } from "react-icons/fa";
 import { IoLayers } from "react-icons/io5";
-import { MdLocalOffer, MdSubscriptions } from "react-icons/md";
+import { MdHistory, MdLocalOffer, MdWorkspacePremium } from "react-icons/md";
 
 const SideBarData = [
   {
@@ -62,7 +62,13 @@ const SideBarData = [
   {
     link: "/subscription-plans",
     title: "subscription-plans",
-    icon: <MdSubscriptions className="text-xl" />,
+    icon: <MdWorkspacePremium className="text-xl" />,
+    content: [],
+  },
+  {
+    link: "/subscription-history",
+    title: "subscription-history",
+    icon: <MdHistory className="text-xl" />,
     content: [],
   },
 

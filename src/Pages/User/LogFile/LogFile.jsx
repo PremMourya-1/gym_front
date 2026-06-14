@@ -11,7 +11,6 @@ function LogFile() {
   const [payload, setPayload] = useState({});
   const [logData, setLogData] = useState({ attendences: [] });
   const [isLoading, setIsLoading] = useState(false);
-  console.log(logData);
 
   function handleGetLogData(e) {
     e.preventDefault();

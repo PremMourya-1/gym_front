@@ -6,11 +6,12 @@ export const AppDataContext = createContext();
 
 export default function AppDataProvider({ children }) {
   const location = useLocation();
-  const [appData, setAppData] = useState(
-    getLocaleStorageItem("appData") || {
-      isAdmin: location.pathname.includes("/admin"),
-    },
-  );
+  const storedAppData = getLocaleStorageItem("appData") || {};
+  const [appData, setAppData] = useState({
+    isAdmin: storedAppData.isAdmin ?? location.pathname.includes("/admin"),
+    subscriptionDetails: storedAppData.subscriptionDetails ?? null,
+    ...storedAppData,
+  });
 
   return (
     <AppDataContext.Provider value={{ appData, setAppData }}>

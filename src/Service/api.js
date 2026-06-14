@@ -65,6 +65,7 @@ const userApi = {
   receivePending: (payload) =>
     apiJson.post(userUrl.renew + "/receivePending/" + payload.id, payload.data),
   subscriptionPlans: () => apiJson.get(userUrl.subscriptionPlans),
+  subscriptionHistory: () => apiJson.get(userUrl.subscriptionHistory),
   currentSubscription: () => apiJson.get(userUrl.currentSubscription),
   createSubscriptionOrder: (payload) =>
     apiJson.post(userUrl.subscriptionCreateOrder, payload),
@@ -74,6 +75,7 @@ const userApi = {
     apiJson.post(userUrl.subscriptionActivate, payload),
   //  change password
   changePassword: (payload) => apiJson.put(userUrl.changePassword, payload),
+  profile: () => apiJson.get(userUrl.profile),
 };
 
 export { userApi };

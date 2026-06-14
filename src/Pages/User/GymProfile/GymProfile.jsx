@@ -14,30 +14,38 @@ import {
 
 import Card from "../../../Components/Card/Card";
 import BreadCrumb from "../../../Components/Common/BreadCrumb/BreadCrumb";
+import { useEffect, useState } from "react";
 
 function GymProfile() {
-  const gymData = useSelector(getLoggedInUserDetails);
+  const [gymData, setGymData] = useState();
+  console.log(gymData);
 
+  const gymStoredDAta = useSelector(getLoggedInUserDetails);
+
+  useEffect(() => {
+    setGymData(gymStoredDAta);
+  }, [gymStoredDAta]);
+
+  const planEndDate = gymData?.planEndDate;
   // registration date
-  const registrationDate = new Date(gymData.createdAt);
-
-  // plan start
-  const planStartDate = new Date(gymData.planStartDate);
+  const registrationDate = new Date(gymData?.createdAt);
 
   // expiry date
-  const expiryDate = new Date(planStartDate);
+  const expiryDate = new Date(gymData?.planEndDate);
 
   expiryDate.setMonth(expiryDate.getMonth() + gymData?.planData?.duration);
 
   // days left
   const today = new Date();
 
-  const remainingTime = expiryDate - today;
+  // const remainingTime = expiryDate - today;
 
-  const daysLeft = Math.max(
-    Math.ceil(remainingTime / (1000 * 60 * 60 * 24)),
-    0,
-  );
+  const remainingDays = planEndDate
+    ? Math.max(
+        Math.ceil((new Date(planEndDate) - today) / (1000 * 60 * 60 * 24)),
+        0,
+      )
+    : null;
 
   // format date
   const formatDate = (date) => {
@@ -48,7 +56,7 @@ function GymProfile() {
     });
   };
 
-  return (
+  return gymData ? (
     <>
       <div className="breadcrumbAndButton">
         <BreadCrumb
@@ -157,13 +165,13 @@ function GymProfile() {
                 </h3>
               </div>
 
-              <div className="bg-light rounded-lg p-4">
+              {/* <div className="bg-light rounded-lg p-4">
                 <p className="text-light text-sm">Plan Start Date</p>
 
                 <h3 className="text-base sm:text-lg font-bold mt-1">
                   {formatDate(planStartDate)}
                 </h3>
-              </div>
+              </div> */}
 
               <div className="bg-light rounded-lg p-4">
                 <p className="text-light text-sm">Plan Expiry Date</p>
@@ -178,10 +186,10 @@ function GymProfile() {
 
                 <h3
                   className={`text-lg sm:text-xl font-bold mt-1 ${
-                    daysLeft <= 5 ? "text-red-500" : "text-green-500"
+                    remainingDays <= 5 ? "text-red-500" : "text-green-500"
                   }`}
                 >
-                  {daysLeft} Days Left
+                  {remainingDays} Days Left
                 </h3>
               </div>
 
@@ -237,6 +245,8 @@ function GymProfile() {
         </div>
       </div>
     </>
+  ) : (
+    "loading"
   );
 }
 

@@ -66,7 +66,6 @@ const getCurrentSubscription = async (setData, setIsLoading) => {
   try {
     setIsLoading?.(true);
     const res = await userApi.currentSubscription();
-
     if (res.data.action) {
       setData?.(res.data.data);
       return res.data.data;
@@ -121,7 +120,6 @@ const startSubscriptionPayment = async ({
     setIsLoading?.(true);
 
     const res = await userApi.createSubscriptionOrder({ planId: plan.id });
-    console.log(res);
 
     if (!res.data.action) {
       toast.error(res.data.message || "Unable to create payment order");

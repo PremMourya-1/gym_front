@@ -67,10 +67,6 @@ function GymClient() {
   const [data, setData] = useState();
   const [dataIndb, setDataInDB] = useState(0);
 
-  const activeClientsCount = data?.filter(
-    (row) => Number(row.active) === 1,
-  ).length;
-
   const [limit, setLimit] = useState(showDefaultDataLimit);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");

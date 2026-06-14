@@ -2,7 +2,6 @@ import { userApi } from "../../../Service/api";
 import { makeToast } from "../../../Components/Common/Toast/Toast";
 
 export const bulkImportMembers = async (payload, callbacks = {}) => {
-  console.log("yes");
   const { onSuccess, onError, onFinally } = callbacks;
 
   try {

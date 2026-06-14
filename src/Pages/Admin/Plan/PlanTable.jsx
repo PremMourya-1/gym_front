@@ -1,7 +1,8 @@
 import ActionButtons from "../../../Components/Common/ActionButtons/ActionButtons";
+import Switch from "../../../Components/Switch";
 import Table from "../../../Components/Table/Table";
 
-function PlanTable({ onEditClick, onDeleteClick, data }) {
+function PlanTable({ onChangeStatus, onEditClick, onDeleteClick, data }) {
   const columns = [
     {
       title: "Plan Name",
@@ -20,19 +21,17 @@ function PlanTable({ onEditClick, onDeleteClick, data }) {
       selector: (item) => item.maxClients,
     },
     {
-      title: "Status",
-      selector: (item) => (
-        <span
-          className={`px-2 py-1 rounded text-xs ${
-            item.isActive
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          {item.isActive ? "Active" : "Inactive"}
-        </span>
+      title: "Active",
+      selector: (row) => (
+        <Switch
+          item={row}
+          onChangeStatus={onChangeStatus}
+          checked={Boolean(row.isActive)}
+          type={"isActive"}
+        />
       ),
     },
+
     {
       title: "Action",
       selector: (item) => (

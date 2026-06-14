@@ -16,41 +16,115 @@ import {
   FaBell,
   FaCog,
 } from "react-icons/fa";
-
 import toCamelCase from "../../../Utils/modifyString";
 import { planColors } from "../../../Constant/Constant";
 import Tippy from "@tippyjs/react";
 import { useSelector } from "react-redux";
-import { getCurrentSubscription } from "../SubscriptionPlans/subscriptionService";
+import { getCurrentPlanDetails } from "../../../Store/Slices/planDetailSlice";
+
+const borderColors = [
+  "border-l-[#FF6B6B]", // red
+  "border-l-[#4ECDC4]", // teal
+  "border-l-[#FFD93D]", // yellow
+  "border-l-[#6C5CE7]", // purple
+  "border-l-[#00B894]", // green
+  "border-l-[#FDCB6E]", // orange
+  "border-l-[#0984E3]", // blue
+  "border-l-[#E84393]", // pink
+];
+
+const parseDate = (value) => {
+  if (!value) return null;
+  if (value instanceof Date) return value;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+};
+
+const formatDate = (date) => {
+  if (!date) return "N/A";
+  return date.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
 function Dashboard() {
   const { reload } = useContext(ThemeContext);
   const [data, setData] = useState();
-  const [subscriptionData, setSubscriptionData] = useState();
+  const subscriptionData = useSelector(getCurrentPlanDetails);
 
   useEffect(() => {
     setData(); // Clear previous data while loading new data
+
     getDashboardData(setData);
-    getCurrentSubscription(setSubscriptionData);
   }, [reload]);
+
+  const planName =
+    subscriptionData?.plan?.name ||
+    subscriptionData?.planName ||
+    subscriptionData?.planData?.name ||
+    subscriptionData?.name ||
+    "No active plan";
+
+  const planAmount = Number(
+    subscriptionData?.plan?.amount ||
+      subscriptionData?.planAmount ||
+      subscriptionData?.planData?.amount ||
+      0,
+  );
+
+  let planStartDate =
+    parseDate(subscriptionData?.planStartDate) ||
+    parseDate(subscriptionData?.startDate) ||
+    parseDate(subscriptionData?.planData?.startDate) ||
+    null;
+
+  let planEndDate = parseDate(subscriptionData?.planEndDate) || null;
+
+  const planDurationMonths = Number(
+    subscriptionData?.planData?.duration || subscriptionData?.duration || 0,
+  );
+
+  if (!planStartDate && planEndDate && planDurationMonths > 0) {
+    planStartDate = new Date(planEndDate);
+    planStartDate.setMonth(planStartDate.getMonth() - planDurationMonths);
+  }
+
+  if (!planEndDate && planStartDate && planDurationMonths > 0) {
+    planEndDate = new Date(planStartDate);
+    planEndDate.setMonth(planEndDate.getMonth() + planDurationMonths);
+  }
+  const today = new Date();
+
+  const remainingDays = planEndDate
+    ? Math.max(
+        Math.ceil((new Date(planEndDate) - today) / (1000 * 60 * 60 * 24)),
+        0,
+      )
+    : null;
+
+  // Total subscription days
+  const totalDays = planDurationMonths > 0 ? planDurationMonths * 30 : null;
+
+  // Remaining based progress
+  const progressPercent =
+    totalDays && remainingDays !== null
+      ? clamp(Math.round((remainingDays / totalDays) * 100), 0, 100)
+      : 0;
 
   const d = data;
 
-  const borderColors = [
-    "border-l-[#FF6B6B]", // red
-    "border-l-[#4ECDC4]", // teal
-    "border-l-[#FFD93D]", // yellow
-    "border-l-[#6C5CE7]", // purple
-    "border-l-[#00B894]", // green
-    "border-l-[#FDCB6E]", // orange
-    "border-l-[#0984E3]", // blue
-    "border-l-[#E84393]", // pink
-  ];
-
-  const getRandomBorder = () =>
-    borderColors[Math.floor(Math.random() * borderColors.length)];
-
-  const borders = useMemo(() => Array(6).fill(0).map(getRandomBorder), []);
+  const borders = useMemo(
+    () =>
+      Array.from(
+        { length: 6 },
+        () => borderColors[Math.floor(Math.random() * borderColors.length)],
+      ),
+    [],
+  );
 
   const icons = [
     <FaUsers key={1} />, // total
@@ -272,45 +346,71 @@ function Dashboard() {
           <h3 className="font-semibold mb-3 ">Last 12 {"Month's"} revenue</h3>
           <RevenueChart data={d?.last12MonthAnalytics} />
         </Card>
-        <Card className="p-4 col-span-4 lg:col-span-full">
-          <h3 className="font-semibold mb-4 text-[var(--text)]">
-            Quick Actions
-          </h3>
+        <Card className="p-6 col-span-4 lg:col-span-full md:p-8 rounded-3xl border border-color bg-[var(--background)] shadow-sm">
+          <div className="flex flex-col items-center">
+            {/* Top Left Content */}
+            <div className="w-full">
+              <h3 className="text-xl font-bold text-[var(--text)] capitalize">
+                {planName}
+              </h3>
 
-          <div className="grid grid-cols-2 gap-4 items-start">
-            {actions.map((a, i) => {
-              const content = (
-                <div
-                  key={i}
-                  className={`p-5 rounded-xl flex flex-col items-center justify-center text-center transition-all
-          ${
-            a.enabled
-              ? "bg-[var(--background-light)] hover:shadow-md hover:-translate-y-1 cursor-pointer"
-              : "bg-[var(--background-light)] opacity-50 cursor-not-allowed"
-          }`}
-                >
-                  {/* Icon */}
-                  <div className="mb-3 bg-[var(--primary-tp)] text-[var(--primary)] p-3 rounded-xl text-lg">
-                    {a.icon}
-                  </div>
+              <p className="mt-1 text-2xl font-extrabold text-[var(--primary)]">
+                ₹{planAmount}
+              </p>
+            </div>
 
-                  {/* Label */}
-                  <p className="text-xs font-medium text-[var(--text)]">
-                    {a.label}
-                  </p>
-                </div>
-              );
+            {/* Circle */}
+            <div className="relative w-[300px] h-[300px] mt-4">
+              <svg viewBox="0 0 120 120" className="w-full h-full">
+                {/* Background Circle */}
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="52"
+                  strokeWidth="8"
+                  className="text-[var(--background-light)]"
+                  stroke="currentColor"
+                  fill="none"
+                />
 
-              return a.enabled ? (
-                <Link to={a.link} key={i}>
-                  {content}
-                </Link>
-              ) : (
-                <div key={i}>{content}</div>
-              );
-            })}
+                {/* Progress Circle */}
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="52"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  stroke="var(--primary)"
+                  fill="none"
+                  strokeDasharray="326.72"
+                  strokeDashoffset={326.72 - (326.72 * progressPercent) / 100}
+                  transform="rotate(-90 60 60)"
+                  className="transition-all duration-500"
+                />
+              </svg>
+
+              {/* Center Content */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+                <p className="text-6xl leading-none font-extrabold text-[var(--text)]">
+                  {remainingDays === null ? "--" : remainingDays}
+                </p>
+
+                <p className="mt-2 text-sm uppercase tracking-[0.18em] text-[var(--text-light)]">
+                  Days Remaining
+                </p>
+
+                <p className="mt-4 text-xs text-[var(--text-light)]">
+                  Expires on
+                </p>
+
+                <p className="text-sm font-semibold text-[var(--text)] mt-1">
+                  {formatDate(planEndDate)}
+                </p>
+              </div>
+            </div>
           </div>
         </Card>
+
         {/* <Card shadow rounded >
           <h3 className=" font-semibold mb-3 ">Client Distribution</h3>
           <PlanChart data={d?.planDistribution} />
@@ -478,8 +578,9 @@ function Dashboard() {
             </span>
           </div>
         </Card>
-
-        <Card className="p-4 mb-16">
+      </div>
+      <div className="grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4">
+        <Card className="p-4">
           {/* Header */}
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-semibold text-[var(--text)]">
@@ -546,6 +647,44 @@ function Dashboard() {
                 </p>
               </div>
             )}
+          </div>
+        </Card>
+
+        <Card className="p-4">
+          <h3 className="font-semibold mb-4 text-[var(--text)]">
+            Quick Actions
+          </h3>
+
+          <div className="grid grid-cols-2 gap-4 items-start">
+            {actions.map((a, i) => {
+              const content = (
+                <div
+                  key={i}
+                  className={`p-5 rounded-xl flex flex-col items-center justify-center text-center transition-all
+          ${
+            a.enabled
+              ? "bg-[var(--background-light)] hover:shadow-md hover:-translate-y-1 cursor-pointer"
+              : "bg-[var(--background-light)] opacity-50 cursor-not-allowed"
+          }`}
+                >
+                  <div className="mb-3 bg-[var(--primary-tp)] text-[var(--primary)] p-3 rounded-xl text-lg">
+                    {a.icon}
+                  </div>
+
+                  <p className="text-xs font-medium text-[var(--text)]">
+                    {a.label}
+                  </p>
+                </div>
+              );
+
+              return a.enabled ? (
+                <Link to={a.link} key={i}>
+                  {content}
+                </Link>
+              ) : (
+                <div key={i}>{content}</div>
+              );
+            })}
           </div>
         </Card>
       </div>

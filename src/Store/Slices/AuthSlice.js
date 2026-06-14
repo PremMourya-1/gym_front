@@ -14,6 +14,10 @@ const authSlice = createSlice({
     updateUserData(state, action) {
       return { ...state, user: { ...state.user, ...action.payload } };
     },
+    updateUserForPlan(state, action) {
+      console.log(action.payload);
+      return { ...state, ...action.payload };
+    },
     logoutAction() {
       return {};
     },
@@ -24,6 +28,7 @@ export const {
   logoutAction,
   updateAuthDataForSession,
   updateUserData,
+  updateUserForPlan,
 } = authSlice.actions;
 
 export const getLoggedInUserDetails = (state) => state.auth;

@@ -1,9 +1,9 @@
 const SUBSCRIPTION_PAYMENT_CONFIG = {
   razorpayScriptUrl: "https://checkout.razorpay.com/v1/checkout.js",
   defaultCurrency: "INR",
-  merchantName: "Gym Management",
+  merchantName: "Gym Fox",
   descriptionSuffix: "Subscription",
-  themeColor: import.meta.env.VITE_RAZORPAY_THEME_COLOR || "#1f8ef1",
+  themeColor: "#8153ec",
   keyPlaceholder: import.meta.env.VITE_RAZORPAY_KEY_ID || "",
 };
 

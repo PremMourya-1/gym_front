@@ -34,7 +34,6 @@ function Gym() {
   }
 
   function onEditClick(row) {
-    console.log(row);
     setListId(row.id);
     setIsEditing(true);
 
@@ -46,7 +45,6 @@ function Gym() {
     setValue("city", row.city);
     setValue("state", row.state);
     setValue("planId", row.planId);
-    setValue("planStartDate", row.planStartDate);
     setValue("planEndDate", row.planEndDate);
     setValue("username", row.username);
 
@@ -54,7 +52,6 @@ function Gym() {
   }
 
   function onDeleteClick(id) {
-    console.log(id);
     setListId(id);
     setModal(true);
   }
@@ -70,7 +67,14 @@ function Gym() {
     <>
       <div className="flex justify-between">
         <BreadCrumb />
-        <Button onClick={() => setDrawer(true)}>Add new gym</Button>
+        <Button
+          onClick={() => {
+            setListId(null);
+            setDrawer(true);
+          }}
+        >
+          Add new gym
+        </Button>
       </div>
 
       <GymTable
@@ -215,9 +219,9 @@ function Gym() {
                 <input
                   type="date"
                   className="formControl"
-                  {...register("planStartDate")}
+                  {...register("planEndDate")}
                 />
-                <label>Plan Start Date</label>
+                <label>Plan End Date</label>
               </div>
             </div>
 

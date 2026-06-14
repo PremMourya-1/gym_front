@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import CustomModal from "../../../Components/Modal/Modal";
 import PlanTable from "./PlanTable";
 import DrawerComponent from "../../../Components/Drawer/Drawer";
@@ -10,6 +10,7 @@ import UseFilter from "../../../Hooks/UseFilter";
 import BreadCrumb from "../../../Components/Common/BreadCrumb/BreadCrumb";
 import UseShortKey from "../../../Hooks/UseShortKey";
 import Button from "../../../Components/Button/Button";
+import { LoaderContext } from "../../../Context/LoaderContext";
 
 function Plan() {
   const [modal, setModal] = useState(false);
@@ -18,6 +19,7 @@ function Plan() {
   const [isLoading, setIsLoading] = useState(false);
   const [listId, setListId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const { setTpLoader } = useContext(LoaderContext);
 
   useEffect(() => {
     !planList && getPlanData(setPlanList);
@@ -41,6 +43,16 @@ function Plan() {
 
     setDrawer(true);
   }
+  function onChangeStatus(status, id, type) {
+    createAndPlan(
+      { [type]: Number(status) },
+      id,
+      setDrawer,
+      setPlanList,
+      setTpLoader,
+    );
+  }
+
   function onDeleteClick(id) {
     setListId(id);
     setModal(true);
@@ -65,6 +77,7 @@ function Plan() {
       </div>
 
       <PlanTable
+        onChangeStatus={onChangeStatus}
         data={filteredData}
         onEditClick={onEditClick}
         onDeleteClick={onDeleteClick}

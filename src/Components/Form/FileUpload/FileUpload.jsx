@@ -2,7 +2,6 @@ import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 function FileUpload({ setFile }) {
   const [fileName, setFileName] = useState("");
-  console.log(fileName);
   const onDrop = useCallback((file) => {
     setFileName(file[0].path);
     setFile(file[0]);

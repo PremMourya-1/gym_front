@@ -7,10 +7,15 @@ import { LoaderContext } from "./Context/LoaderContext";
 import TpLoader from "./Components/Common/Loader/TpLoader";
 import { getLocaleStorageItem } from "./Utils/localeStorage";
 import { ADMIN_DETAILS, USER_DETAILS } from "./Constant/Constant";
-import { useDispatch } from "react-redux";
-import { loginToggleAction } from "./Store/Slices/AuthSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { loginToggleAction, updateUserForPlan } from "./Store/Slices/AuthSlice";
 import { AppDataContext } from "./Context/AppDataContext";
 import { Toaster } from "react-hot-toast";
+import {
+  getCurrentPlanDetails,
+  setPlanDetails,
+} from "./Store/Slices/planDetailSlice";
+import { getCurrentSubscription } from "./Pages/User/SubscriptionPlans/subscriptionService";
 
 const RoutesData = lazy(() => import("./Routes/Route"));
 
@@ -29,6 +34,24 @@ function App() {
     if (userData) {
       dispatch(loginToggleAction(userData));
     }
+  }, []);
+
+  const currentPlanDetails = useSelector(getCurrentPlanDetails);
+
+  useEffect(() => {
+    const loadSubscription = async () => {
+      if (!currentPlanDetails) {
+        const subscription = await getCurrentSubscription();
+        dispatch(setPlanDetails(subscription));
+        dispatch(
+          updateUserForPlan({
+            planData: subscription.planData,
+            planEndDate: subscription.planEndDate,
+          }),
+        );
+      }
+    };
+    loadSubscription();
   }, []);
   const isDark = document.body.classList.contains("dark");
 

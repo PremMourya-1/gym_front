@@ -3,7 +3,6 @@ import { COMMON_IMAGE_URL } from "../../Service/service";
 import formatDate from "../../Utils/formateDate";
 
 function PrintHeader({ data, title }) {
-  console.log(data);
   const schoolData = useSelector((state) => state.auth) || {};
 
   return (
