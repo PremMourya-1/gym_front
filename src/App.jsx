@@ -27,10 +27,10 @@ function App() {
 
   const dispatch = useDispatch();
 
+  const userData = getLocaleStorageItem(
+    !isAdmin ? USER_DETAILS : ADMIN_DETAILS,
+  );
   useEffect(() => {
-    const userData = getLocaleStorageItem(
-      !isAdmin ? USER_DETAILS : ADMIN_DETAILS,
-    );
     if (userData) {
       dispatch(loginToggleAction(userData));
     }
@@ -40,7 +40,7 @@ function App() {
 
   useEffect(() => {
     const loadSubscription = async () => {
-      if (!currentPlanDetails) {
+      if (!currentPlanDetails && userData) {
         const subscription = await getCurrentSubscription();
         dispatch(setPlanDetails(subscription));
         dispatch(
@@ -52,7 +52,7 @@ function App() {
       }
     };
     loadSubscription();
-  }, []);
+  }, [userData]);
   const isDark = document.body.classList.contains("dark");
 
   return (

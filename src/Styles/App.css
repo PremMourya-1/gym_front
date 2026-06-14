@@ -648,7 +648,7 @@ body.dark .dashboardCard {
 
 body.dark .dashboardCard:nth-child(1) {
   background:
-    linear-gradient(rgba(0, 0, 0, 0.71), rgba(21, 21, 21, 0.651)),
+    linear-gradient(rgba(0, 0, 0, 0.71), #151515ea),
     url(../Assets/images/dashboard/one.avif);
   background-position: center center;
 
@@ -656,7 +656,7 @@ body.dark .dashboardCard:nth-child(1) {
 
 body.dark .dashboardCard:nth-child(2) {
   background:
-    linear-gradient(rgba(0, 0, 0, 0.598), rgba(21, 21, 21, 0.607)),
+    linear-gradient(rgba(0, 0, 0, 0.598), #151515ea),
     url(../Assets/images/dashboard/two.jpg);
 
   background-position: center center;
@@ -664,7 +664,7 @@ body.dark .dashboardCard:nth-child(2) {
 
 body.dark .dashboardCard:nth-child(3) {
   background:
-    linear-gradient(rgba(0, 0, 0, 0.078), rgba(21, 21, 21, 0.128)),
+    linear-gradient(rgba(0, 0, 0, 0.078), #151515ea),
     url(../Assets/images/dashboard/three.avif);
 
   background-position: center center;
@@ -672,7 +672,7 @@ body.dark .dashboardCard:nth-child(3) {
 
 body.dark .dashboardCard:nth-child(4) {
   background:
-    linear-gradient(rgba(0, 0, 0, 0.078), rgba(21, 21, 21, 0.128)),
+    linear-gradient(rgba(0, 0, 0, 0.078), #151515ea),
     url(../Assets/images/dashboard/four.avif);
 
   background-position: center center;
@@ -681,7 +681,7 @@ body.dark .dashboardCard:nth-child(4) {
 
 body.dark .dashboardCard:nth-child(5) {
   background:
-    linear-gradient(rgba(0, 0, 0, 0.598), rgba(21, 21, 21, 0.621)),
+    linear-gradient(rgba(0, 0, 0, 0.598), #151515ea),
     url(../Assets/images/dashboard/five.jfif);
 
   background-position: center center;
@@ -690,7 +690,7 @@ body.dark .dashboardCard:nth-child(5) {
 
 body.dark .dashboardCard:nth-child(6) {
   background:
-    linear-gradient(rgba(0, 0, 0, 0.598), rgba(21, 21, 21, 0.607)),
+    linear-gradient(rgba(0, 0, 0, 0.598), #151515ea),
     url(../Assets/images/dashboard/four.avif);
 
   background-position: center center;
@@ -700,7 +700,7 @@ body.dark .dashboardCard:nth-child(6) {
 
 body.dark .dashboardCard:nth-child(7) {
   background:
-    linear-gradient(rgba(0, 0, 0, 0.598), rgba(21, 21, 21, 0.607)),
+    linear-gradient(rgba(0, 0, 0, 0.598), #151515ea),
     url(../Assets/images/dashboard/two.jpg);
 
   background-position: center center;
@@ -708,7 +708,7 @@ body.dark .dashboardCard:nth-child(7) {
 
 body.dark .dashboardCard:nth-child(8) {
   background:
-    linear-gradient(rgba(0, 0, 0, 0.42), rgba(21, 21, 21, 0.384)),
+    linear-gradient(rgba(0, 0, 0, 0.42), #151515ea),
     url(../Assets/images/dashboard/seven.jpg);
 
   background-position: center center;

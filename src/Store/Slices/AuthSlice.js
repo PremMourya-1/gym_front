@@ -15,7 +15,6 @@ const authSlice = createSlice({
       return { ...state, user: { ...state.user, ...action.payload } };
     },
     updateUserForPlan(state, action) {
-      console.log(action.payload);
       return { ...state, ...action.payload };
     },
     logoutAction() {

@@ -18,7 +18,6 @@ import { useEffect, useState } from "react";
 
 function GymProfile() {
   const [gymData, setGymData] = useState();
-  console.log(gymData);
 
   const gymStoredDAta = useSelector(getLoggedInUserDetails);
 
