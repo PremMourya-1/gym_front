@@ -700,7 +700,7 @@ body.dark .dashboardCard:nth-child(6) {
 
 body.dark .dashboardCard:nth-child(7) {
   background:
-    linear-gradient(rgba(0, 0, 0, 0.598), #151515ea),
+    linear-gradient(rgba(0, 0, 0, 0.598), #151515f9),
     url(../Assets/images/dashboard/two.jpg);
 
   background-position: center center;

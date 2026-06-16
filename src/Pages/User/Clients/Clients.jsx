@@ -168,17 +168,15 @@ function GymClient() {
       lastRenewalDate: data.joiningDate,
     };
 
-    const formData = new FormData();
+    // Object.keys(payload).forEach((key) => {
+    //   if (key === "photo" && data.photo?.[0]) {
+    //     formData.append(key, data.photo[0]);
+    //   } else {
+    //     formData.append(key, payload[key]);
+    //   }
+    // });
 
-    Object.keys(payload).forEach((key) => {
-      if (key === "photo" && data.photo?.[0]) {
-        formData.append(key, data.photo[0]);
-      } else {
-        formData.append(key, payload[key]);
-      }
-    });
-
-    addEditClient(formData, listId, setDrawer, setData, setIsLoading);
+    addEditClient(payload, listId, setDrawer, setData, setIsLoading);
   }
   function handleRenewPlan(data) {
     const plan = Number(data.planAmount) || 0;
@@ -344,10 +342,14 @@ function GymClient() {
   }
 
   function handleClearPending(data) {
-    const payload = { ...data, markAsDiscount: Number(data.markAsDiscount) };
+    const payload = {
+      amount: Number(data.amount),
+      markAsDiscount: Number(data.markAsDiscount),
+    };
     receivePending(
       { id: selectedRow.id, data: payload },
-      setIsLoading,
+      // setIsLoading,
+      null,
       setPendingModal,
       setReload,
     );

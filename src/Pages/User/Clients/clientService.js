@@ -109,11 +109,11 @@ async function deleteClient(id, setIsLoading, setClientList, setModal) {
 }
 async function receivePending(payload, setIsLoading, setModal, setReload) {
   try {
-    setIsLoading(true);
+    setIsLoading?.(true);
 
     const res = await userApi.receivePending(payload);
 
-    setIsLoading(false);
+    setIsLoading?.(false);
     if (res.data.action) {
       setModal(false);
       setReload((prev) => prev + 1);
