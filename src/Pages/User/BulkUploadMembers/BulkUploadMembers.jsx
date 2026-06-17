@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import * as XLSX from "xlsx";
 import BreadCrumb from "../../../Components/Common/BreadCrumb/BreadCrumb";
 import Card from "../../../Components/Card/Card";
 import Button from "../../../Components/Button/Button";
@@ -23,6 +24,7 @@ import {
 } from "react-icons/fa";
 import { FaTableColumns } from "react-icons/fa6";
 import { bulkImportMembers } from "./bulkUploadService";
+import { makeToast } from "../../../Components/Common/Toast/Toast";
 
 const PLAN_MAPPING_METHODS = [
   {
@@ -68,6 +70,18 @@ const BASE_REQUIRED_FIELDS = [
   "mobileNo",
   "paidAmount",
   "joiningDate",
+];
+
+const SAMPLE_FILE_HEADERS = [
+  "Client Name",
+  "Mobile No.",
+  "Paid Amount",
+  "Joining Date",
+  "Gender",
+  "Discount Amount",
+  "Pending Amount",
+  "Plan ID",
+  "Plan Name",
 ];
 
 const FEMALE_NAME_SUFFIXES = [
@@ -127,25 +141,16 @@ const resolvePlanFromAmount = (amountValue, planOptions) => {
 
   if (!plansWithAmount.length) return null;
 
-  // If amount is less than all plans, pick the closest lower (first plan)
-  if (amount < plansWithAmount[0].resolvedAmount) {
-    return plansWithAmount[0];
-  }
+  // Pick the plan whose price is closest to the effective amount
+  // (so 850 will correctly align to the 1000 plan instead of the 450 plan).
+  return plansWithAmount.reduce((closestPlan, currentPlan) => {
+    if (!closestPlan) return currentPlan;
 
-  // If amount is more than all plans, pick the next higher (last plan)
-  if (amount > plansWithAmount[plansWithAmount.length - 1].resolvedAmount) {
-    return plansWithAmount[plansWithAmount.length - 1];
-  }
+    const currentDiff = Math.abs(currentPlan.resolvedAmount - amount);
+    const closestDiff = Math.abs(closestPlan.resolvedAmount - amount);
 
-  // Find the first plan whose amount is >= amount
-  for (let i = 0; i < plansWithAmount.length; i++) {
-    if (amount <= plansWithAmount[i].resolvedAmount) {
-      return plansWithAmount[i];
-    }
-  }
-
-  // Fallback (should not reach here)
-  return plansWithAmount[plansWithAmount.length - 1];
+    return currentDiff < closestDiff ? currentPlan : closestPlan;
+  }, null);
 };
 
 // Accepts: '06 May 2026', '06-05-2026', '06/05/2026', '2026-05-06', etc.
@@ -333,14 +338,6 @@ function BulkUploadMembers() {
 
   const hasParsedData = headers.length > 0 && rows.length > 0;
 
-  const hasRequiredSetup =
-    hasParsedData &&
-    missingMappings.length === 0 &&
-    !(planMappingMethod === "samePlan" && !selectedPlan);
-
-  const isContinueDisabled =
-    !hasRequiredSetup || isPreparingImport || isReading;
-
   const hasPlans = (planOptions || []).length > 0;
 
   useEffect(() => {
@@ -386,11 +383,15 @@ function BulkUploadMembers() {
         mappedRow.genderSource = "predicted";
       }
 
+      const totalConsideredAmount =
+        Number(mappedRow.paidAmount || 0) +
+        Number(mappedRow.pendingAmount || 0);
+
       const selectedPlanFromSamePlan =
         planMappingMethod === "samePlan" ? PLAN_BY_ID[selectedPlan] : null;
       const selectedPlanFromAmount =
         planMappingMethod === "amount"
-          ? resolvePlanFromAmount(mappedRow.paidAmount, planOptions)
+          ? resolvePlanFromAmount(totalConsideredAmount, planOptions)
           : null;
 
       const assignedPlan = selectedPlanFromSamePlan || selectedPlanFromAmount;
@@ -420,15 +421,63 @@ function BulkUploadMembers() {
       }
 
       // --- DISCOUNT HANDLING ---
-      // If discount is missing/0 and planAmount > paidAmount, auto-calc
-      if (
-        (!mappedRow.discountAmount || mappedRow.discountAmount === 0) &&
-        mappedRow.planAmount > mappedRow.paidAmount
-      ) {
-        mappedRow.discountAmount = mappedRow.planAmount - mappedRow.paidAmount;
+      const computedDiscountFromAmount = Math.max(
+        0,
+        Number(mappedRow.planAmount || 0) - totalConsideredAmount,
+      );
+
+      if (Number(mappedRow.discountAmount || 0) < computedDiscountFromAmount) {
+        mappedRow.discountAmount = computedDiscountFromAmount;
       }
 
-      return mappedRow;
+      const validationIssues = [];
+      const isValidJoiningDate =
+        mappedRow._joiningDateBackend &&
+        dayjs(mappedRow._joiningDateBackend, "YYYY-MM-DD", true).isValid();
+
+      if (!mappedRow.clientName) {
+        validationIssues.push("Client Name is missing");
+      }
+      if (!mappedRow.mobileNo) {
+        validationIssues.push("Mobile No. is missing");
+      }
+      if (!mappedRow.paidAmount || Number(mappedRow.paidAmount) <= 0) {
+        validationIssues.push("Paid Amount must be a valid positive number");
+      }
+      if (!isValidJoiningDate) {
+        validationIssues.push(
+          "Joining Date must be a valid date in DD-MM-YYYY format",
+        );
+      }
+      if (
+        planMappingMethod === "planId" &&
+        (!mappedRow.planId || !PLAN_BY_ID[mappedRow.planId])
+      ) {
+        validationIssues.push("Plan ID is missing or does not match any plan");
+      }
+      if (
+        planMappingMethod === "planName" &&
+        !(planOptions || []).some(
+          (plan) =>
+            String(plan.name || plan.label).toLowerCase() ===
+            String(mappedRow.planName || "").toLowerCase(),
+        )
+      ) {
+        validationIssues.push(
+          "Plan Name is missing or does not match any plan",
+        );
+      }
+      if (Number(mappedRow.discountAmount) < 0) {
+        validationIssues.push("Discount Amount cannot be negative");
+      }
+      if (Number(mappedRow.pendingAmount) < 0) {
+        validationIssues.push("Pending Amount cannot be negative");
+      }
+
+      return {
+        ...mappedRow,
+        validationIssues,
+      };
     });
   }, [
     rows,
@@ -452,6 +501,14 @@ function BulkUploadMembers() {
     { key: "planName", label: "plan name" },
     { key: "planAmount", label: "plan amount" },
   ];
+
+  const hasRequiredSetup =
+    hasParsedData &&
+    missingMappings.length === 0 &&
+    !(planMappingMethod === "samePlan" && !selectedPlan);
+
+  const isContinueDisabled =
+    !hasRequiredSetup || isPreparingImport || isReading;
 
   const handleMappingChange = (fieldKey, selectedHeader) => {
     const currentMapping = form.getValues("mapping") || {};
@@ -480,11 +537,11 @@ function BulkUploadMembers() {
     const mappedRows = computedRows.map((row, index) => {
       const isDuplicateMobile = duplicateIndexSet.has(index);
       const isEmptyMobile = !row.mobileNo;
+      const hasValidationError = (row.validationIssues || []).length > 0;
       const finalGender = genderEdits[row.rowNumber] || row.gender;
       const planAmount = Number(row.planAmount) || 0;
       const paidAmount = row.paidAmount ? Number(row.paidAmount) : planAmount;
       const pendingAmount = Number(row.pendingAmount) || 0;
-      // Use backend date format
       const joiningDateForBackend = row._joiningDateBackend || "";
 
       let discountAmount = row.discountAmount;
@@ -511,12 +568,36 @@ function BulkUploadMembers() {
         ...backendRow,
         isDuplicateMobile,
         isEmptyMobile,
+        hasValidationError,
       };
     });
 
-    const validRows = mappedRows.filter(
-      (item) => !item.isDuplicateMobile && !item.isEmptyMobile,
+    const invalidRows = mappedRows.filter(
+      (item) =>
+        item.isDuplicateMobile || item.isEmptyMobile || item.hasValidationError,
     );
+    const validRows = mappedRows.filter(
+      (item) =>
+        !item.isDuplicateMobile &&
+        !item.isEmptyMobile &&
+        !item.hasValidationError,
+    );
+
+    if (!validRows.length) {
+      makeToast(
+        "No valid rows to upload. Please fix the highlighted errors first.",
+        "warning",
+      );
+      setIsPreparingImport(false);
+      return;
+    }
+
+    if (invalidRows.length) {
+      makeToast(
+        `${validRows.length} rows will be uploaded. ${invalidRows.length} rows were skipped due to errors.`,
+        "warning",
+      );
+    }
 
     const payload = {
       clients: validRows,
@@ -526,11 +607,9 @@ function BulkUploadMembers() {
       onSuccess: (response) => {
         setIsPreparingImport(false);
 
-        // Handle rejected rows if any
         if (response?.rejectedRows?.length > 0) {
           setRejectedRows(response.rejectedRows);
         } else {
-          // Only reset if all rows were imported successfully
           resetAll();
         }
       },
@@ -541,6 +620,77 @@ function BulkUploadMembers() {
         setIsPreparingImport(false);
       },
     });
+  };
+
+  const handleDownloadSampleFile = () => {
+    const sampleRows = [
+      [
+        "Rahul Sharma",
+        "9876543210",
+        5000,
+        "01-01-2026",
+        "Male",
+        0,
+        0,
+        "PLAN_ID_1",
+        "Basic Plan",
+      ],
+      [
+        "Priya Verma",
+        "9123456780",
+        3000,
+        "15-01-2026",
+        "Female",
+        500,
+        0,
+        "PLAN_ID_2",
+        "Premium Plan",
+      ],
+    ];
+
+    const worksheet = XLSX.utils.aoa_to_sheet([
+      SAMPLE_FILE_HEADERS,
+      ...sampleRows,
+    ]);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Members");
+    XLSX.writeFile(workbook, "bulk-upload-sample.xlsx");
+  };
+
+  const handleDownloadFailedRows = () => {
+    const failedRowsExport = computedRows
+      .map((row, index) => {
+        const rowIssues = [
+          ...(row.validationIssues || []),
+          ...(duplicateState.duplicateRowIndexes.has(index)
+            ? ["Duplicate mobile number"]
+            : []),
+          ...(!row.mobileNo ? ["Empty mobile number"] : []),
+        ];
+
+        if (!rowIssues.length) return null;
+
+        return {
+          "Client Name": row.clientName || "",
+          "Mobile No.": row.mobileNo || "",
+          "Paid Amount": row.paidAmount || "",
+          "Joining Date": row.joiningDate || "",
+          Gender: row.gender || "",
+          "Discount Amount": row.discountAmount || "",
+          "Pending Amount": row.pendingAmount || "",
+          "Plan ID": row.planId || "",
+          "Plan Name": row.planName || "",
+          Reason: rowIssues.join(" | "),
+        };
+      })
+      .filter(Boolean);
+
+    if (!failedRowsExport.length) return;
+
+    const worksheet = XLSX.utils.json_to_sheet(failedRowsExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Failed Rows");
+    XLSX.writeFile(workbook, "bulk-upload-failed-rows.xlsx");
   };
 
   const handleFileRead = async (file) => {
@@ -764,13 +914,22 @@ function BulkUploadMembers() {
                 or click below to browse
               </p>
 
-              <div className="mt-4">
+              <div className="mt-4 flex flex-wrap justify-center gap-3">
                 <Button
                   type="button"
                   onClick={() => inputRef.current?.click()}
                   className="h-10 px-5 rounded-xl"
                 >
                   Choose File
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleDownloadSampleFile}
+                  className="h-10 px-5 rounded-xl"
+                >
+                  <FaFileExcel className="h-4 w-4 mr-2" />
+                  Download Sample File
                 </Button>
                 <input
                   ref={inputRef}
@@ -962,12 +1121,14 @@ function BulkUploadMembers() {
                   {computedRows.map((row, index) => {
                     const isDuplicate =
                       duplicateState.duplicateRowIndexes.has(index);
+                    const hasRowError = (row.validationIssues || []).length > 0;
+                    const isInvalidRow = isDuplicate || hasRowError;
 
                     return (
                       <tr
                         key={`preview_${index}`}
                         className={`border-b border-color/70 ${
-                          isDuplicate ? "bg-red-50/70 dark:bg-red-900/15" : ""
+                          isInvalidRow ? "bg-red-50/80 dark:bg-red-900/15" : ""
                         }`}
                       >
                         {previewColumns.map((column) => {
@@ -1052,6 +1213,58 @@ function BulkUploadMembers() {
           </div>
         </Card>
       ) : null}
+
+      {computedRows.some(
+        (row) =>
+          row.validationIssues?.length ||
+          duplicateState.duplicateRowIndexes.has(row.rowNumber - 2) ||
+          !row.mobileNo,
+      ) && (
+        <Card className="border border-red-300 dark:border-red-700/40 rounded-2xl shadow-sm bg-red-50/50 dark:bg-red-900/10">
+          <div className="p-5 md:p-4 space-y-3">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-base font-semibold text-red-700 dark:text-red-400">
+                Row Validation Issues
+              </h3>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleDownloadFailedRows}
+                className="h-9 rounded-xl px-3"
+              >
+                Download Failed Rows
+              </Button>
+            </div>
+            <div className="space-y-2">
+              {computedRows.map((row, index) => {
+                const rowIssues = [
+                  ...(row.validationIssues || []),
+                  ...(duplicateState.duplicateRowIndexes.has(index)
+                    ? ["Duplicate mobile number"]
+                    : []),
+                  ...(!row.mobileNo ? ["Empty mobile number"] : []),
+                ];
+
+                return rowIssues.length ? (
+                  <div
+                    key={`issue_${index}`}
+                    className="rounded-xl border border-red-200 dark:border-red-700/40 bg-white/70 dark:bg-slate-900/30 p-3"
+                  >
+                    <p className="text-sm font-semibold text-red-700 dark:text-red-300">
+                      Row {row.rowNumber} ({index + 1}):
+                    </p>
+                    <ul className="mt-1 list-disc pl-5 text-sm text-red-700 dark:text-red-300">
+                      {rowIssues.map((issue, issueIndex) => (
+                        <li key={`${row.rowNumber}_${issueIndex}`}>{issue}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null;
+              })}
+            </div>
+          </div>
+        </Card>
+      )}
 
       {rejectedRows.length > 0 && (
         <Card className="border border-red-300 rounded-2xl shadow-sm bg-red-50/50 dark:bg-red-900/10">
