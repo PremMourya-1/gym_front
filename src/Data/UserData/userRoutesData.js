@@ -10,6 +10,7 @@ import RenewList from "../../Pages/User/RenewList/RenewList";
 import SubscriptionPlans from "../../Pages/User/SubscriptionPlans/SubscriptionPlans";
 import BulkUploadMembers from "../../Pages/User/BulkUploadMembers/BulkUploadMembers";
 import subscriptionHistory from "../../Pages/User/SubscriptionHistory/SubscriptionHistory";
+import DietBuilder from "../../Pages/User/DietBuilder/DietBuilder";
 
 const userRoutes = [
   {
@@ -71,6 +72,10 @@ const userRoutes = [
   {
     element: Features,
     path: "/features",
+  },
+  {
+    element: DietBuilder,
+    path: "/diet-builder",
   },
   {
     element: GymProfile,

@@ -2,6 +2,7 @@ import { BiSolidDashboard } from "react-icons/bi";
 import { FaUsers, FaRegListAlt, FaUpload, FaCogs } from "react-icons/fa";
 import { IoLayers } from "react-icons/io5";
 import { MdHistory, MdLocalOffer, MdWorkspacePremium } from "react-icons/md";
+import { GiHotMeal } from "react-icons/gi";
 
 const SideBarData = [
   {
@@ -72,6 +73,12 @@ const SideBarData = [
     content: [],
   },
 
+  {
+    link: "/diet-builder",
+    title: "diet-builder",
+    icon: <GiHotMeal className="text-xl" />,
+    content: [],
+  },
   {
     link: "/features",
     title: "features",

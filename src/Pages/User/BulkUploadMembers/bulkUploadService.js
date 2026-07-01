@@ -6,51 +6,46 @@ export const bulkImportMembers = async (payload, callbacks = {}) => {
 
   try {
     const response = await userApi.bulkImportMembers(payload);
+    const responseData = response?.data || {};
+    const nestedData = responseData?.data || {};
+    const notInserted = Array.isArray(nestedData?.notInserted)
+      ? nestedData.notInserted
+      : Array.isArray(nestedData)
+        ? nestedData
+        : [];
+    const insertedCount = Number(
+      nestedData?.insertedCount ?? responseData?.insertedCount ?? 0,
+    );
+    const normalizedResponse = {
+      ...responseData,
+      insertedCount,
+      notInserted,
+      rejectedRows: notInserted,
+    };
 
-    // Check for action flag (true = success)
-    if (response?.data?.action) {
-      const rejectedData = response?.data?.data || [];
-      const successCount = payload?.rows?.length - rejectedData.length;
-
-      // Show success message
+    if (responseData?.action) {
       const message =
-        response?.data?.message ||
-        `${successCount} members imported successfully!`;
+        responseData?.message ||
+        `${insertedCount} members imported successfully!`;
       makeToast(message, "success");
 
-      // Call onSuccess with full response including rejected data
       if (onSuccess) {
-        onSuccess({
-          ...response.data.data,
-          successCount,
-          rejectedCount: rejectedData.length,
-          rejectedRows: rejectedData,
-        });
+        onSuccess(normalizedResponse);
       }
 
-      return response.data;
-    } else {
-      // action is false - partial or complete failure
-      const rejectedData = response?.data?.data || [];
-      const successCount = payload?.rows?.length - rejectedData.length;
-
-      const errorMsg =
-        response?.data?.message ||
-        "Some members failed to import. Please check rejected rows.";
-      makeToast(errorMsg, "warning");
-
-      // Call onSuccess with rejection details even on partial failure
-      if (onSuccess) {
-        onSuccess({
-          ...response.data,
-          successCount,
-          rejectedCount: rejectedData.length,
-          rejectedRows: rejectedData,
-        });
-      }
-
-      return response.data;
+      return normalizedResponse;
     }
+
+    const errorMsg =
+      responseData?.message ||
+      "Some members failed to import. Please check rejected rows.";
+    makeToast(errorMsg, "warning");
+
+    if (onSuccess) {
+      onSuccess(normalizedResponse);
+    }
+
+    return normalizedResponse;
   } catch (error) {
     const errorMsg =
       error?.response?.data?.message ||

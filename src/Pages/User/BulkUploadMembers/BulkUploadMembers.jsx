@@ -14,6 +14,7 @@ import dayjs from "dayjs";
 import { usePlanOptions } from "./usePlanOptions";
 import {
   FaArrowRight,
+  FaCheckCircle,
   FaCloudUploadAlt,
   FaExclamationTriangle,
   FaFileExcel,
@@ -141,8 +142,21 @@ const resolvePlanFromAmount = (amountValue, planOptions) => {
 
   if (!plansWithAmount.length) return null;
 
-  // Pick the plan whose price is closest to the effective amount
-  // (so 850 will correctly align to the 1000 plan instead of the 450 plan).
+  // Check if there's an exact match
+  const exactMatch = plansWithAmount.find((p) => p.resolvedAmount === amount);
+  if (exactMatch) return exactMatch;
+
+  // If amount is higher than all plans, pick the highest plan
+  if (amount > plansWithAmount[plansWithAmount.length - 1].resolvedAmount) {
+    return plansWithAmount[plansWithAmount.length - 1];
+  }
+
+  // If amount is lower than all plans, pick the lowest plan
+  if (amount < plansWithAmount[0].resolvedAmount) {
+    return plansWithAmount[0];
+  }
+
+  // Otherwise pick the plan whose price is closest to the amount
   return plansWithAmount.reduce((closestPlan, currentPlan) => {
     if (!closestPlan) return currentPlan;
 
@@ -293,7 +307,9 @@ function BulkUploadMembers() {
   const [dragActive, setDragActive] = useState(false);
   const [readError, setReadError] = useState("");
   const [genderEdits, setGenderEdits] = useState({});
-  const [rejectedRows, setRejectedRows] = useState([]);
+  const [cellEdits, setCellEdits] = useState({});
+  const [editingCell, setEditingCell] = useState(null);
+  const [importResult, setImportResult] = useState(null);
 
   const form = useForm({
     mode: "onChange",
@@ -318,10 +334,15 @@ function BulkUploadMembers() {
   const selectedPlan = form.watch("samePlan");
   const mapping = form.watch("mapping");
   const selectedMobileHeader = mapping?.mobileNo || "";
+  const selectedClientNameHeader = mapping?.clientName || "";
 
   const duplicateState = useMemo(() => {
-    return detectDuplicateMobiles(rows, selectedMobileHeader);
-  }, [rows, selectedMobileHeader]);
+    return detectDuplicateMobiles(
+      rows,
+      selectedMobileHeader,
+      selectedClientNameHeader,
+    );
+  }, [rows, selectedMobileHeader, selectedClientNameHeader]);
 
   const requiredMappings = useMemo(() => {
     return getRequiredFieldKeys(planMappingMethod);
@@ -342,6 +363,8 @@ function BulkUploadMembers() {
 
   useEffect(() => {
     setGenderEdits({});
+    setCellEdits({});
+    setEditingCell(null);
   }, [rows, mapping?.gender]);
 
   const computedRows = useMemo(() => {
@@ -510,6 +533,161 @@ function BulkUploadMembers() {
   const isContinueDisabled =
     !hasRequiredSetup || isPreparingImport || isReading;
 
+  const handleCellChange = (rowNumber, fieldKey, value) => {
+    setCellEdits((prev) => {
+      const updatedEdits = {
+        ...prev,
+        [rowNumber]: {
+          ...(prev[rowNumber] || {}),
+          [fieldKey]: value,
+        },
+      };
+
+      // Get current row from computedRows to get the original plan amount
+      const row = computedRows.find((r) => r.rowNumber === rowNumber);
+      if (!row) return updatedEdits;
+
+      // Get current values with edits applied
+      const currentEdits = updatedEdits[rowNumber] || {};
+      const paidAmount =
+        currentEdits.paidAmount !== undefined
+          ? currentEdits.paidAmount
+          : row.paidAmount;
+      const discountAmount =
+        currentEdits.discountAmount !== undefined
+          ? currentEdits.discountAmount
+          : row.discountAmount;
+      const pendingAmount =
+        currentEdits.pendingAmount !== undefined
+          ? currentEdits.pendingAmount
+          : row.pendingAmount;
+
+      // Formula: Paid + Pending + Discount = Plan
+
+      if (fieldKey === "paidAmount") {
+        // When Paid Amount changes: KEEP the entered amount, find the plan based on it
+        let newPaid = Number(paidAmount || 0);
+        const currentPending = Number(pendingAmount || 0);
+        const totalForPlanCalc = newPaid + currentPending;
+
+        const newResolvedPlan = resolvePlanFromAmount(
+          totalForPlanCalc,
+          planOptions,
+        );
+        const newPlanAmount =
+          newResolvedPlan?.price ||
+          newResolvedPlan?.amount ||
+          row.planAmount ||
+          0;
+
+        // If user entered Paid > Plan, clamp it down
+        if (newPaid > newPlanAmount) {
+          newPaid = newPlanAmount;
+        }
+
+        // Auto-adjust Discount: Discount = Plan - Paid - Pending
+        const newDiscount = Math.max(
+          0,
+          newPlanAmount - newPaid - currentPending,
+        );
+
+        updatedEdits[rowNumber].paidAmount = newPaid;
+        updatedEdits[rowNumber].discountAmount = newDiscount;
+        updatedEdits[rowNumber].planAmount = newPlanAmount;
+        updatedEdits[rowNumber].planName =
+          newResolvedPlan?.name || newResolvedPlan?.label || row.planName;
+        updatedEdits[rowNumber].planId = newResolvedPlan?.id || row.planId;
+      } else if (fieldKey === "discountAmount") {
+        // When Discount changes: Paid reduces, Pending stays same
+        // Paid = Plan - Discount - Pending
+        // First, we need to find/calculate the Plan
+        const newDiscount = Number(discountAmount || 0);
+        const currentPaid = Number(paidAmount || 0);
+        const currentPending = Number(pendingAmount || 0);
+        const totalForPlanCalc = currentPaid + currentPending;
+
+        const newResolvedPlan = resolvePlanFromAmount(
+          totalForPlanCalc,
+          planOptions,
+        );
+        const newPlanAmount =
+          newResolvedPlan?.price ||
+          newResolvedPlan?.amount ||
+          row.planAmount ||
+          0;
+
+        // Paid auto-adjusts down: Paid = Plan - Discount - Pending
+        const newPaid = Math.max(
+          0,
+          newPlanAmount - newDiscount - currentPending,
+        );
+        updatedEdits[rowNumber].paidAmount = newPaid;
+        updatedEdits[rowNumber].planAmount = newPlanAmount;
+        updatedEdits[rowNumber].planName =
+          newResolvedPlan?.name || newResolvedPlan?.label || row.planName;
+        updatedEdits[rowNumber].planId = newResolvedPlan?.id || row.planId;
+      } else if (fieldKey === "pendingAmount") {
+        // When Pending Amount changes: Paid reduces, Discount stays same
+        // Paid = Plan - Pending - Discount
+        const newPending = Number(pendingAmount || 0);
+        const currentPaid = Number(paidAmount || 0);
+        const currentDiscount = Number(discountAmount || 0);
+        const totalForPlanCalc = currentPaid + newPending;
+
+        const newResolvedPlan = resolvePlanFromAmount(
+          totalForPlanCalc,
+          planOptions,
+        );
+        const newPlanAmount =
+          newResolvedPlan?.price ||
+          newResolvedPlan?.amount ||
+          row.planAmount ||
+          0;
+
+        // Paid auto-adjusts down: Paid = Plan - Pending - Discount
+        const newPaid = Math.max(
+          0,
+          newPlanAmount - newPending - currentDiscount,
+        );
+        updatedEdits[rowNumber].paidAmount = newPaid;
+        updatedEdits[rowNumber].planAmount = newPlanAmount;
+        updatedEdits[rowNumber].planName =
+          newResolvedPlan?.name || newResolvedPlan?.label || row.planName;
+        updatedEdits[rowNumber].planId = newResolvedPlan?.id || row.planId;
+      }
+
+      return updatedEdits;
+    });
+  };
+
+  const getEditedOrOriginalValue = (row, fieldKey) => {
+    return cellEdits[row.rowNumber]?.[fieldKey] !== undefined
+      ? cellEdits[row.rowNumber][fieldKey]
+      : row[fieldKey];
+  };
+
+  const computeRowWithEdits = (row) => {
+    let editedRow = { ...row };
+
+    // Apply all cell edits (including pre-calculated plan and amounts)
+    if (cellEdits[row.rowNumber]) {
+      Object.entries(cellEdits[row.rowNumber]).forEach(([key, value]) => {
+        editedRow[key] = value;
+      });
+    }
+
+    return editedRow;
+  };
+
+  const getCalculatedPlanForDisplay = (row) => {
+    const editedRow = computeRowWithEdits(row);
+    return {
+      planId: editedRow.planId,
+      planName: editedRow.planName,
+      planAmount: editedRow.planAmount,
+    };
+  };
+
   const handleMappingChange = (fieldKey, selectedHeader) => {
     const currentMapping = form.getValues("mapping") || {};
     const updatedMapping = { ...currentMapping, [fieldKey]: selectedHeader };
@@ -535,14 +713,26 @@ function BulkUploadMembers() {
     const duplicateIndexSet = duplicateState.duplicateRowIndexes;
 
     const mappedRows = computedRows.map((row, index) => {
+      // Apply cell edits and recalculate
+      const editedRow = computeRowWithEdits(row);
       const isDuplicateMobile = duplicateIndexSet.has(index);
-      const isEmptyMobile = !row.mobileNo;
-      const hasValidationError = (row.validationIssues || []).length > 0;
-      const finalGender = genderEdits[row.rowNumber] || row.gender;
-      const planAmount = Number(row.planAmount) || 0;
-      const paidAmount = row.paidAmount ? Number(row.paidAmount) : planAmount;
-      const pendingAmount = Number(row.pendingAmount) || 0;
-      const joiningDateForBackend = row._joiningDateBackend || "";
+      const isEmptyMobile = !editedRow.mobileNo;
+      const hasValidationError = (editedRow.validationIssues || []).length > 0;
+      const finalGender = genderEdits[editedRow.rowNumber] || editedRow.gender;
+      const planAmount = Number(editedRow.planAmount) || 0;
+      const paidAmount = editedRow.paidAmount
+        ? Number(editedRow.paidAmount)
+        : planAmount;
+      const pendingAmount = Number(editedRow.pendingAmount) || 0;
+
+      // Parse edited joining date
+      let joiningDateForBackend = editedRow._joiningDateBackend || "";
+      if (cellEdits[editedRow.rowNumber]?.joiningDate) {
+        const parsedDate = parseExcelDate(
+          cellEdits[editedRow.rowNumber].joiningDate,
+        );
+        joiningDateForBackend = parsedDate.backend;
+      }
 
       let discountAmount = row.discountAmount;
       if (discountAmount === undefined || discountAmount === null) {
@@ -551,16 +741,16 @@ function BulkUploadMembers() {
       if (discountAmount < 0) discountAmount = 0;
 
       const backendRow = {
-        clientName: row.clientName,
-        mobileNo: row.mobileNo,
+        clientName: editedRow.clientName,
+        mobileNo: editedRow.mobileNo,
         gender: finalGender,
         paidAmount,
         pendingAmount,
         discountAmount,
         joiningDate: joiningDateForBackend,
         lastRenewalDate: joiningDateForBackend,
-        planId: row.planId,
-        planName: row.planName,
+        planId: editedRow.planId,
+        planName: editedRow.planName,
         planAmount,
       };
 
@@ -585,8 +775,8 @@ function BulkUploadMembers() {
 
     if (!validRows.length) {
       makeToast(
-        "No valid rows to upload. Please fix the highlighted errors first.",
-        "warning",
+        "No valid rows to upload. Please fix the highlighted errors first. | अपलोड करने के लिए कोई मान्य पंक्ति नहीं है। कृपया पहले उजागर की गई त्रुटियों को ठीक करें।",
+        "error",
       );
       setIsPreparingImport(false);
       return;
@@ -594,8 +784,8 @@ function BulkUploadMembers() {
 
     if (invalidRows.length) {
       makeToast(
-        `${validRows.length} rows will be uploaded. ${invalidRows.length} rows were skipped due to errors.`,
-        "warning",
+        `${validRows.length} rows will be uploaded. ${invalidRows.length} rows were skipped due to errors. | ${validRows.length} पंक्तियां अपलोड की जाएंगी। ${invalidRows.length} पंक्तियां त्रुटियों के कारण छोड़ दी गईं।`,
+        "error",
       );
     }
 
@@ -607,9 +797,10 @@ function BulkUploadMembers() {
       onSuccess: (response) => {
         setIsPreparingImport(false);
 
-        if (response?.rejectedRows?.length > 0) {
-          setRejectedRows(response.rejectedRows);
+        if (response?.notInserted?.length > 0) {
+          setImportResult(response);
         } else {
+          setImportResult(null);
           resetAll();
         }
       },
@@ -693,6 +884,31 @@ function BulkUploadMembers() {
     XLSX.writeFile(workbook, "bulk-upload-failed-rows.xlsx");
   };
 
+  const handleDownloadNotInsertedRows = () => {
+    const notInsertedRowsExport = (importResult?.notInserted || []).map(
+      (row, index) => ({
+        "Row No.": row.rowNumber || row.row_number || index + 1,
+        "Client Name": row.clientName || row.client_name || "",
+        "Mobile No.": row.mobileNo || row.mobile_no || "",
+        Gender: row.gender || "",
+        "Paid Amount": row.paidAmount || "",
+        "Pending Amount": row.pendingAmount || "",
+        "Discount Amount": row.discountAmount || "",
+        "Joining Date": row.joiningDate || "",
+        "Plan Name": row.planName || "",
+        "Plan ID": row.planId || "",
+        Reason: row.reason || row.message || "Unknown reason",
+      }),
+    );
+
+    if (!notInsertedRowsExport.length) return;
+
+    const worksheet = XLSX.utils.json_to_sheet(notInsertedRowsExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Not Inserted");
+    XLSX.writeFile(workbook, "bulk-upload-not-inserted.xlsx");
+  };
+
   const handleFileRead = async (file) => {
     if (!file) return;
     if (isPlansLoading || !hasPlans) return;
@@ -708,6 +924,8 @@ function BulkUploadMembers() {
       setHeaders(detectedHeaders);
       setRows(parsedRows);
       setGenderEdits({});
+      setCellEdits({});
+      setImportResult(null);
 
       form.setValue(
         "mapping",
@@ -755,7 +973,10 @@ function BulkUploadMembers() {
     setHeaders([]);
     setRows([]);
     setGenderEdits({});
+    setCellEdits({});
+    setEditingCell(null);
     setReadError("");
+    setImportResult(null);
     form.reset({
       planMappingMethod: "planId",
       samePlan: "",
@@ -783,7 +1004,7 @@ function BulkUploadMembers() {
       </div>
 
       <Card className="border border-color rounded-2xl bg-gradient-to-br from-white via-slate-50/60 to-cyan-50/50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 shadow-sm">
-        <div className="p-5 md:p-4 space-y-5">
+        <div className="p-2 space-y-5">
           <div>
             <h2 className="text-lg font-semibold text-[var(--text)] dark:text-[var(--text-dark)]">
               Bulk Import Setup
@@ -845,10 +1066,17 @@ function BulkUploadMembers() {
                 <p className="text-xs uppercase tracking-[0.14em] text-light mb-2">
                   Select Plan
                 </p>
-                <select className={SELECT_CLASS} {...form.register("samePlan")}>
+                <select
+                  className={`${SELECT_CLASS} capitalize`}
+                  {...form.register("samePlan")}
+                >
                   <option value="">Choose plan</option>
                   {(planOptions || []).map((plan) => (
-                    <option value={plan.id} key={plan.id}>
+                    <option
+                      value={plan.id}
+                      key={plan.id}
+                      className="capitalize"
+                    >
                       {buildPlanLabel(plan)}
                     </option>
                   ))}
@@ -860,7 +1088,7 @@ function BulkUploadMembers() {
       </Card>
 
       <Card className="border border-color rounded-2xl shadow-sm">
-        <div className="p-5 md:p-4 space-y-4">
+        <div className="p-2 space-y-4">
           <div>
             <h3 className="text-base font-semibold text-[var(--text)] dark:text-[var(--text-dark)]">
               Upload Source File
@@ -924,7 +1152,7 @@ function BulkUploadMembers() {
                 </Button>
                 <Button
                   type="button"
-                  variant="outline"
+                  variant="success"
                   onClick={handleDownloadSampleFile}
                   className="h-10 px-5 rounded-xl"
                 >
@@ -966,7 +1194,7 @@ function BulkUploadMembers() {
 
       {headers.length ? (
         <Card className="border border-color rounded-2xl shadow-sm">
-          <div className="p-5 md:p-4">
+          <div className="">
             <h3 className="text-base font-semibold text-[var(--text)] dark:text-[var(--text-dark)]">
               Detected Excel Columns
             </h3>
@@ -986,7 +1214,7 @@ function BulkUploadMembers() {
 
       {headers.length ? (
         <Card className="border border-color rounded-2xl shadow-sm">
-          <div className="p-5 md:p-4 space-y-4">
+          <div className="p-2 space-y-4">
             <h3 className="text-base font-semibold text-[var(--text)] dark:text-[var(--text-dark)]">
               Column Mapping
             </h3>
@@ -1059,46 +1287,9 @@ function BulkUploadMembers() {
         </Card>
       ) : null}
 
-      {duplicateState.duplicates.length ? (
-        <Card className="border border-red-200 dark:border-red-700/40 rounded-2xl shadow-sm">
-          <div className="p-5 md:p-4 space-y-4">
-            <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
-              <FaExclamationTriangle className="h-5 w-5" />
-              <h3 className="text-base font-semibold">
-                Duplicate Mobile Errors
-              </h3>
-            </div>
-
-            <div className="overflow-x-auto rounded-xl border border-red-200 dark:border-red-700/40">
-              <table className="min-w-full text-sm">
-                <thead className="bg-red-50 dark:bg-red-900/20 text-left">
-                  <tr>
-                    <th className="px-3 py-2 font-semibold">Row Number</th>
-                    <th className="px-3 py-2 font-semibold">Mobile Number</th>
-                    <th className="px-3 py-2 font-semibold">Error Message</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {duplicateState.duplicates.map((item, index) => (
-                    <tr
-                      key={`${item.mobile}_${item.rowNumber}_${index}`}
-                      className="border-t border-red-200/60 dark:border-red-700/40"
-                    >
-                      <td className="px-3 py-2">Row {item.rowNumber}</td>
-                      <td className="px-3 py-2">{item.mobile}</td>
-                      <td className="px-3 py-2">{item.message}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </Card>
-      ) : null}
-
       {headers.length ? (
         <Card className="border border-color rounded-2xl shadow-sm">
-          <div className="p-5 md:p-4 space-y-4">
+          <div className="p-2 space-y-4">
             <h3 className="text-base font-semibold text-[var(--text)] dark:text-[var(--text-dark)]">
               Data Preview (Updated Rows)
             </h3>
@@ -1127,18 +1318,27 @@ function BulkUploadMembers() {
                     return (
                       <tr
                         key={`preview_${index}`}
-                        className={`border-b border-color/70 ${
+                        className={`border-b border-color ${
                           isInvalidRow ? "bg-red-50/80 dark:bg-red-900/15" : ""
                         }`}
                       >
                         {previewColumns.map((column) => {
                           if (column.key === "srNo") {
+                            const isValidRow = !isInvalidRow;
                             return (
                               <td
                                 key={`${index}_${column.key}`}
                                 className="px-3 py-2 whitespace-nowrap"
                               >
-                                {index + 1}
+                                <div className="flex items-center gap-2">
+                                  <span>{index + 1}</span>
+                                  {isValidRow && (
+                                    <FaCheckCircle
+                                      className="h-4 w-4 text-emerald-500"
+                                      title="No errors"
+                                    />
+                                  )}
+                                </div>
                               </td>
                             );
                           }
@@ -1195,12 +1395,84 @@ function BulkUploadMembers() {
                             );
                           }
 
+                          // Non-editable columns (Plan fields auto-calculated from amounts)
+                          if (
+                            column.key === "planName" ||
+                            column.key === "planAmount"
+                          ) {
+                            const calculatedPlan =
+                              getCalculatedPlanForDisplay(row);
+                            const displayValue =
+                              column.key === "planName"
+                                ? calculatedPlan.planName
+                                : calculatedPlan.planAmount;
+
+                            return (
+                              <td
+                                key={`${index}_${column.key}`}
+                                className="px-3 py-2 whitespace-nowrap capitalize bg-slate-50/50 dark:bg-slate-900/20 text-slate-600 dark:text-slate-400"
+                              >
+                                {String(displayValue ?? "")}
+                              </td>
+                            );
+                          }
+
+                          // Editable columns
+                          const editValue = getEditedOrOriginalValue(
+                            row,
+                            column.key,
+                          );
+                          const isAmountField = [
+                            "paidAmount",
+                            "discountAmount",
+                            "pendingAmount",
+                          ].includes(column.key);
+                          const cellId = `${row.rowNumber}_${column.key}`;
+                          const isEditingThisCell = editingCell === cellId;
+
                           return (
                             <td
                               key={`${index}_${column.key}`}
-                              className="px-3 py-2 whitespace-nowrap capitalize"
+                              className="px-3 py-2 whitespace-nowrap"
                             >
-                              {String(row?.[column.key] ?? "")}
+                              {isEditingThisCell ? (
+                                <input
+                                  autoFocus
+                                  type={isAmountField ? "number" : "text"}
+                                  value={String(editValue ?? "")}
+                                  onChange={(e) => {
+                                    const newValue = isAmountField
+                                      ? e.target.value === ""
+                                        ? ""
+                                        : Number(e.target.value)
+                                      : e.target.value;
+                                    handleCellChange(
+                                      row.rowNumber,
+                                      column.key,
+                                      newValue,
+                                    );
+                                  }}
+                                  onBlur={() => setEditingCell(null)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter") setEditingCell(null);
+                                    if (e.key === "Escape")
+                                      setEditingCell(null);
+                                  }}
+                                  className="w-24 box-border px-2 py-1 rounded border border-[var(--primary)] bg-white dark:bg-slate-800 text-sm text-[var(--text)] dark:text-[var(--text-dark)] outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)]"
+                                />
+                              ) : (
+                                <div
+                                  onClick={() => setEditingCell(cellId)}
+                                  className="cursor-pointer px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors"
+                                  title="Click to edit"
+                                >
+                                  {isAmountField
+                                    ? String(editValue ?? "").length > 0
+                                      ? editValue
+                                      : "-"
+                                    : String(editValue ?? "")}
+                                </div>
+                              )}
                             </td>
                           );
                         })}
@@ -1221,10 +1493,10 @@ function BulkUploadMembers() {
           !row.mobileNo,
       ) && (
         <Card className="border border-red-300 dark:border-red-700/40 rounded-2xl shadow-sm bg-red-50/50 dark:bg-red-900/10">
-          <div className="p-5 md:p-4 space-y-3">
+          <div className="p- space-y-3">
             <div className="flex items-center justify-between gap-3">
               <h3 className="text-base font-semibold text-red-700 dark:text-red-400">
-                Row Validation Issues
+                Row Validation Issues | कुछ Rows में Error है
               </h3>
               <Button
                 type="button"
@@ -1245,6 +1517,13 @@ function BulkUploadMembers() {
                   ...(!row.mobileNo ? ["Empty mobile number"] : []),
                 ];
 
+                const issueTranslations = {
+                  "Duplicate mobile number":
+                    "Duplicate mobile number | यह Mobile Number पहले से मौजूद है",
+
+                  "Empty mobile number":
+                    "Empty mobile number | कृपया Mobile Number भरें",
+                };
                 return rowIssues.length ? (
                   <div
                     key={`issue_${index}`}
@@ -1255,7 +1534,9 @@ function BulkUploadMembers() {
                     </p>
                     <ul className="mt-1 list-disc pl-5 text-sm text-red-700 dark:text-red-300">
                       {rowIssues.map((issue, issueIndex) => (
-                        <li key={`${row.rowNumber}_${issueIndex}`}>{issue}</li>
+                        <li key={`${row.rowNumber}_${issueIndex}`}>
+                          {issueTranslations[issue] || issue}
+                        </li>
                       ))}
                     </ul>
                   </div>
@@ -1266,22 +1547,54 @@ function BulkUploadMembers() {
         </Card>
       )}
 
-      {rejectedRows.length > 0 && (
+      {importResult?.notInserted?.length > 0 && (
         <Card className="border border-red-300 rounded-2xl shadow-sm bg-red-50/50 dark:bg-red-900/10">
           <div className="p-5 md:p-4 space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-base font-semibold text-red-700 dark:text-red-400">
-                Rejected Rows ({rejectedRows.length})
-              </h3>
-              <button
-                onClick={() => setRejectedRows([])}
-                className="text-red-600 hover:text-red-700 text-sm"
-              >
-                ✕ Close
-              </button>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h3 className="text-base font-semibold text-red-700 dark:text-red-400">
+                  Not Inserted Rows ({importResult.notInserted.length}) | डाली
+                  नहीं गई पंक्तियां ({importResult.notInserted.length})
+                </h3>
+                <p className="text-sm text-light mt-1">
+                  {importResult?.action
+                    ? "These rows were skipped during import. | ये पंक्तियां आयात के दौरान छोड़ दी गईं।"
+                    : "These rows could not be inserted. | इन पंक्तियों को डाला नहीं जा सका।"}
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleDownloadNotInsertedRows}
+                  className="h-9 rounded-xl px-3"
+                >
+                  <FaFileExcel className="h-4 w-4 mr-2" />
+                  Download Excel
+                </Button>
+                <button
+                  onClick={() => setImportResult(null)}
+                  className="text-red-600 hover:text-red-700 text-sm"
+                >
+                  ✕ Close
+                </button>
+              </div>
             </div>
 
-            <div className="overflow-auto rounded-xl border border-red-200 max-h-[300px]">
+            <div className="grid grid-cols-2 md:grid-cols-1 gap-3">
+              <StatCard
+                title="Inserted Count"
+                value={importResult.insertedCount ?? 0}
+                tone="success"
+              />
+              <StatCard
+                title="Not Inserted"
+                value={importResult.notInserted.length}
+                tone="danger"
+              />
+            </div>
+
+            <div className="overflow-auto rounded-xl border border-red-200 max-h-[360px]">
               <table className="min-w-full w-full text-sm">
                 <thead className="sticky top-0 bg-red-100 dark:bg-red-900/30 z-10">
                   <tr>
@@ -1295,18 +1608,18 @@ function BulkUploadMembers() {
                       Mobile No.
                     </th>
                     <th className="px-3 py-2 text-left font-semibold border-b border-red-300 whitespace-nowrap">
-                      Rejection Reason
+                      Reason
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {rejectedRows.map((row, index) => (
+                  {importResult.notInserted.map((row, index) => (
                     <tr
-                      key={`rejected_${index}`}
-                      className="border-b border-red-200 hover:bg-red-100/50 dark:hover:bg-red-900/20"
+                      key={`not_inserted_${index}`}
+                      className="border-b border-red-200 bg-red-50/70 dark:bg-red-900/15"
                     >
                       <td className="px-3 py-2 whitespace-nowrap">
-                        {row.rowNumber || row.row_number || "-"}
+                        {row.rowNumber || row.row_number || index + 1}
                       </td>
                       <td className="px-3 py-2 whitespace-nowrap">
                         {row.clientName || row.client_name || "-"}
@@ -1345,26 +1658,61 @@ function BulkUploadMembers() {
         />
       </div>
 
-      <div className="flex items-center justify-end gap-3">
-        <Button
-          type="button"
-          variant="outline"
-          className="h-10 rounded-xl px-4"
-          onClick={resetAll}
-        >
-          <FaSyncAlt className="h-4 w-4 mr-2" />
-          Reset
-        </Button>
+      <div className="space-y-3">
+        {computedRows.some(
+          (row, index) =>
+            row.validationIssues?.length ||
+            duplicateState.duplicateRowIndexes.has(index) ||
+            !row.mobileNo,
+        ) && (
+          <div className="rounded-xl border border-amber-200 dark:border-amber-700/40 bg-amber-50/60 dark:bg-amber-900/15 p-4">
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5">
+                <FaExclamationTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              </div>
 
-        <Button
-          type="button"
-          className="h-10 rounded-xl px-5"
-          disabled={isContinueDisabled}
-          onClick={handleContinueImport}
-        >
-          {isPreparingImport ? "Preparing Payload..." : "Continue Import"}
-          <FaArrowRight className="h-4 w-4 ml-2" />
-        </Button>
+              <div>
+                <p className="font-semibold text-amber-700 dark:text-amber-300 text-sm">
+                  Errors found in some rows | कुछ Rows में Error मिला
+                </p>
+
+                <p className="text-sm text-amber-600 dark:text-amber-400 mt-1">
+                  Please fix the highlighted errors below before uploading. Only
+                  rows without errors will be imported, and rows with errors
+                  will be skipped.
+                  <br />
+                  <span className="block mt-1">
+                    Upload करने से पहले नीचे दिख रहे Errors को ठीक करें। सिर्फ
+                    जिन Rows में कोई Error नहीं होगा, वही Import होंगी। जिन Rows
+                    में Error होगा, उन्हें Skip कर दिया जाएगा।
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="flex items-center justify-end gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            className="h-10 rounded-xl px-4"
+            onClick={resetAll}
+          >
+            <FaSyncAlt className="h-4 w-4 mr-2" />
+            Reset
+          </Button>
+
+          <Button
+            type="button"
+            className="h-10 rounded-xl px-5"
+            disabled={isContinueDisabled}
+            onClick={handleContinueImport}
+          >
+            {isPreparingImport ? "Preparing Payload..." : "Continue Import"}
+            <FaArrowRight className="h-4 w-4 ml-2" />
+          </Button>
+        </div>
       </div>
     </div>
   );

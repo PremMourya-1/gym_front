@@ -129,7 +129,11 @@ export const parseExcelFile = async (file) => {
   };
 };
 
-export const detectDuplicateMobiles = (rows, mobileHeader) => {
+export const detectDuplicateMobiles = (
+  rows,
+  mobileHeader,
+  clientNameHeader = null,
+) => {
   if (!mobileHeader) {
     return {
       duplicates: [],
@@ -158,12 +162,27 @@ export const detectDuplicateMobiles = (rows, mobileHeader) => {
 
   duplicateMap.forEach((indexes, mobile) => {
     if (indexes.length > 1) {
-      indexes.forEach((index) => {
+      const firstIndex = indexes[0];
+      const firstRowName = clientNameHeader
+        ? String(rows[firstIndex]?.[clientNameHeader] || "").trim()
+        : "";
+      const firstRowNumber = firstIndex + 2;
+
+      // Only mark 2nd and subsequent rows as duplicates (first row is valid)
+      indexes.slice(1).forEach((index) => {
         duplicateRowIndexes.add(index);
+
+        let message = "Duplicate mobile number";
+        if (firstRowName) {
+          message = `Duplicate with Row ${firstRowNumber} (${firstRowName})`;
+        } else if (firstRowNumber !== index + 2) {
+          message = `Duplicate with Row ${firstRowNumber}`;
+        }
+
         duplicates.push({
           rowNumber: index + 2,
           mobile,
-          message: "Duplicate mobile number",
+          message,
         });
       });
     }
